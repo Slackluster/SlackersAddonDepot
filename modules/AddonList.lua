@@ -122,15 +122,26 @@ end
 --------------------
 
 function app:HookGameMenu()
-	GameMenuFrame:HookScript("OnShow", function()
-		for button in GameMenuFrame.buttonPool:EnumerateActive() do
-			if button:GetText() == ADDONS then
-				button:SetScript("OnClick", function()
-					HideUIPanel(GameMenuFrame)
-					app.AddonListFrame:Show()
-				end)
-				break
+	if not app.Flag.MenuHooked then
+		local originalOnClick
+		GameMenuFrame:HookScript("OnShow", function()
+			for button in GameMenuFrame.buttonPool:EnumerateActive() do
+				if button:GetText() == ADDONS then
+					if not originalOnClick then
+						originalOnClick = button:GetScript("OnClick")
+					end
+					if app.Settings["replaceMenuButton"] then
+						button:SetScript("OnClick", function()
+							HideUIPanel(GameMenuFrame)
+							app.AddonListFrame:Show()
+						end)
+					else
+						 button:SetScript("OnClick", originalOnClick)
+					end
+					break
+				end
 			end
-		end
-	end)
+		end)
+		app.Flag.MenuHooked = true
+	end
 end

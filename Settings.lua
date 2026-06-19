@@ -283,4 +283,6 @@ function app:CreateSettings()
 	header(L.GENERAL)
 
 	checkbox("minimapIcon", L.SETTINGS_MINIMAP_TITLE, L.SETTINGS_MINIMAP_DESC, true, function() app:ToggleMinimapIcon() end)
+
+	checkbox("replaceMenuButton", L.SETTINGS_REPLACE_MENU_BUTTON, L.SETTINGS_REPLACE_MENU_BUTTON_DESC, true)
 end
