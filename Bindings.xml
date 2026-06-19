@@ -1,0 +1,5 @@
+<Bindings>
+	<Binding name="???_FEATURE" category="|cff3FC7EBMy Addon|r" searchTags="BINDING_NAME_MYADDON,BINDING_NAME_SLACKWARE">
+		MyAddon.Feature()
+	</Binding>
+</Bindings>
