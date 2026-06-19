@@ -1,6 +1,6 @@
------------------------
--- My Addon: API.lua --
------------------------
+------------------------------------
+-- Slacker's Addon Depot: API.lua --
+------------------------------------
 
 -- Explanation
-MyAddon.Function()
+SlackersAddonDepot.Function()

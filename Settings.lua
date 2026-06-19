@@ -1,6 +1,6 @@
-----------------------------
--- My Addon: Settings.lua --
-----------------------------
+-----------------------------------------
+-- Slacker's Addon Depot: Settings.lua --
+-----------------------------------------
 
 local appName, app = ...
 local api = app.api
@@ -12,8 +12,8 @@ local L = app.locales
 
 app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 	if addOnName == appName then
-		MyAddon_Settings = MyAddon_Settings or {}
-		app.Settings = MyAddon_Settings
+		SlackersAddonDepot_Settings = SlackersAddonDepot_Settings or {}
+		app.Settings = SlackersAddonDepot_Settings
 
 		app:CreateMinimapButton()
 		app:CreateSettings()
@@ -34,7 +34,7 @@ function app:CreateMinimapButton()
 		text = app.NameLong,
 		icon = app.Icon,
 
-		OnClick = MyAddon_Click,
+		OnClick = SlackersAddonDepot_Click,
 
 		OnTooltipShow = function(tooltip)
 			if not tooltip or not tooltip.AddLine then return end
@@ -84,7 +84,7 @@ function app:CreateSettings()
 		app.LinkCopiedFrame:Hide()
 	end)
 
-	StaticPopupDialogs["MYADDON_URL"] = {
+	StaticPopupDialogs["SLACKERSADDONDEPOT_URL"] = {
 		text = L.SETTINGS_URL_COPY,
 		button1 = CLOSE,
 		whileDead = true,
@@ -127,35 +127,35 @@ function app:CreateSettings()
 		end,
 	}
 
-	MyAddon_SettingsTextMixin = {}
-	function MyAddon_SettingsTextMixin:Init(initializer)
+	SlackersAddonDepot_SettingsTextMixin = {}
+	function SlackersAddonDepot_SettingsTextMixin:Init(initializer)
 		local data = initializer:GetData()
 		self.LeftText:SetTextToFit(data.leftText)
 		self.MiddleText:SetTextToFit(data.middleText)
 		self.RightText:SetTextToFit(data.rightText)
 	end
 
-	MyAddon_SettingsExpandMixin = CreateFromMixins(SettingsExpandableSectionMixin)
+	SlackersAddonDepot_SettingsExpandMixin = CreateFromMixins(SettingsExpandableSectionMixin)
 
-	function MyAddon_SettingsExpandMixin:Init(initializer)
+	function SlackersAddonDepot_SettingsExpandMixin:Init(initializer)
 		SettingsExpandableSectionMixin.Init(self, initializer)
 		self.data = initializer.data
 	end
 
-	function MyAddon_SettingsExpandMixin:OnExpandedChanged(expanded)
+	function SlackersAddonDepot_SettingsExpandMixin:OnExpandedChanged(expanded)
 		SettingsInbound.RepairDisplay()
 	end
 
-	function MyAddon_SettingsExpandMixin:CalculateHeight()
+	function SlackersAddonDepot_SettingsExpandMixin:CalculateHeight()
 		return 24
 	end
 
-	function MyAddon_SettingsExpandMixin:OnExpandedChanged(expanded)
+	function SlackersAddonDepot_SettingsExpandMixin:OnExpandedChanged(expanded)
 		self:EvaluateVisibility(expanded)
 		SettingsInbound.RepairDisplay()
 	end
 
-	function MyAddon_SettingsExpandMixin:EvaluateVisibility(expanded)
+	function SlackersAddonDepot_SettingsExpandMixin:EvaluateVisibility(expanded)
 		if expanded then
 			self.Button.Right:SetAtlas("Options_ListExpand_Right_Expanded", TextureKitConstants.UseAtlasSize)
 		else
@@ -224,7 +224,7 @@ function app:CreateSettings()
 		local initializer = CreateFromMixins(SettingsExpandableSectionInitializer)
 		local data = { name = name, expanded = false }
 
-		initializer:Init("MyAddon_SettingsExpandTemplate", data)
+		initializer:Init("SlackersAddonDepot_SettingsExpandTemplate", data)
 		initializer.GetExtent = ScrollBoxFactoryInitializerMixin.GetExtent
 
 		layout:AddInitializer(initializer)
@@ -248,7 +248,7 @@ function app:CreateSettings()
 
 	local function text(leftText, middleText, rightText, customExtent, isExpanded)
 		local data = { leftText = leftText, middleText = middleText, rightText = rightText }
-		local text = layout:AddInitializer(Settings.CreateElementInitializer("MyAddon_SettingsText", data))
+		local text = layout:AddInitializer(Settings.CreateElementInitializer("SlackersAddonDepot_SettingsText", data))
 		function text:GetExtent()
 			if customExtent then return customExtent end
 			return 28 + select(2, string.gsub(data.leftText, "\n", "")) * 12
@@ -263,16 +263,16 @@ function app:CreateSettings()
 
 	text(L.SETTINGS_VERSION .. " |cffFFFFFF" .. C_AddOns.GetAddOnMetadata(appName, "Version"), nil, nil, 14)
 	text(L.SETTINGS_SUPPORT_TEXTLONG)
-	button(L.SETTINGS_SUPPORT_TEXT, L.SETTINGS_SUPPORT_BUTTON, L.SETTINGS_SUPPORT_DESC, function() StaticPopup_Show("MYADDON_URL", nil, nil, "https://buymeacoffee.com/Slackluster") end)
-	button(L.SETTINGS_HELP_TEXT, L.SETTINGS_HELP_BUTTON, L.SETTINGS_HELP_DESC, function() StaticPopup_Show("MYADDON_URL", nil, nil, "https://discord.gg/hGvF59hstx") end)
+	button(L.SETTINGS_SUPPORT_TEXT, L.SETTINGS_SUPPORT_BUTTON, L.SETTINGS_SUPPORT_DESC, function() StaticPopup_Show("SLACKERSADDONDEPOT_URL", nil, nil, "https://buymeacoffee.com/Slackluster") end)
+	button(L.SETTINGS_HELP_TEXT, L.SETTINGS_HELP_BUTTON, L.SETTINGS_HELP_DESC, function() StaticPopup_Show("SLACKERSADDONDEPOT_URL", nil, nil, "https://discord.gg/hGvF59hstx") end)
 
 	local _, isExpanded = expandableHeader(L.SETTINGS_KEYSLASH_TITLE)
 
-		keybind("???_FEATURE", isExpanded)
+		keybind("SAD_FEATURE", isExpanded)
 
 		local leftText = { "|cffFFFFFF" ..
-			"/???",
-			"/??? settings" }
+			"/sad",
+			"/sad settings" }
 		local middleText = {
 			"",
 			L.SLASH_OPEN_SETTINGS }

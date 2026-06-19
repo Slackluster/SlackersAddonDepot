@@ -1,19 +1,19 @@
-----------------------------
--- My Addon: Database.lua --
-----------------------------
+-----------------------------------------
+-- Slacker's Addon Depot: Database.lua --
+-----------------------------------------
 
 local appName, app = ...
 
 -- Strings
-app.Name = "My Addon"
+app.Name = "Slacker's Addon Depot"
 app.NameLong = app:Colour(app.Name)
-app.NameShort = app:Colour("???")
-app.NamePrefix = "MyAddon"
-_G["BINDING_NAME_MYADDON"] = app.Name
+app.NameShort = app:Colour("SAD")
+app.NamePrefix = "SlackAddonDepot"
+_G["BINDING_NAME_SLACKERSADDONDEPOT"] = app.Name
 _G["BINDING_NAME_SLACKWARE"] = "Slackware"
 
 -- Textures
-app.Icon = "Interface\\AddOns\\MyAddon\\assets\\icon.png"
+app.Icon = "Interface\\Icons\\inv_tinkermodule_blue"
 app.IconReady = "|TInterface\\RaidFrame\\ReadyCheck-Ready:0|t"
 app.IconNotReady = "|TInterface\\RaidFrame\\ReadyCheck-NotReady:0|t"
 app.IconLMB = "|TInterface\\TutorialFrame\\UI-Tutorial-Frame:12:12:0:0:512:512:10:65:228:283:0|t"

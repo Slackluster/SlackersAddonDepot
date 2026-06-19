@@ -1,11 +1,11 @@
-------------------------
--- My Addon: Core.lua --
-------------------------
+-------------------------------------
+-- Slacker's Addon Depot: Core.lua --
+-------------------------------------
 
 local appName, app = ...
 app.locales = {}
 app.api = {}
-MyAddon = app.api
+SlackersAddonDepot = app.api
 local api = app.api
 local L = app.locales
 
@@ -103,8 +103,8 @@ function app:CreateSlashCommands()
 	SLASH_RELOADUI1 = "/rl"
 	SlashCmdList.RELOADUI = ReloadUI
 
-	SLASH_MyAddon1 = "/???"
-	function SlashCmdList.MyAddon(msg, editBox)
+	SLASH_SlackersAddonDepot1 = "/sad"
+	function SlashCmdList.SlackersAddonDepot(msg, editBox)
 		local command, rest = msg:match("^(%S*)%s*(.-)$")
 
 		if command == "settings" then
@@ -119,7 +119,7 @@ end
 -- ADDON COMPARTMENT --
 -----------------------
 
-function MyAddon_Click(self, button)
+function SlackersAddonDepot_Click(self, button)
 	if button == "LeftButton" then
 		-- ???
 	elseif button == "RightButton" then
@@ -127,14 +127,14 @@ function MyAddon_Click(self, button)
 	end
 end
 
-function MyAddon_Enter(self, button)
+function SlackersAddonDepot_Enter(self, button)
 	GameTooltip:ClearLines()
 	GameTooltip:SetOwner(type(self) ~= "string" and self or button, "ANCHOR_LEFT")
 	GameTooltip:AddLine(L.SETTINGS_TOOLTIP)
 	GameTooltip:Show()
 end
 
-function MyAddon_Leave()
+function SlackersAddonDepot_Leave()
 	GameTooltip:Hide()
 end
 

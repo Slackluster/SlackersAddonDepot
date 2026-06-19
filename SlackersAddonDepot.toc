@@ -1,0 +1,45 @@
+## Interface: 120007
+## Title: |cff3FC7EBSlacker's Addon Depot|r
+## Author: Slackluster
+## IconTexture: Interface\AddOns\SlackersAddonDepot\assets\icon.png
+## Version: @project-version@
+## X-Curse-Project-ID: 1580967
+## X-Wago-ID: mKOD2RGx
+
+## AddonCompartmentFunc: SlackersAddonDepot_Click
+## AddonCompartmentFuncOnEnter: SlackersAddonDepot_Enter
+## AddonCompartmentFuncOnLeave: SlackersAddonDepot_Leave
+
+## SavedVariables: SlackersAddonDepot_Settings, SlackersAddonDepot_Cache
+## SavedVariablesPerCharacter:
+
+## Category: User Interface
+## Category-deDE: Benutzerinterface
+## Category-esES: Interfaz de usuario
+## Category-esMX: Interfaz de usuario
+## Category-frFR: Interface utilisateur
+## Category-itIT: Interfaccia utente
+## Category-koKR: 사용자 인터페이스
+## Category-ptBR: Interface do usuário
+## Category-ruRU: Интерфейс пользователя
+## Category-zhCN: 用户界面
+## Category-zhTW: 使用者介面
+
+libs\ChatThrottleLib\ChatThrottleLib.xml
+libs\LibDBIcon-1.0\embeds.xml
+libs\LibDBIcon-1.0\LibDBIcon-1.0\LibDBIcon-1.0.lua
+Core.lua
+Database.lua
+Settings.lua
+FrameTemplates.xml
+locales\enUS.lua
+locales\deDE.lua
+locales\esES.lua
+locales\esMX.lua
+locales\frFR.lua
+locales\itIT.lua
+locales\koKR.lua
+locales\ptBR.lua
+locales\ruRU.lua
+locales\zhCN.lua
+locales\zhTW.lua

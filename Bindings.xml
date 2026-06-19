@@ -1,5 +1,5 @@
 <Bindings>
-	<Binding name="???_FEATURE" category="|cff3FC7EBMy Addon|r" searchTags="BINDING_NAME_MYADDON,BINDING_NAME_SLACKWARE">
-		MyAddon.Feature()
+	<Binding name="SAD_FEATURE" category="|cff3FC7EBSlacker's Addon Depot|r" searchTags="BINDING_NAME_SLACKERSADDONDEPOT,BINDING_NAME_SLACKWARE">
+		SlackersAddonDepot.Feature()
 	</Binding>
 </Bindings>
