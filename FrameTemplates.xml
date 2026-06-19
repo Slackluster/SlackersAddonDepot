@@ -25,4 +25,32 @@
 	<Frame name="SlackersAddonDepot_SettingsExpandTemplate" inherits="SettingsExpandableSectionTemplate" mixin="SlackersAddonDepot_SettingsExpandMixin" virtual="true">
 		<Size y="24" />
 	</Frame>
+
+	<Button name="SlackersAddonDepot_ListButton" virtual="true">
+		<Size x="200" y="20" />
+		<HighlightTexture atlas="Options_List_Hover" setAllPoints="true" />
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString parentKey="LeftText1" inherits="GameFontNormal" justifyH="LEFT">
+					<Anchors>
+						<Anchor point="LEFT" x="2" />
+					</Anchors>
+					<Size x="400" y="24" />
+				</FontString>
+				<FontString parentKey="LeftText2" inherits="GameFontNormal" justifyH="LEFT" wordwrap="false">
+					<Anchors>
+						<Anchor point="LEFT" x="22" y="1" />
+						<Anchor point="RIGHT" x="-22" />
+					</Anchors>
+					<Size x="400" y="24" />
+				</FontString>
+				<FontString parentKey="RightText" inherits="GameFontNormal" justifyH="RIGHT">
+					<Anchors>
+						<Anchor point="RIGHT" x="-5" />
+					</Anchors>
+					<Size x="400" y="24" />
+				</FontString>
+			</Layer>
+		</Layers>
+	</Button>
 </Ui>

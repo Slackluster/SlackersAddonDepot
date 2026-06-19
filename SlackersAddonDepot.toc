@@ -32,6 +32,7 @@ Core.lua
 Database.lua
 Settings.lua
 FrameTemplates.xml
+modules\AddonList.lua
 locales\enUS.lua
 locales\deDE.lua
 locales\esES.lua
