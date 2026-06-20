@@ -47,3 +47,5 @@ L.ENABLED =                              PVP_WAR_MODE_ENABLED
 L.DISABLED =                             ADDON_DISABLED
 L.CANCEL =                               CANCEL
 L.RELOAD =                               RELOADUI
+L.ENABLE_ALL =                           ENABLE_ALL_ADDONS
+L.DISABLE_ALL =                          DISABLE_ALL_ADDONS

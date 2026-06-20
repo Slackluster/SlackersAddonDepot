@@ -109,6 +109,45 @@ function app:CreateAddonList()
 		ReloadUI()
 	end)
 
+	local function checkChangesAll(i)
+		if not app.Flag.Changed[i] then
+			app.Flag.Changed[i] = true
+		else
+			app.Flag.Changed[i] = nil
+		end
+
+		local next = next
+		if next(app.Flag.Changed) == nil then
+			app.AddonListFrame.ReloadButton:Disable()
+		else
+			app.AddonListFrame.ReloadButton:Enable()
+		end
+
+		app:UpdateAddonList()
+	end
+
+	app.AddonListFrame.EnableAllButton = app:MakeButton(app.AddonListFrame, L.ENABLE_ALL)
+	app.AddonListFrame.EnableAllButton:SetPoint("BOTTOMLEFT", app.AddonListFrame, 10, 8)
+	app.AddonListFrame.EnableAllButton:SetScript("OnClick", function()
+		for i, addon in ipairs(app.Info.AddonList) do
+			if addon.enabledCharacter ~= 2 then
+				addon.enabledCharacter = 2
+				checkChangesAll(i)
+			end
+		end
+	end)
+
+	app.AddonListFrame.DisableAllButton = app:MakeButton(app.AddonListFrame, L.DISABLE_ALL)
+	app.AddonListFrame.DisableAllButton:SetPoint("LEFT", app.AddonListFrame.EnableAllButton, "RIGHT", 2, 0)
+	app.AddonListFrame.DisableAllButton:SetScript("OnClick", function()
+		for i, addon in ipairs(app.Info.AddonList) do
+			if addon.enabledCharacter ~= 0 then
+				addon.enabledCharacter = 0
+				checkChangesAll(i)
+			end
+		end
+	end)
+
 	local scrollBox = CreateFrame("Frame", nil, app.AddonListFrame.List, "WowScrollBoxList")
 	scrollBox:SetPoint("TOPLEFT", app.AddonListFrame.List, 2, -6)
 	scrollBox:SetPoint("BOTTOMRIGHT", app.AddonListFrame.List, -18, 4)
