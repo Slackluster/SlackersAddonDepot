@@ -280,12 +280,12 @@ function app:CreateAddonList()
 		local _, _, _, interfaceVersion = GetBuildInfo()
 		if data.interface < 119999 or data.interface > interfaceVersion then
 			listItem.Text2:SetText("|cffFF0000" .. L.INCOMPATIBLE)
+		elseif data.interface < interfaceVersion and not app.Settings["loadOutOfDate"] then
+			listItem.Text2:SetText("|cffFF0000" .. L.OUT_OF_DATE)
+		elseif app.Flag.Changed[data.id] then
+			listItem.Text2:SetText("|cffFF0000" .. L.REQUIRES_RELOAD)
 		elseif data.interface < interfaceVersion then
-			if app.Settings["loadOutOfDate"] then
-				listItem.Text2:SetText("|cff9D9D9D" .. L.OUT_OF_DATE)
-			else
-				listItem.Text2:SetText("|cffFF0000" .. L.OUT_OF_DATE)
-			end
+			listItem.Text2:SetText("|cff9D9D9D" .. L.OUT_OF_DATE)
 		else
 			listItem.Text2:SetText("")
 		end
