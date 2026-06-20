@@ -18,6 +18,8 @@ app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 
 		app:CreateMinimapButton()
 		app:CreateSettings()
+
+		C_AddOns.SetAddonVersionCheck(not app.Settings["loadOutOfDate"])
 	end
 end)
 
@@ -286,4 +288,9 @@ function app:CreateSettings()
 	checkbox("minimapIcon", L.SETTINGS_MINIMAP_TITLE, L.SETTINGS_MINIMAP_DESC, true, function() app:ToggleMinimapIcon() end)
 
 	checkbox("replaceMenuButton", L.SETTINGS_REPLACE_MENU_BUTTON, L.SETTINGS_REPLACE_MENU_BUTTON_DESC, true)
+
+	checkbox("loadOutOfDate", L.SETTINGS_LOAD_OUT_OF_DATE, L.SETTINGS_LOAD_OUT_OF_DATE_DESC, true, function()
+		C_AddOns.SetAddonVersionCheck(not app.Settings["loadOutOfDate"])
+		app:UpdateAddonList()
+	end)
 end

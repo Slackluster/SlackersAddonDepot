@@ -28,7 +28,8 @@ function app:GetAddonInfo()
 	app.Info.AddonList = {}
 
 	for i = 1, C_AddOns.GetNumAddOns() do
-		table.insert(app.Info.AddonList, { iconTexture = C_AddOns.GetAddOnMetadata(i, "IconTexture"), iconAtlas = C_AddOns.GetAddOnMetadata(i, "IconAtlas"), title = C_AddOns.GetAddOnTitle(i), name = C_AddOns.GetAddOnName(i), category = C_AddOns.GetAddOnMetadata(i, "Category"), dependencies = C_AddOns.GetAddOnDependencies(i), enabledCharacter = C_AddOns.GetAddOnEnableState(i, UnitGUID("player")), enabledAll = C_AddOns.GetAddOnEnableState(i) })
+		local name, title, notes = C_AddOns.GetAddOnInfo(i)
+		table.insert(app.Info.AddonList, { iconTexture = C_AddOns.GetAddOnMetadata(i, "IconTexture"), iconAtlas = C_AddOns.GetAddOnMetadata(i, "IconAtlas"), name = name, title = title, notes = notes, version = C_AddOns.GetAddOnMetadata(i, "Version"), interface = C_AddOns.GetAddOnInterfaceVersion(i), category = C_AddOns.GetAddOnMetadata(i, "Category"), dependencies = C_AddOns.GetAddOnDependencies(i), enabledCharacter = C_AddOns.GetAddOnEnableState(i, UnitGUID("player")), enabledAll = C_AddOns.GetAddOnEnableState(i) })
 		-- + Addon cache for history
 	end
 end

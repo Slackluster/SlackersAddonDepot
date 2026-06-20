@@ -21,7 +21,8 @@ local L = app.locales
 -- L.SETTINGS_URL_COPIED =                  "Link copied to clipboard"
 
 -- L.SETTINGS_KEYSLASH_TITLE =              SETTINGS_KEYBINDINGS_LABEL .. " & Slash Commands" -- "Keybindings"
--- _G["BINDING_NAME_SAD_FEATURE"] =         app.NameShort .. ": Feature Name"
+-- _G["BINDING_NAME_SAD_TOGGLELIST"] =      app.NameShort .. ": Toggle Addon List"
+-- L.SLASH_OPEN_LIST =                      "Toggle the addon list"
 -- L.SLASH_OPEN_SETTINGS =                  "Open the settings"
 
 -- L.GENERAL =                              GENERAL -- "General"
@@ -30,11 +31,13 @@ local L = app.locales
 -- L.SETTINGS_MINIMAP_DESC =                "Show the minimap icon. If you disable this, " .. app.NameShort .. " is still available from the Addon Compartment."
 -- L.SETTINGS_REPLACE_MENU_BUTTON =         "Replace AddOns Button"
 -- L.SETTINGS_REPLACE_MENU_BUTTON_DESC =    "Make the main menu's AddOns button open " .. app.NameLong .. "."
+-- L.SETTINGS_LOAD_OUT_OF_DATE =            "Load out of date addons"
+-- L.SETTINGS_LOAD_OUT_OF_DATE_DESC =       "This may cause errors from incompatible addons."
 
 -- General
 -- L.NEW_VERSION_AVAILABLE =                "There is a newer version of " .. app.NameLong .. " available:"
 -- L.SETTINGS_TOOLTIP =                     app.NameLong .. "\n|cffFFFFFF" ..
---                                          app.IconLMB .. ": " .. "???" .. "\n" ..
+--                                          app.IconLMB .. ": " .. L.SLASH_OPEN_LIST .. "\n" ..
 --                                          app.IconRMB .. ": " .. L.SLASH_OPEN_SETTINGS
 
 -- L.INVALID_COMMAND =                      "Invalid command."
@@ -48,3 +51,5 @@ local L = app.locales
 -- L.RELOAD =                               RELOADUI
 -- L.ENABLE_ALL =                           ENABLE_ALL_ADDONS
 -- L.DISABLE_ALL =                          DISABLE_ALL_ADDONS
+-- L.OUT_OF_DATE =                          ADDON_INTERFACE_VERSION
+-- L.INCOMPATIBLE =                         ADDON_INCOMPATIBLE

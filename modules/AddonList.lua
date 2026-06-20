@@ -231,16 +231,6 @@ function app:CreateAddonList()
 
 		local data = node:GetData()
 
-		if data.iconTexture then
-			listItem.Icon:SetText(CreateSimpleTextureMarkup(data.iconTexture, 18, 18))
-		elseif data.iconAtlas then
-			listItem.Icon:SetText(CreateAtlasMarkup(data.iconAtlas, 18, 18))
-		else
-			listItem.Icon:SetText(CreateSimpleTextureMarkup(app.IconNone, 18, 18))
-		end
-		listItem.Text1:SetText(data.title)
-		listItem.Text1:SetFont("Fonts\\FRIZQT__.TTF", 14)
-
 		local function sendChanges(checkboxState)
 			if checkboxState then
 				app.Info.AddonList[data.id].enabledCharacter = 2
@@ -275,6 +265,30 @@ function app:CreateAddonList()
 			sendChanges(self:GetChecked())
 			checkChanges()
 		end)
+
+		if data.iconTexture then
+			listItem.Icon:SetText(CreateSimpleTextureMarkup(data.iconTexture, 18, 18))
+		elseif data.iconAtlas then
+			listItem.Icon:SetText(CreateAtlasMarkup(data.iconAtlas, 18, 18))
+		else
+			listItem.Icon:SetText(CreateSimpleTextureMarkup(app.IconNone, 18, 18))
+		end
+
+		listItem.Text1:SetText(data.title)
+		listItem.Text1:SetFont("Fonts\\FRIZQT__.TTF", 14)
+
+		local _, _, _, interfaceVersion = GetBuildInfo()
+		if data.interface < 119999 or data.interface > interfaceVersion then
+			listItem.Text2:SetText("|cffFF0000" .. L.INCOMPATIBLE)
+		elseif data.interface < interfaceVersion then
+			if app.Settings["loadOutOfDate"] then
+				listItem.Text2:SetText("|cff9D9D9D" .. L.OUT_OF_DATE)
+			else
+				listItem.Text2:SetText("|cffFF0000" .. L.OUT_OF_DATE)
+			end
+		else
+			listItem.Text2:SetText("")
+		end
 	end
 
 	app.AddonList:SetElementFactory(function(factory, node)
@@ -315,9 +329,9 @@ function app:UpdateAddonList()
 			for i, addon in ipairs(app.Info.AddonList) do
 				if not addon.dependencies then
 					if not addon.category and category == STABLE_PET_UNCATEGORIZED then
-						addonList[addon.name] = header:Insert({ id = i, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, title = addon.title, name = addon.name, dependencies = addon.dependencies, enabled = addon.enabledCharacter })
+						addonList[addon.name] = header:Insert({ id = i, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, dependencies = addon.dependencies, enabled = addon.enabledCharacter })
 					elseif addon.category == category then
-						addonList[addon.name] = header:Insert({ id = i, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, title = addon.title, name = addon.name, dependencies = addon.dependencies, enabled = addon.enabledCharacter })
+						addonList[addon.name] = header:Insert({ id = i, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, dependencies = addon.dependencies, enabled = addon.enabledCharacter })
 					end
 				end
 			end
@@ -329,9 +343,9 @@ function app:UpdateAddonList()
 		for i, addon in ipairs(app.Info.AddonList) do
 			if not addon.dependencies then
 				if addon.enabledCharacter == 2 then
-					addonList[addon.name] = headerEnabled:Insert({ id = i, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, title = addon.title, name = addon.name, dependencies = addon.dependencies, enabled = addon.enabledCharacter })
+					addonList[addon.name] = headerEnabled:Insert({ id = i, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, dependencies = addon.dependencies, enabled = addon.enabledCharacter })
 				elseif addon.enabledCharacter == 0 then
-					addonList[addon.name] = headerDisabled:Insert({ id = i, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, title = addon.title, name = addon.name, dependencies = addon.dependencies, enabled = addon.enabledCharacter })
+					addonList[addon.name] = headerDisabled:Insert({ id = i, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, dependencies = addon.dependencies, enabled = addon.enabledCharacter })
 				end
 			end
 		end
@@ -339,7 +353,7 @@ function app:UpdateAddonList()
 
 	for i, addon in ipairs(app.Info.AddonList) do
 		if addon.dependencies and addonList[addon.dependencies] then
-			addonList[addon.dependencies]:Insert({ id = i, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, title = addon.title, name = addon.name, enabled = addon.enabledCharacter })
+			addonList[addon.dependencies]:Insert({ id = i, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, dependencies = addon.dependencies, enabled = addon.enabledCharacter })
 		end
 	end
 
