@@ -3,6 +3,7 @@
 ---------------------------------------
 
 local appName, app = ...
+local api = app.api
 local L = app.locales
 
 -------------
@@ -115,6 +116,14 @@ function app:UpdateAddonList()
 	end
 
 	app.AddonList:SetDataProvider(DataProvider, true)
+end
+
+function api:ToggleAddonList()
+	if app.AddonListFrame:IsShown() then
+		app.AddonListFrame:Hide()
+	else
+		app.AddonListFrame:Show()
+	end
 end
 
 --------------------

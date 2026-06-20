@@ -114,6 +114,8 @@ function app:CreateSlashCommands()
 
 		if command == "settings" then
 			app:OpenSettings()
+		elseif command == "" then
+			api:ToggleAddonList()
 		else
 			app:Print(L.INVALID_COMMAND)
 		end
@@ -126,7 +128,7 @@ end
 
 function SlackersAddonDepot_Click(self, button)
 	if button == "LeftButton" then
-		-- ???
+		api:ToggleAddonList()
 	elseif button == "RightButton" then
 		app:OpenSettings()
 	end

@@ -21,7 +21,8 @@ L.SETTINGS_URL_COPY =                    "Ctrl+C to copy:"
 L.SETTINGS_URL_COPIED =                  "Link copied to clipboard"
 
 L.SETTINGS_KEYSLASH_TITLE =              SETTINGS_KEYBINDINGS_LABEL .. " & Slash Commands" -- "Keybindings"
-_G["BINDING_NAME_SAD_FEATURE"] =         app.NameShort .. ": Feature Name"
+_G["BINDING_NAME_SAD_TOGGLELIST"] =      app.NameShort .. ": Toggle Addon List"
+L.SLASH_OPEN_LIST =                      "Toggle the addon list"
 L.SLASH_OPEN_SETTINGS =                  "Open the settings"
 
 L.GENERAL =                              GENERAL -- "General"
@@ -34,7 +35,7 @@ L.SETTINGS_REPLACE_MENU_BUTTON_DESC =    "Make the main menu's AddOns button ope
 -- General
 L.NEW_VERSION_AVAILABLE =                "There is a newer version of " .. app.NameLong .. " available:"
 L.SETTINGS_TOOLTIP =                     app.NameLong .. "\n|cffFFFFFF" ..
-                                         app.IconLMB .. ": " .. "???" .. "\n" ..
+                                         app.IconLMB .. ": " .. L.SLASH_OPEN_LIST .. "\n" ..
                                          app.IconRMB .. ": " .. L.SLASH_OPEN_SETTINGS
 
 L.INVALID_COMMAND =                      "Invalid command."

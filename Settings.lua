@@ -268,13 +268,13 @@ function app:CreateSettings()
 
 	local _, isExpanded = expandableHeader(L.SETTINGS_KEYSLASH_TITLE)
 
-		keybind("SAD_FEATURE", isExpanded)
+		keybind("SAD_TOGGLELIST", isExpanded)
 
 		local leftText = { "|cffFFFFFF" ..
 			"/sad",
 			"/sad settings" }
 		local middleText = {
-			"",
+			L.SLASH_OPEN_LIST,
 			L.SLASH_OPEN_SETTINGS }
 		leftText = table.concat(leftText, "\n\n")
 		middleText = table.concat(middleText, "\n\n")

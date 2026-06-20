@@ -1,5 +1,5 @@
 <Bindings>
-	<Binding name="SAD_FEATURE" category="|cff3FC7EBSlacker's Addon Depot|r" searchTags="BINDING_NAME_SLACKERSADDONDEPOT,BINDING_NAME_SLACKWARE">
-		SlackersAddonDepot.Feature()
+	<Binding name="SAD_TOGGLELIST" category="|cff3FC7EBSlacker's Addon Depot|r" searchTags="BINDING_NAME_SLACKERSADDONDEPOT,BINDING_NAME_SLACKWARE">
+		SlackersAddonDepot.ToggleAddonList()
 	</Binding>
 </Bindings>
