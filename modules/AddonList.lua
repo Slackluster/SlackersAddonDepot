@@ -14,6 +14,10 @@ app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 	if addOnName == appName then
 		app:CreateAddonList()
 		app:HookGameMenu()
+
+		if not app.Settings["headerStyle"] then app.Settings["headerStyle"] = 1 end
+
+		app.Flag.Changed = {}
 	end
 end)
 
@@ -25,7 +29,6 @@ function app:CreateAddonList()
 	app.AddonListFrame = CreateFrame("Frame", nil, UIParent, "DefaultPanelTemplate")
 	app.AddonListFrame:SetSize(600, 600)
 	app.AddonListFrame:SetPoint("CENTER", UIParent)
-	--app.AddonListFrame:SetFrameStrata("DIALOG")
 	app.AddonListFrame:EnableMouse(true)
 	app.AddonListFrame:SetMovable(true)
 	app.AddonListFrame:RegisterForDrag("LeftButton")
@@ -36,6 +39,7 @@ function app:CreateAddonList()
 
 	app.AddonListFrame:SetScript("OnShow", function()
 		app:UpdateAddonList()
+		app.AddonListFrame.ReloadButton:Disable()
 	end)
 	app.AddonListFrame:SetScript("OnMouseDown", function()
 		app.AddonListFrame:SetToplevel(true)
@@ -55,11 +59,55 @@ function app:CreateAddonList()
 	end)
 
 	app.AddonListFrame.List = CreateFrame("Frame", nil, app.AddonListFrame, "InsetFrameTemplate")
-	app.AddonListFrame.List:SetPoint("TOPLEFT", app.AddonListFrame, 10, -50)
-	app.AddonListFrame.List:SetPoint("BOTTOMRIGHT", app.AddonListFrame, -6, 28)
+	app.AddonListFrame.List:SetPoint("TOPLEFT", app.AddonListFrame, 10, -54)
+	app.AddonListFrame.List:SetPoint("BOTTOMRIGHT", app.AddonListFrame, -6, 34)
 	app.AddonListFrame.List.Background = app.AddonListFrame.List:CreateTexture(nil, "BACKGROUND")
 	app.AddonListFrame.List.Background:SetAllPoints()
 	app.AddonListFrame.List.Background:SetAtlas("CreditsScreen-Background-2")
+
+	local function GeneratorFunction(owner, rootDescription)
+		rootDescription:CreateButton(L.LISTSTYLE_CATEGORIES, function(data)
+			app.Settings["headerStyle"] = 1
+			owner:SetDefaultText(L.LISTSTYLE_CATEGORIES)
+			app:UpdateAddonList()
+		end)
+		rootDescription:CreateButton(L.LISTSTYLE_ENABLESTATE, function(data)
+			app.Settings["headerStyle"] = 2
+			owner:SetDefaultText(L.LISTSTYLE_ENABLESTATE)
+			app:UpdateAddonList()
+		end)
+	end
+	app.AddonListFrame.ListStyleDropdown = CreateFrame("DropdownButton", nil, app.AddonListFrame, "WowStyle1DropdownTemplate")
+	if app.Settings["headerStyle"] == 1 then
+		app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.LISTSTYLE_CATEGORIES)
+	elseif app.Settings["headerStyle"] == 2 then
+		app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.LISTSTYLE_ENABLESTATE)
+	end
+	app.AddonListFrame.ListStyleDropdown:SetWidth(120)
+	app.AddonListFrame.ListStyleDropdown:SetPoint("TOPRIGHT", -7, -26)
+	app.AddonListFrame.ListStyleDropdown:SetupMenu(GeneratorFunction)
+
+	app.AddonListFrame.CancelButton = app:MakeButton(app.AddonListFrame, L.CANCEL)
+	app.AddonListFrame.CancelButton:SetPoint("BOTTOMRIGHT", app.AddonListFrame, -10, 8)
+	app.AddonListFrame.CancelButton:SetScript("OnClick", function()
+		app.Flag.AddonsChanged = false
+		app:GetAddonInfo()
+		app.AddonListFrame:Hide()
+	end)
+
+	app.AddonListFrame.ReloadButton = app:MakeButton(app.AddonListFrame, L.RELOAD)
+	app.AddonListFrame.ReloadButton:SetPoint("RIGHT", app.AddonListFrame.CancelButton, "LEFT", -2, 0)
+	app.AddonListFrame.ReloadButton:SetScript("OnClick", function()
+		local guid = UnitGUID("player")
+		for i, addon in ipairs(app.Info.AddonList) do
+			if addon.enabledCharacter == 2 then
+				C_AddOns.EnableAddOn(i, guid)
+			elseif addon.enabledCharacter == 0 then
+				C_AddOns.DisableAddOn(i, guid)
+			end
+		end
+		ReloadUI()
+	end)
 
 	local scrollBox = CreateFrame("Frame", nil, app.AddonListFrame.List, "WowScrollBoxList")
 	scrollBox:SetPoint("TOPLEFT", app.AddonListFrame.List, 2, -6)
@@ -76,43 +124,162 @@ function app:CreateAddonList()
 	app.AddonList = CreateScrollBoxListTreeListView()
 	ScrollUtil.InitScrollBoxListWithScrollBar(scrollBox, scrollBar, app.AddonList)
 
-	local function Initializer(listItem, node)
-		local data = node:GetData()
-
-		if data.iconTexture then
-			listItem.LeftText1:SetText(CreateSimpleTextureMarkup(data.iconTexture, 18, 18))
-		elseif data.iconAtlas then
-			listItem.LeftText1:SetText(CreateAtlasMarkup(data.iconAtlas, 18, 18))
-		end
-		listItem.LeftText2:SetText(data.title)
-		listItem.LeftText2:SetFont("Fonts\\FRIZQT__.TTF", 14)
-
-		-- node:ToggleCollapsed()
-		-- Watchtower_Flags[data.groupID].collapsed = node:IsCollapsed()
-		-- app:UpdateStatusList()
-
+	local function headerInitializer(listItem, node)
 		listItem:EnableMouse(true)
 		listItem:RegisterForDrag("LeftButton")
 		listItem:SetScript("OnDragStart", function() app.AddonListFrame:StartMoving() end)
 		listItem:SetScript("OnDragStop", function() app.AddonListFrame:StopMovingOrSizing() end)
-		-- listItem:SetScript("OnEnter", function(self)
-		-- end)
-		-- listItem:SetScript("OnLeave", function(self)
-		-- end)
-		-- listItem:SetScript("OnClick", function(self)
-		-- end)
+
+		local data = node:GetData()
+
+		local function updateToggleButton()
+			if node:IsCollapsed() then
+				listItem.toggleButton.texture:SetTexture("Interface\\AddOns\\SlackersAddonDepot\\assets\\button-right.png")
+			else
+				listItem.toggleButton.texture:SetTexture("Interface\\AddOns\\SlackersAddonDepot\\assets\\button-down.png")
+			end
+		end
+
+		if not listItem.toggleButton then
+			listItem.toggleButton = CreateFrame("Button", nil, listItem)
+			listItem.toggleButton:SetSize(22, 22)
+			listItem.toggleButton:SetFrameLevel(listItem:GetFrameLevel() + 1)
+			listItem.toggleButton:SetHighlightAtlas("common-button-collapseExpand-hover")
+			listItem.toggleButton:SetPropagateMouseClicks(false)
+			listItem.toggleButton.texture = listItem.toggleButton:CreateTexture(nil, "ARTWORK")
+			listItem.toggleButton.texture:SetAllPoints()
+		end
+		updateToggleButton()
+		listItem.toggleButton:Show()
+		listItem.toggleButton:ClearAllPoints()
+		listItem.toggleButton:SetPoint("LEFT", listItem, "LEFT", 0, 1)
+		listItem.toggleButton:SetScript("OnClick", function()
+			node:ToggleCollapsed()
+			updateToggleButton()
+		end)
+
+		listItem.Text1:SetText("|cffFFFFFF" .. data.title)
+		listItem.Text1:SetFont("Fonts\\FRIZQT__.TTF", 14)
 	end
 
-	app.AddonList:SetElementInitializer("SlackersAddonDepot_ListButton", Initializer)
+	local function addonInitializer(listItem, node)
+		listItem:EnableMouse(true)
+		listItem:RegisterForDrag("LeftButton")
+		listItem:SetScript("OnDragStart", function() app.AddonListFrame:StartMoving() end)
+		listItem:SetScript("OnDragStop", function() app.AddonListFrame:StopMovingOrSizing() end)
+
+		local data = node:GetData()
+
+		if data.iconTexture then
+			listItem.Icon:SetText(CreateSimpleTextureMarkup(data.iconTexture, 18, 18))
+		elseif data.iconAtlas then
+			listItem.Icon:SetText(CreateAtlasMarkup(data.iconAtlas, 18, 18))
+		else
+			listItem.Icon:SetText(CreateSimpleTextureMarkup(app.IconNone, 18, 18))
+		end
+		listItem.Text1:SetText(data.title)
+		listItem.Text1:SetFont("Fonts\\FRIZQT__.TTF", 14)
+
+		local function sendChanges(checkboxState)
+			if checkboxState then
+				app.Info.AddonList[data.id].enabledCharacter = 2
+			else
+				app.Info.AddonList[data.id].enabledCharacter = 0
+			end
+		end
+		local function checkChanges()
+			if not app.Flag.Changed[data.id] then
+				app.Flag.Changed[data.id] = true
+			else
+				app.Flag.Changed[data.id] = nil
+			end
+			local next = next
+			if next(app.Flag.Changed) == nil then
+				app.AddonListFrame.ReloadButton:Disable()
+			else
+				app.AddonListFrame.ReloadButton:Enable()
+			end
+		end
+		if data.enabled == 2 then
+			listItem.Checkbox:SetChecked(true)
+		elseif data.enabled == 0 then
+			listItem.Checkbox:SetChecked(false)
+		end
+		listItem:SetScript("OnClick", function()
+			listItem.Checkbox:SetChecked(not listItem.Checkbox:GetChecked())
+			sendChanges(listItem.Checkbox:GetChecked())
+			checkChanges()
+		end)
+		listItem.Checkbox:SetScript("OnClick", function(self)
+			sendChanges(self:GetChecked())
+			checkChanges()
+		end)
+	end
+
+	app.AddonList:SetElementFactory(function(factory, node)
+		local data = node:GetData()
+
+		if data.nodeType == "header" then
+			factory("SlackersAddonDepot_AddonListHeader", headerInitializer)
+		elseif data.nodeType == "addon" then
+			factory("SlackersAddonDepot_AddonListAddon", addonInitializer)
+		elseif data.nodeType == "dependency" then
+			factory("SlackersAddonDepot_AddonListDependency", addonInitializer)
+		end
+	end)
 
 	app.AddonListFrame:SetFlattensRenderLayers(true)
 end
 
 function app:UpdateAddonList()
 	local DataProvider = CreateTreeDataProvider()
+	local addonList = {}
 
-	for i = 1, C_AddOns.GetNumAddOns() do
-		DataProvider:Insert({ iconTexture = C_AddOns.GetAddOnMetadata(i, "IconTexture"), iconAtlas = C_AddOns.GetAddOnMetadata(i, "IconAtlas"), title = C_AddOns.GetAddOnTitle(i) })
+	if app.Settings["headerStyle"] == 1 then
+		local categoryList = {}
+		local seen = {}
+
+		for i, addon in ipairs(app.Info.AddonList) do
+			if not addon.dependencies and addon.category and not seen[addon.category] then
+				table.insert(categoryList, addon.category)
+				seen[addon.category] = true
+			end
+		end
+		table.sort(categoryList, function(a, b) return a < b end)
+		table.insert(categoryList, STABLE_PET_UNCATEGORIZED)
+
+		for i, category in ipairs(categoryList) do
+			local header = DataProvider:Insert({ nodeType = "header", title = category })
+
+			for i, addon in ipairs(app.Info.AddonList) do
+				if not addon.dependencies then
+					if not addon.category and category == STABLE_PET_UNCATEGORIZED then
+						addonList[addon.name] = header:Insert({ id = i, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, title = addon.title, name = addon.name, dependencies = addon.dependencies, enabled = addon.enabledCharacter })
+					elseif addon.category == category then
+						addonList[addon.name] = header:Insert({ id = i, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, title = addon.title, name = addon.name, dependencies = addon.dependencies, enabled = addon.enabledCharacter })
+					end
+				end
+			end
+		end
+	elseif app.Settings["headerStyle"] == 2 then
+		local headerEnabled = DataProvider:Insert({ nodeType = "header", title = L.ENABLED })
+		local headerDisabled = DataProvider:Insert({ nodeType = "header", title = L.DISABLED })
+
+		for i, addon in ipairs(app.Info.AddonList) do
+			if not addon.dependencies then
+				if addon.enabledCharacter == 2 then
+					addonList[addon.name] = headerEnabled:Insert({ id = i, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, title = addon.title, name = addon.name, dependencies = addon.dependencies, enabled = addon.enabledCharacter })
+				elseif addon.enabledCharacter == 0 then
+					addonList[addon.name] = headerDisabled:Insert({ id = i, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, title = addon.title, name = addon.name, dependencies = addon.dependencies, enabled = addon.enabledCharacter })
+				end
+			end
+		end
+	end
+
+	for i, addon in ipairs(app.Info.AddonList) do
+		if addon.dependencies and addonList[addon.dependencies] then
+			addonList[addon.dependencies]:Insert({ id = i, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, title = addon.title, name = addon.name, enabled = addon.enabledCharacter })
+		end
 	end
 
 	app.AddonList:SetDataProvider(DataProvider, true)

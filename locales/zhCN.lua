@@ -38,3 +38,11 @@ local L = app.locales
 --                                          app.IconRMB .. ": " .. L.SLASH_OPEN_SETTINGS
 
 -- L.INVALID_COMMAND =                      "Invalid command."
+
+-- Addon List
+-- L.LISTSTYLE_CATEGORIES =                 CATEGORIES
+-- L.LISTSTYLE_ENABLESTATE =                "Enable State"
+-- L.ENABLED =                              PVP_WAR_MODE_ENABLED
+-- L.DISABLED =                             ADDON_DISABLED
+-- L.CANCEL =                               CANCEL
+-- L.RELOAD =                               RELOADUI

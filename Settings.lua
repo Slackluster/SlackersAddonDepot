@@ -14,6 +14,7 @@ app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 	if addOnName == appName then
 		SlackersAddonDepot_Settings = SlackersAddonDepot_Settings or {}
 		app.Settings = SlackersAddonDepot_Settings
+		app.Cache = SlackersAddonDepot_Cache
 
 		app:CreateMinimapButton()
 		app:CreateSettings()

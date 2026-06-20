@@ -26,25 +26,41 @@
 		<Size y="24" />
 	</Frame>
 
-	<Button name="SlackersAddonDepot_ListButton" virtual="true">
-		<Size x="200" y="20" />
+	<Button name="SlackersAddonDepot_AddonListHeader" virtual="true">
+		<Size x="200" y="22" />
 		<HighlightTexture atlas="Options_List_Hover" setAllPoints="true" />
 		<Layers>
 			<Layer level="OVERLAY">
-				<FontString parentKey="LeftText1" inherits="GameFontNormal" justifyH="LEFT">
+				<FontString parentKey="Text1" inherits="GameFontNormal" justifyH="LEFT" wordwrap="false">
 					<Anchors>
-						<Anchor point="LEFT" x="2" />
-					</Anchors>
-					<Size x="400" y="24" />
-				</FontString>
-				<FontString parentKey="LeftText2" inherits="GameFontNormal" justifyH="LEFT" wordwrap="false">
-					<Anchors>
-						<Anchor point="LEFT" x="22" y="1" />
+						<Anchor point="LEFT" x="23" y="1" />
 						<Anchor point="RIGHT" x="-22" />
 					</Anchors>
 					<Size x="400" y="24" />
 				</FontString>
-				<FontString parentKey="RightText" inherits="GameFontNormal" justifyH="RIGHT">
+			</Layer>
+		</Layers>
+	</Button>
+
+	<Button name="SlackersAddonDepot_AddonListAddon" virtual="true">
+		<Size x="200" y="22" />
+		<HighlightTexture atlas="Options_List_Hover" setAllPoints="true" />
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString parentKey="Icon" inherits="GameFontNormal" justifyH="LEFT">
+					<Anchors>
+						<Anchor point="LEFT" x="32" />
+					</Anchors>
+					<Size x="400" y="24" />
+				</FontString>
+				<FontString parentKey="Text1" inherits="GameFontNormal" justifyH="LEFT" wordwrap="false">
+					<Anchors>
+						<Anchor point="LEFT" x="55" y="1" />
+						<Anchor point="RIGHT" x="-22" />
+					</Anchors>
+					<Size x="400" y="24" />
+				</FontString>
+				<FontString parentKey="Text2" inherits="GameFontNormal" justifyH="RIGHT">
 					<Anchors>
 						<Anchor point="RIGHT" x="-5" />
 					</Anchors>
@@ -52,5 +68,55 @@
 				</FontString>
 			</Layer>
 		</Layers>
+		<Frames>
+			<CheckButton parentKey="Checkbox" inherits="MinimalCheckboxArtTemplate">
+				<Size x="24" y="24"/>
+				<Anchors>
+					<Anchor point="LEFT" x="5" y="0"/>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="8"/>
+				</HitRectInsets>
+			</CheckButton>
+		</Frames>
+	</Button>
+
+	<Button name="SlackersAddonDepot_AddonListDependency" virtual="true">
+		<Size x="200" y="22" />
+		<HighlightTexture atlas="Options_List_Hover" setAllPoints="true" />
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString parentKey="Icon" inherits="GameFontNormal" justifyH="LEFT">
+					<Anchors>
+						<Anchor point="LEFT" x="39" />
+					</Anchors>
+					<Size x="400" y="24" />
+				</FontString>
+				<FontString parentKey="Text1" inherits="GameFontNormal" justifyH="LEFT" wordwrap="false">
+					<Anchors>
+						<Anchor point="LEFT" x="62" y="1" />
+						<Anchor point="RIGHT" x="-22" />
+					</Anchors>
+					<Size x="400" y="24" />
+				</FontString>
+				<FontString parentKey="Text2" inherits="GameFontNormal" justifyH="RIGHT">
+					<Anchors>
+						<Anchor point="RIGHT" x="-5" />
+					</Anchors>
+					<Size x="400" y="24" />
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<CheckButton parentKey="Checkbox" inherits="MinimalCheckboxArtTemplate">
+				<Size x="24" y="24"/>
+				<Anchors>
+					<Anchor point="LEFT" x="12" y="0"/>
+				</Anchors>
+				<HitRectInsets>
+					<AbsInset left="0" right="0" top="0" bottom="8"/>
+				</HitRectInsets>
+			</CheckButton>
+		</Frames>
 	</Button>
 </Ui>
