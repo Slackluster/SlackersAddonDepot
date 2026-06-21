@@ -40,6 +40,8 @@ function app:CreateAddonList()
 	app.AddonListFrame:Hide()
 	table.insert(UISpecialFrames, "SlackersAddonDepotAddonList")
 	app.AddonListFrame:SetScript("OnShow", function()
+		app.AddonListFrame:ClearAllPoints()
+		app.AddonListFrame:SetPoint("CENTER")
 		if app.Flag.SelectedCharacter == L.ALL then
 			app.AddonListFrame.CharListDropdown:SetDefaultText(L.ALL)
 		else
