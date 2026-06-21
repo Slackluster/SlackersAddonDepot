@@ -3,7 +3,7 @@ A World of Warcraft addon. Download locations: [CurseForge](https://www.cursefor
 
 [![](https://media.forgecdn.net/attachments/1439/398/buymeacoffee-png.png)](https://www.buymeacoffee.com/Slackluster)
 
-**Slacker's Addon Depot** lets you automatically load addons based on load conditions.
+**Slacker's Addon Depot (SAD)** lets you automatically load addons based on load conditions.
 
 **Features**
 - Set load conditions and they will be automatically applied to any known character.
