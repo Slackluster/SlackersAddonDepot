@@ -250,9 +250,35 @@ function app:CreateAddonList()
 	end)
 	app:SetBorder(app.AddonListFrame.SearchBar, -7, 1, 2, -2)
 
-	app.AddonListFrame.SelectedText = app.AddonListFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-	app.AddonListFrame.SelectedText:SetPoint("TOPLEFT", 14, -60)
-	app.AddonListFrame.SelectedText:SetText(app.Flag.SelectedNo .. " " .. "addons selected")
+	-- app.AddonListFrame.SelectedText = app.AddonListFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+	-- app.AddonListFrame.SelectedText:SetPoint("TOPLEFT", 14, -60)
+	-- app.AddonListFrame.SelectedText:SetText(app.Flag.SelectedNo .. " " .. "addons selected")
+
+	app.AddonListFrame.SelectAllButton = app:MakeButton(app.AddonListFrame, "Select All")
+	app.AddonListFrame.SelectAllButton:SetPoint("TOPLEFT", 14, -60)
+	app.AddonListFrame.SelectAllButton:SetScript("OnClick", function()
+		for i = 1, #app.Info.AddonList do
+			app.Flag.Selected[i] = true
+		end
+		app.Flag.SelectedNo = #app.Info.AddonList
+		app:UpdateAddonList()
+	end)
+
+	app.AddonListFrame.ClearButton = app:MakeButton(app.AddonListFrame, "Clear")
+	app.AddonListFrame.ClearButton:SetPoint("LEFT", app.AddonListFrame.SelectAllButton, "RIGHT", 2, 0)
+	app.AddonListFrame.ClearButton:SetScript("OnClick", function()
+		for i = 1, #app.Info.AddonList do
+			app.Flag.Selected[i] = false
+		end
+		app.Flag.SelectedNo = 0
+		app:UpdateAddonList()
+	end)
+
+	app.AddonListFrame.EditSelectionButton = app:MakeButton(app.AddonListFrame, "Edit " .. app.Flag.SelectedNo .. " addons")
+	app.AddonListFrame.EditSelectionButton:SetPoint("LEFT", app.AddonListFrame.ClearButton, "RIGHT", 2, 0)
+	app.AddonListFrame.EditSelectionButton:SetScript("OnClick", function()
+
+	end)
 
 	app.AddonListFrame.CancelButton = app:MakeButton(app.AddonListFrame, L.CANCEL)
 	app.AddonListFrame.CancelButton:SetPoint("BOTTOMRIGHT", app.AddonListFrame, -10, 8)
@@ -423,23 +449,17 @@ function app:CreateAddonList()
 					for _, selected in pairs(app.Flag.Selected) do
 						if selected then app.Flag.SelectedNo = app.Flag.SelectedNo + 1 end
 					end
-					app.AddonListFrame.SelectedText:SetText(app.Flag.SelectedNo .. " " .. "addons selected")
 				end
-
-				app:UpdateAddonList()
 			elseif app.Flag.Selected[data.id] then
 				app.Flag.LastClicked = { id = listItem:GetElementDataIndex(), selected = false }
 				app.Flag.Selected[data.id] = nil
 				app.Flag.SelectedNo = app.Flag.SelectedNo - 1
-				app.AddonListFrame.SelectedText:SetText(app.Flag.SelectedNo .. " " .. "addons selected")
-				listItem.Highlight:Hide()
 			else
 				app.Flag.LastClicked = { id = listItem:GetElementDataIndex(), selected = true }
 				app.Flag.Selected[data.id] = true
 				app.Flag.SelectedNo = app.Flag.SelectedNo + 1
-				app.AddonListFrame.SelectedText:SetText(app.Flag.SelectedNo .. " " .. "addons selected")
-				listItem.Highlight:Show()
 			end
+			app:UpdateAddonList()
 		end)
 
 		if data.iconTexture then
@@ -531,6 +551,16 @@ function app:UpdateAddonList()
 	else
 		app.AddonListFrame.ReloadButton:Enable()
 	end
+
+	if app.Flag.SelectedNo > 0 then
+		app.AddonListFrame.ClearButton:Enable()
+		app.AddonListFrame.EditSelectionButton:Enable()
+	else
+		app.AddonListFrame.ClearButton:Disable()
+		app.AddonListFrame.EditSelectionButton:Disable()
+	end
+	app.AddonListFrame.EditSelectionButton:SetText("Edit " .. app.Flag.SelectedNo .. " addons")
+	app.AddonListFrame.EditSelectionButton:SetWidth(app.AddonListFrame.EditSelectionButton:GetTextWidth()+20)
 
 	for _, addon in ipairs(app.Info.AddonList) do
 		if app.Flag.SelectedCharacter == "All" then
