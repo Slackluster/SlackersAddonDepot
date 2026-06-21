@@ -43,15 +43,15 @@ L.SETTINGS_TOOLTIP =                     app.NameLong .. "\n|cffFFFFFF" ..
 L.INVALID_COMMAND =                      "Invalid command."
 
 -- Addon List
-L.LISTSTYLE_CATEGORIES =                 CATEGORIES
+L.LISTSTYLE_CATEGORIES =                 CATEGORIES -- "Categories"
 L.LISTSTYLE_ENABLESTATE =                "Enable State"
-L.ENABLED =                              PVP_WAR_MODE_ENABLED
-L.DISABLED =                             ADDON_DISABLED
-L.CANCEL =                               CANCEL
-L.RELOAD =                               RELOADUI
-L.ENABLE_ALL =                           ENABLE_ALL_ADDONS
-L.DISABLE_ALL =                          DISABLE_ALL_ADDONS
-L.OUT_OF_DATE =                          ADDON_INTERFACE_VERSION
-L.INCOMPATIBLE =                         ADDON_INCOMPATIBLE
-L.REQUIRES_RELOAD =                      REQUIRES_RELOAD
-L.DEPENDENCIES =                         ADDON_DEPENDENCIES
+L.ENABLED =                              PVP_WAR_MODE_ENABLED -- "Enabled"
+L.DISABLED =                             ADDON_DISABLED -- "Disabled"
+L.CANCEL =                               CANCEL -- "Cancel"
+L.RELOAD =                               RELOADUI -- "Reload UI"
+L.ENABLE_ALL =                           ENABLE_ALL_ADDONS -- "Enable All"
+L.DISABLE_ALL =                          DISABLE_ALL_ADDONS -- "Disable All"
+L.OUT_OF_DATE =                          ADDON_INTERFACE_VERSION -- "Out of date"
+L.INCOMPATIBLE =                         ADDON_INCOMPATIBLE -- "Incompatible"
+L.REQUIRES_RELOAD =                      REQUIRES_RELOAD -- "Requires Reload"
+L.DEPENDENCIES =                         ADDON_DEPENDENCIES -- "Dependencies: " (note the included trailing space)
