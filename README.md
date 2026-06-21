@@ -10,7 +10,7 @@ A World of Warcraft addon. Download locations: [CurseForge](https://www.cursefor
 - For characters SAD hasn't seen yet (so sad), it will prompt you to reload to enable the right addons.
 - You can also manually apply profiles for temporary addon loadouts.
 - Features a character list with all seen characters, including those from different realms.
-- Lets you show addons either by category, or by load state.
+- Lets you view addons either by category, or by load state.
 
 **To Do**
 - Follow the CurseForge project
