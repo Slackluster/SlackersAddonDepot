@@ -420,10 +420,18 @@ function app:CreateAddonList()
 		end
 
 		listItem:SetScript("OnEnter", function()
+			local major = math.floor(data.interface / 10000)
+			local minor = math.floor(data.interface / 100) % 100
+			local patch = data.interface % 100
+
 			GameTooltip:ClearLines()
 			GameTooltip:ClearAllPoints()
 			GameTooltip:SetOwner(UIParent, "ANCHOR_NONE")
 			GameTooltip:AddDoubleLine(data.title, data.version)
+			GameTooltip:AddDoubleLine(data.author or L.NOT_APPLICABLE, major .. "." .. minor .. "." .. patch)
+			if data.dependencies or data.notes then
+				GameTooltip:AddLine(" ")
+			end
 			if data.dependencies then
 				GameTooltip:AddLine(L.DEPENDENCIES .. data.dependencies)
 			end
@@ -539,10 +547,10 @@ function app:UpdateAddonList()
 			local row1 = DataProvider:Insert({ nodeType = "header", title = header.category })
 			for _, addon1 in ipairs(header.children) do
 				local addon = addon1.addon
-				local row2 = row1:Insert({ id = addon.id, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, dependencies = addon.dependencies, enabled = addon.enabled })
+				local row2 = row1:Insert({ id = addon.id, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
 				for _, addon2 in ipairs(addon1.children) do
 					local addon = addon2.addon
-					row2:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, dependencies = addon.dependencies, enabled = addon.enabled })
+					row2:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
 				end
 			end
 		end

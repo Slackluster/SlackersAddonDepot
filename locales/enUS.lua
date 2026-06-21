@@ -67,3 +67,4 @@ L.CHANGE_PENDING =                       "Change Pending"
 L.DEPENDENCIES =                         ADDON_DEPENDENCIES -- "Dependencies: " (note the included trailing space)
 L.UNCATEGORIZED =                        STABLE_PET_UNCATEGORIZED -- "Uncategorized"
 L.ALL =                                  ALL -- "All"
+L.NOT_APPLICABLE =                       NOT_APPLICABLE -- "N/A"
