@@ -48,6 +48,11 @@ function app:CreateAddonList()
 		app:UpdateAddonList()
 		app.AddonListFrame.ReloadButton:Disable()
 	end)
+	app.AddonListFrame:SetScript("OnHide", function()
+		app.Flag.Changed = {}
+		app:GetAddonInfo()
+	end)
+
 	app.AddonListFrame:SetScript("OnMouseDown", function()
 		app.AddonListFrame:SetToplevel(true)
 	end)
@@ -247,8 +252,6 @@ function app:CreateAddonList()
 	app.AddonListFrame.CancelButton = app:MakeButton(app.AddonListFrame, L.CANCEL)
 	app.AddonListFrame.CancelButton:SetPoint("BOTTOMRIGHT", app.AddonListFrame, -10, 8)
 	app.AddonListFrame.CancelButton:SetScript("OnClick", function()
-		app.Flag.AddonsChanged = false
-		app:GetAddonInfo()
 		app.AddonListFrame:Hide()
 	end)
 
