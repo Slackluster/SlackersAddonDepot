@@ -1,6 +1,7 @@
 ## Interface: 120007
 ## Title: |cff3FC7EBSlacker's Addon Depot|r
 ## Author: Slackluster
+## Notes: Enable addons automatically through load conditions
 ## IconTexture: Interface\AddOns\SlackersAddonDepot\assets\icon.png
 ## Version: @project-version@
 ## X-Curse-Project-ID: 1580967
