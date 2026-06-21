@@ -352,7 +352,6 @@ function app:CreateAddonList()
 		end)
 
 		listItem.Text1:SetText("|cffFFFFFF" .. data.title)
-		listItem.Text1:SetFont("Fonts\\FRIZQT__.TTF", 14)
 	end
 
 	local function addonInitializer(listItem, node)
@@ -401,7 +400,6 @@ function app:CreateAddonList()
 		end
 
 		listItem.Text1:SetText(data.title)
-		listItem.Text1:SetFont("Fonts\\FRIZQT__.TTF", 14)
 
 		local _, _, _, interfaceVersion = GetBuildInfo()
 		if data.interface < 119999 or data.interface > interfaceVersion then

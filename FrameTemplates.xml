@@ -31,7 +31,7 @@
 		<HighlightTexture atlas="Options_List_Hover" setAllPoints="true" />
 		<Layers>
 			<Layer level="OVERLAY">
-				<FontString parentKey="Text1" inherits="GameFontNormal" justifyH="LEFT" wordwrap="false">
+				<FontString parentKey="Text1" inherits="GameFontNormalMed1" justifyH="LEFT" wordwrap="false">
 					<Anchors>
 						<Anchor point="LEFT" x="23" y="1" />
 						<Anchor point="RIGHT" x="-22" />
@@ -47,13 +47,13 @@
 		<HighlightTexture atlas="Options_List_Hover" setAllPoints="true" />
 		<Layers>
 			<Layer level="OVERLAY">
-				<FontString parentKey="Icon" inherits="GameFontNormal" justifyH="LEFT">
+				<FontString parentKey="Icon" inherits="GameFontNormalMed1" justifyH="LEFT">
 					<Anchors>
 						<Anchor point="LEFT" x="32" />
 					</Anchors>
 					<Size x="400" y="24" />
 				</FontString>
-				<FontString parentKey="Text1" inherits="GameFontNormal" justifyH="LEFT" wordwrap="false">
+				<FontString parentKey="Text1" inherits="GameFontNormalMed1" justifyH="LEFT" wordwrap="false">
 					<Anchors>
 						<Anchor point="LEFT" x="55" y="1" />
 						<Anchor point="RIGHT" x="-22" />
@@ -86,13 +86,13 @@
 		<HighlightTexture atlas="Options_List_Hover" setAllPoints="true" />
 		<Layers>
 			<Layer level="OVERLAY">
-				<FontString parentKey="Icon" inherits="GameFontNormal" justifyH="LEFT">
+				<FontString parentKey="Icon" inherits="GameFontNormalMed1" justifyH="LEFT">
 					<Anchors>
 						<Anchor point="LEFT" x="39" />
 					</Anchors>
 					<Size x="400" y="24" />
 				</FontString>
-				<FontString parentKey="Text1" inherits="GameFontNormal" justifyH="LEFT" wordwrap="false">
+				<FontString parentKey="Text1" inherits="GameFontNormalMed1" justifyH="LEFT" wordwrap="false">
 					<Anchors>
 						<Anchor point="LEFT" x="62" y="1" />
 						<Anchor point="RIGHT" x="-22" />
