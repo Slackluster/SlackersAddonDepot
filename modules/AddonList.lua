@@ -18,6 +18,7 @@ app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 		if not app.Settings["headerStyle"] then app.Settings["headerStyle"] = 1 end
 
 		app.Flag.Changed = {}
+		app.Flag.Search = ""
 	end
 end)
 
@@ -108,6 +109,33 @@ function app:CreateAddonList()
 	app.AddonListFrame.ListStyleDropdown:SetWidth(120)
 	app.AddonListFrame.ListStyleDropdown:SetPoint("TOPRIGHT", -7, -26)
 	app.AddonListFrame.ListStyleDropdown:SetupMenu(GeneratorFunction)
+	app:SetBorder(app.AddonListFrame.ListStyleDropdown, -2, 1, 1, 0)
+
+	app.AddonListFrame.SearchBar = CreateFrame("EditBox", nil, app.AddonListFrame, "SearchBoxTemplate")
+	app.AddonListFrame.SearchBar:SetSize(160, 20)
+	app.AddonListFrame.SearchBar:SetPoint("RIGHT", app.AddonListFrame.ListStyleDropdown, "LEFT", -6, 0)
+	app.AddonListFrame.SearchBar:SetAutoFocus(false)
+	app.AddonListFrame.SearchBar:SetCursorPosition(0)
+	app.AddonListFrame.SearchBar:SetScript("OnEditFocusGained", function(self)
+		self.Instructions:SetText("")
+	end)
+	app.AddonListFrame.SearchBar:SetScript("OnEditFocusLost", function(self)
+		if self:GetText() == "" then
+			self.Instructions:SetText(self.instructionText)
+		end
+	end)
+	app.AddonListFrame.SearchBar:SetScript("OnTextChanged", function(self)
+		app.Flag.Search = self:GetText()
+		app.UpdateAddonList()
+	end)
+	app.AddonListFrame.SearchBar:SetScript("OnEnterPressed", function(self)
+		self:ClearFocus()
+	end)
+	app.AddonListFrame.SearchBar:SetScript("OnEscapePressed", function(self)
+		self:SetText("")
+		self:ClearFocus()
+	end)
+	app:SetBorder(app.AddonListFrame.SearchBar, -7, 1, 2, -2)
 
 	app.AddonListFrame.CancelButton = app:MakeButton(app.AddonListFrame, L.CANCEL)
 	app.AddonListFrame.CancelButton:SetPoint("BOTTOMRIGHT", app.AddonListFrame, -10, 8)
@@ -330,6 +358,16 @@ function app:UpdateAddonList()
 	local DataProvider = CreateTreeDataProvider()
 	local addonList = {}
 
+	local function addonNameSearch(addon, search)
+		if search == "" then
+			return true
+		end
+
+		search = search:lower()
+
+		return addon.title:lower():find(search, 1, true) or addon.name:lower():find(search, 1, true)
+	end
+
 	if app.Settings["headerStyle"] == 1 then
 		local categoryList = {}
 		local seen = {}
@@ -347,7 +385,7 @@ function app:UpdateAddonList()
 			local header = DataProvider:Insert({ nodeType = "header", title = category })
 
 			for i, addon in ipairs(app.Info.AddonList) do
-				if not addon.dependencies then
+				if not addon.dependencies and addonNameSearch(addon, app.Flag.Search) then
 					if not addon.category and category == STABLE_PET_UNCATEGORIZED then
 						addonList[addon.name] = header:Insert({ id = i, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, dependencies = addon.dependencies, enabled = addon.enabledCharacter })
 					elseif addon.category == category then
@@ -361,7 +399,7 @@ function app:UpdateAddonList()
 		local headerDisabled = DataProvider:Insert({ nodeType = "header", title = L.DISABLED })
 
 		for i, addon in ipairs(app.Info.AddonList) do
-			if not addon.dependencies then
+			if not addon.dependencies and addonNameSearch(addon, app.Flag.Search) then
 				if addon.enabledCharacter == 2 then
 					addonList[addon.name] = headerEnabled:Insert({ id = i, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, dependencies = addon.dependencies, enabled = addon.enabledCharacter })
 				elseif addon.enabledCharacter == 0 then
@@ -372,7 +410,7 @@ function app:UpdateAddonList()
 	end
 
 	for i, addon in ipairs(app.Info.AddonList) do
-		if addon.dependencies and addonList[addon.dependencies] then
+		if addon.dependencies and addonList[addon.dependencies] and addonNameSearch(addon, app.Flag.Search) then
 			addonList[addon.dependencies]:Insert({ id = i, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, dependencies = addon.dependencies, enabled = addon.enabledCharacter })
 		end
 	end
