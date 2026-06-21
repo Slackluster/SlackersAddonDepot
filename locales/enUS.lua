@@ -55,3 +55,4 @@ L.OUT_OF_DATE =                          ADDON_INTERFACE_VERSION -- "Out of date
 L.INCOMPATIBLE =                         ADDON_INCOMPATIBLE -- "Incompatible"
 L.REQUIRES_RELOAD =                      REQUIRES_RELOAD -- "Requires Reload"
 L.DEPENDENCIES =                         ADDON_DEPENDENCIES -- "Dependencies: " (note the included trailing space)
+L.UNCATEGORIZED =                        STABLE_PET_UNCATEGORIZED -- "Uncategorized"
