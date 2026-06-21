@@ -54,3 +54,4 @@ L.DISABLE_ALL =                          DISABLE_ALL_ADDONS
 L.OUT_OF_DATE =                          ADDON_INTERFACE_VERSION
 L.INCOMPATIBLE =                         ADDON_INCOMPATIBLE
 L.REQUIRES_RELOAD =                      REQUIRES_RELOAD
+L.DEPENDENCIES =                         ADDON_DEPENDENCIES

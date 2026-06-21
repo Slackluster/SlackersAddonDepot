@@ -54,3 +54,4 @@ local L = app.locales
 -- L.OUT_OF_DATE =                          ADDON_INTERFACE_VERSION
 -- L.INCOMPATIBLE =                         ADDON_INCOMPATIBLE
 -- L.REQUIRES_RELOAD =                      REQUIRES_RELOAD
+-- L.DEPENDENCIES =                         ADDON_DEPENDENCIES

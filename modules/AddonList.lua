@@ -289,6 +289,25 @@ function app:CreateAddonList()
 		else
 			listItem.Text2:SetText("")
 		end
+
+		listItem:SetScript("OnEnter", function()
+			GameTooltip:ClearLines()
+			GameTooltip:SetOwner(UIParent, "ANCHOR_NONE")
+			GameTooltip:AddDoubleLine(data.title, data.version)
+			if data.dependencies then
+				GameTooltip:AddLine(L.DEPENDENCIES .. data.dependencies)
+			end
+			GameTooltip:AddLine(data.notes, 1, 1, 1, true)
+			if app.AddonListFrame:GetCenter() < GetScreenWidth() / 2 then
+				GameTooltip:SetPoint("LEFT", app.AddonListFrame, "RIGHT", 5, 0)
+			else
+				GameTooltip:SetPoint("RIGHT", app.AddonListFrame, "LEFT", -5, 0)
+			end
+			GameTooltip:Show()
+		end)
+		listItem:SetScript("OnLeave", function()
+			GameTooltip:Hide()
+		end)
 	end
 
 	app.AddonList:SetElementFactory(function(factory, node)
