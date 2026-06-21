@@ -47,11 +47,9 @@ function app:CreateAddonList()
 		end
 
 		app:UpdateAddonList()
-		app.AddonListFrame.ReloadButton:Disable()
 	end)
 	app.AddonListFrame:SetScript("OnHide", function()
 		app.Flag.Changed = {}
-		app:GetAddonInfo()
 	end)
 	app.AddonListFrame:SetScript("OnMouseDown", function()
 		app.AddonListFrame:SetToplevel(true)
@@ -150,6 +148,7 @@ function app:CreateAddonList()
 				rootDescription:CreateButton(label, function(data)
 					owner:SetDefaultText("|c" .. char.classColor .. char.name .. "-" .. char.realmNorm)
 					app.Flag.SelectedCharacter = char.guid
+					app.Flag.Changed = {}
 					app:UpdateAddonList()
 				end)
 			end
@@ -159,6 +158,7 @@ function app:CreateAddonList()
 		rootDescription:CreateButton(L.ALL, function(data)
 			owner:SetDefaultText(L.ALL)
 			app.Flag.SelectedCharacter = L.ALL
+			app.Flag.Changed = {}
 			app:UpdateAddonList()
 		end)
 
@@ -258,29 +258,29 @@ function app:CreateAddonList()
 	app.AddonListFrame.ReloadButton = app:MakeButton(app.AddonListFrame, L.RELOAD)
 	app.AddonListFrame.ReloadButton:SetPoint("RIGHT", app.AddonListFrame.CancelButton, "LEFT", -2, 0)
 	app.AddonListFrame.ReloadButton:SetScript("OnClick", function()
-		local guid = UnitGUID("player")
-		for i, addon in ipairs(app.Info.AddonList) do
-			if addon.enabledCharacter == 2 then
-				C_AddOns.EnableAddOn(i, guid)
-			elseif addon.enabledCharacter == 0 then
-				C_AddOns.DisableAddOn(i, guid)
+		for i, state in pairs(app.Flag.Changed) do
+			if app.Flag.SelectedCharacter == "All" then
+				if state then
+					C_AddOns.EnableAddOn(i)
+				else
+					C_AddOns.DisableAddOn(i)
+				end
+			else
+				if state then
+					C_AddOns.EnableAddOn(i, app.Flag.SelectedCharacter)
+				else
+					C_AddOns.DisableAddOn(i, app.Flag.SelectedCharacter)
+				end
 			end
 		end
 		ReloadUI()
 	end)
 
-	local function checkChangesAll(i)
-		if not app.Flag.Changed[i] then
-			app.Flag.Changed[i] = true
-		else
-			app.Flag.Changed[i] = nil
-		end
-
-		local next = next
-		if next(app.Flag.Changed) == nil then
-			app.AddonListFrame.ReloadButton:Disable()
-		else
-			app.AddonListFrame.ReloadButton:Enable()
+	local function sendChangesAll(checkboxState)
+		for i, addon in ipairs(app.Info.AddonList) do
+			if (checkboxState and addon.enabled ~= 2) or (not checkboxState and addon.enabled ~= 0) then
+				app.Flag.Changed[i] = checkboxState
+			end
 		end
 
 		app:UpdateAddonList()
@@ -289,23 +289,13 @@ function app:CreateAddonList()
 	app.AddonListFrame.EnableAllButton = app:MakeButton(app.AddonListFrame, L.ENABLE_ALL)
 	app.AddonListFrame.EnableAllButton:SetPoint("BOTTOMLEFT", app.AddonListFrame, 10, 8)
 	app.AddonListFrame.EnableAllButton:SetScript("OnClick", function()
-		for i, addon in ipairs(app.Info.AddonList) do
-			if addon.enabledCharacter ~= 2 then
-				addon.enabledCharacter = 2
-				checkChangesAll(i)
-			end
-		end
+		sendChangesAll(true)
 	end)
 
 	app.AddonListFrame.DisableAllButton = app:MakeButton(app.AddonListFrame, L.DISABLE_ALL)
 	app.AddonListFrame.DisableAllButton:SetPoint("LEFT", app.AddonListFrame.EnableAllButton, "RIGHT", 2, 0)
 	app.AddonListFrame.DisableAllButton:SetScript("OnClick", function()
-		for i, addon in ipairs(app.Info.AddonList) do
-			if addon.enabledCharacter ~= 0 then
-				addon.enabledCharacter = 0
-				checkChangesAll(i)
-			end
-		end
+		sendChangesAll(false)
 	end)
 
 	local scrollBox = CreateFrame("Frame", nil, app.AddonListFrame.List, "WowScrollBoxList")
@@ -369,39 +359,33 @@ function app:CreateAddonList()
 
 		local data = node:GetData()
 
-		local function sendChanges(checkboxState)
-			if checkboxState then
-				app.Info.AddonList[data.id].enabledCharacter = 2
-			else
-				app.Info.AddonList[data.id].enabledCharacter = 0
-			end
-		end
-		local function checkChanges()
-			if not app.Flag.Changed[data.id] then
-				app.Flag.Changed[data.id] = true
+		local function sendChanges(i, checkboxState)
+			if app.Info.AddonList[i].enabled == 1 or (app.Info.AddonList[i].enabled == 0 and checkboxState == true) or (app.Info.AddonList[i].enabled == 2 and checkboxState == false) then
+				app.Flag.Changed[data.id] = checkboxState
 			else
 				app.Flag.Changed[data.id] = nil
 			end
-			local next = next
-			if next(app.Flag.Changed) == nil then
-				app.AddonListFrame.ReloadButton:Disable()
-			else
-				app.AddonListFrame.ReloadButton:Enable()
-			end
+			app:UpdateAddonList()
 		end
-		if data.enabled == 2 then
+		if data.enabled == 1 and app.Flag.Changed[data.id] == nil then
+			listItem.Checkbox:SetCheckedTexture("checkmark-minimal-disabled")
+		else
+			listItem.Checkbox:SetCheckedTexture("checkmark-minimal")
+		end
+		if app.Flag.Changed[data.id] ~= nil then
+			listItem.Checkbox:SetChecked(app.Flag.Changed[data.id])
+		elseif data.enabled == 1 or data.enabled == 2 then
 			listItem.Checkbox:SetChecked(true)
 		elseif data.enabled == 0 then
 			listItem.Checkbox:SetChecked(false)
 		end
-		listItem:SetScript("OnClick", function()
-			listItem.Checkbox:SetChecked(not listItem.Checkbox:GetChecked())
-			sendChanges(listItem.Checkbox:GetChecked())
-			checkChanges()
+		listItem:SetScript("OnClick", function(self, button)
+			if button == "LeftButton" then
+				listItem.Checkbox:Click()
+			end
 		end)
 		listItem.Checkbox:SetScript("OnClick", function(self)
-			sendChanges(self:GetChecked())
-			checkChanges()
+			sendChanges(data.id, self:GetChecked())
 		end)
 
 		if data.iconTexture then
@@ -420,7 +404,7 @@ function app:CreateAddonList()
 			listItem.Text2:SetText("|cffFF0000" .. L.INCOMPATIBLE)
 		elseif data.interface < interfaceVersion and not app.Settings["loadOutOfDate"] then
 			listItem.Text2:SetText("|cffFF0000" .. L.OUT_OF_DATE)
-		elseif app.Flag.Changed[data.id] then
+		elseif app.Flag.Changed[data.id] ~= nil then
 			listItem.Text2:SetText("|cffFF0000" .. L.REQUIRES_RELOAD)
 		elseif data.interface < interfaceVersion then
 			listItem.Text2:SetText("|cff9D9D9D" .. L.OUT_OF_DATE)
@@ -475,6 +459,21 @@ function app:UpdateAddonList()
 		return addon.title:lower():find(search, 1, true) or addon.name:lower():find(search, 1, true)
 	end
 
+	local next = next
+	if next(app.Flag.Changed) == nil then
+		app.AddonListFrame.ReloadButton:Disable()
+	else
+		app.AddonListFrame.ReloadButton:Enable()
+	end
+
+	for _, addon in ipairs(app.Info.AddonList) do
+		if app.Flag.SelectedCharacter == "All" then
+			addon.enabled = C_AddOns.GetAddOnEnableState(addon.id)
+		else
+			addon.enabled = C_AddOns.GetAddOnEnableState(addon.id, app.Flag.SelectedCharacter)
+		end
+	end
+
 	local addonList = {}
 
 	if app.Settings["headerStyle"] == 1 then
@@ -504,10 +503,10 @@ function app:UpdateAddonList()
 
 		for _, addon in ipairs(app.Info.AddonList) do
 			if not addon.dependencies and addonNameSearch(addon, app.Flag.Search) then
-				if addon.enabledCharacter == 2 then
-					table.insert(addonList[1].children, { addon = addon, children = {} })
-				elseif addon.enabledCharacter == 0 then
+				if addon.enabled == 0 then
 					table.insert(addonList[2].children, { addon = addon, children = {} })
+				else
+					table.insert(addonList[1].children, { addon = addon, children = {} })
 				end
 			end
 		end
@@ -533,10 +532,10 @@ function app:UpdateAddonList()
 			local row1 = DataProvider:Insert({ nodeType = "header", title = header.category })
 			for _, addon1 in ipairs(header.children) do
 				local addon = addon1.addon
-				local row2 = row1:Insert({ id = addon.id, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, dependencies = addon.dependencies, enabled = addon.enabledCharacter })
+				local row2 = row1:Insert({ id = addon.id, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, dependencies = addon.dependencies, enabled = addon.enabled })
 				for _, addon2 in ipairs(addon1.children) do
 					local addon = addon2.addon
-					row2:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, dependencies = addon.dependencies, enabled = addon.enabledCharacter })
+					row2:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, dependencies = addon.dependencies, enabled = addon.enabled })
 				end
 			end
 		end
