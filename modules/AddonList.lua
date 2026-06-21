@@ -250,10 +250,6 @@ function app:CreateAddonList()
 	end)
 	app:SetBorder(app.AddonListFrame.SearchBar, -7, 1, 2, -2)
 
-	-- app.AddonListFrame.SelectedText = app.AddonListFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-	-- app.AddonListFrame.SelectedText:SetPoint("TOPLEFT", 14, -60)
-	-- app.AddonListFrame.SelectedText:SetText(app.Flag.SelectedNo .. " " .. "addons selected")
-
 	app.AddonListFrame.SelectAllButton = app:MakeButton(app.AddonListFrame, "Select All")
 	app.AddonListFrame.SelectAllButton:SetPoint("TOPLEFT", 14, -60)
 	app.AddonListFrame.SelectAllButton:SetScript("OnClick", function()
