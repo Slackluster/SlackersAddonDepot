@@ -257,7 +257,7 @@ function app:CreateAddonList()
 		app.AddonListFrame:Hide()
 	end)
 
-	app.AddonListFrame.ReloadButton = app:MakeButton(app.AddonListFrame, L.RELOAD)
+	app.AddonListFrame.ReloadButton = app:MakeButton(app.AddonListFrame, L.APPLY_CHANGES)
 	app.AddonListFrame.ReloadButton:SetPoint("RIGHT", app.AddonListFrame.CancelButton, "LEFT", -2, 0)
 	app.AddonListFrame.ReloadButton:SetScript("OnClick", function()
 		for i, state in pairs(app.Flag.Changed) do
@@ -275,7 +275,12 @@ function app:CreateAddonList()
 				end
 			end
 		end
-		ReloadUI()
+		if app.Flag.SelectedCharacter == app.Info.GUID or app.Flag.SelectedCharacter == "All" then
+			ReloadUI()
+		else
+			app.Flag.Changed = {}
+			app:UpdateAddonList()
+		end
 	end)
 
 	local function sendChangesAll(checkboxState)
@@ -407,7 +412,12 @@ function app:CreateAddonList()
 		elseif data.interface < interfaceVersion and not app.Settings["loadOutOfDate"] then
 			listItem.Text2:SetText("|cffFF0000" .. L.OUT_OF_DATE)
 		elseif app.Flag.Changed[data.id] ~= nil then
-			listItem.Text2:SetText("|cffFF0000" .. L.REQUIRES_RELOAD)
+			if app.Flag.SelectedCharacter == app.Info.GUID or app.Flag.SelectedCharacter == "All" then
+				listItem.Text2:SetText("|cffFF0000" .. L.REQUIRES_RELOAD)
+			else
+				listItem.Text2:SetText("|cffFF0000" .. L.CHANGE_PENDING)
+			end
+
 		elseif data.interface < interfaceVersion then
 			listItem.Text2:SetText("|cff9D9D9D" .. L.OUT_OF_DATE)
 		else
