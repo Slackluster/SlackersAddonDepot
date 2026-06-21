@@ -411,14 +411,8 @@ function app:CreateAddonList()
 				if newIndex == app.Flag.LastClicked then return end
 				app.Flag.LastClicked.id = newIndex
 
-				local a, b
-				if oldIndex < newIndex then
-					a = oldIndex
-					b = newIndex
-				else
-					a = newIndex
-					b = oldIndex
-				end
+				local a = math.min(oldIndex, newIndex)
+				local b = math.max(oldIndex, newIndex)
 
 				for i = a, b do
 					local id = app.AddonList:FindElementData(i).data.id
