@@ -12,13 +12,15 @@ local L = app.locales
 
 app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 	if addOnName == appName then
-		app:CreateAddonList()
-		app:HookGameMenu()
-
 		if not app.Settings["headerStyle"] then app.Settings["headerStyle"] = 1 end
 
 		app.Flag.Changed = {}
+		app.Flag.Selected = {}
+		app.Flag.SelectedNo = 0
 		app.Flag.Search = ""
+
+		app:CreateAddonList()
+		app:HookGameMenu()
 	end
 end)
 
@@ -92,7 +94,7 @@ function app:CreateAddonList()
 	end)
 
 	app.AddonListFrame.List = CreateFrame("Frame", nil, app.AddonListFrame, "InsetFrameTemplate")
-	app.AddonListFrame.List:SetPoint("TOPLEFT", app.AddonListFrame, 10, -54)
+	app.AddonListFrame.List:SetPoint("TOPLEFT", app.AddonListFrame, 10, -84)
 	app.AddonListFrame.List:SetPoint("BOTTOMRIGHT", app.AddonListFrame, -6, 34)
 	app.AddonListFrame.List.Background = app.AddonListFrame.List:CreateTexture(nil, "BACKGROUND")
 	app.AddonListFrame.List.Background:SetAllPoints()
@@ -248,6 +250,10 @@ function app:CreateAddonList()
 	end)
 	app:SetBorder(app.AddonListFrame.SearchBar, -7, 1, 2, -2)
 
+	app.AddonListFrame.SelectedText = app.AddonListFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+	app.AddonListFrame.SelectedText:SetPoint("TOPLEFT", 14, -60)
+	app.AddonListFrame.SelectedText:SetText(app.Flag.SelectedNo .. " " .. "addons selected")
+
 	app.AddonListFrame.CancelButton = app:MakeButton(app.AddonListFrame, L.CANCEL)
 	app.AddonListFrame.CancelButton:SetPoint("BOTTOMRIGHT", app.AddonListFrame, -10, 8)
 	app.AddonListFrame.CancelButton:SetScript("OnClick", function()
@@ -382,13 +388,64 @@ function app:CreateAddonList()
 		elseif data.enabled == 0 then
 			listItem.Checkbox:SetChecked(false)
 		end
-		listItem:SetScript("OnClick", function(self, button)
-			if button == "LeftButton" then
-				listItem.Checkbox:Click()
-			end
-		end)
 		listItem.Checkbox:SetScript("OnClick", function(self)
 			sendChanges(data.id, self:GetChecked())
+		end)
+
+		if not listItem.Highlight then
+			listItem.Highlight = listItem:CreateTexture(nil, "ARTWORK")
+			listItem.Highlight:SetAtlas("Options_List_Active")
+			listItem.Highlight:SetAllPoints()
+		end
+		if app.Flag.Selected[data.id] then
+			listItem.Highlight:Show()
+		else
+			listItem.Highlight:Hide()
+		end
+		listItem:SetScript("OnClick", function(self, button)
+			if not data.id then return end
+
+			if IsShiftKeyDown() and app.Flag.LastClicked then
+				local oldIndex = app.Flag.LastClicked.id
+				local newIndex = listItem:GetElementDataIndex()
+				if newIndex == app.Flag.LastClicked then return end
+				app.Flag.LastClicked.id = newIndex
+
+				local a, b
+				if oldIndex < newIndex then
+					a = oldIndex
+					b = newIndex
+				else
+					a = newIndex
+					b = oldIndex
+				end
+
+				for i = a, b do
+					local id = app.AddonList:FindElementData(i).data.id
+					if id then
+						app.Flag.Selected[id] = app.Flag.LastClicked.selected
+					end
+					app.Flag.SelectedNo = 0
+					for _, selected in pairs(app.Flag.Selected) do
+						if selected then app.Flag.SelectedNo = app.Flag.SelectedNo + 1 end
+					end
+					app.AddonListFrame.SelectedText:SetText(app.Flag.SelectedNo .. " " .. "addons selected")
+				end
+
+				app:UpdateAddonList()
+			elseif app.Flag.Selected[data.id] then
+				app.Flag.LastClicked = { id = listItem:GetElementDataIndex(), selected = false }
+				app.Flag.Selected[data.id] = nil
+				app.Flag.SelectedNo = app.Flag.SelectedNo - 1
+				app.AddonListFrame.SelectedText:SetText(app.Flag.SelectedNo .. " " .. "addons selected")
+				listItem.Highlight:Hide()
+			else
+				app.Flag.LastClicked = { id = listItem:GetElementDataIndex(), selected = true }
+				app.Flag.Selected[data.id] = true
+				app.Flag.SelectedNo = app.Flag.SelectedNo + 1
+				app.AddonListFrame.SelectedText:SetText(app.Flag.SelectedNo .. " " .. "addons selected")
+				listItem.Highlight:Show()
+			end
 		end)
 
 		if data.iconTexture then
