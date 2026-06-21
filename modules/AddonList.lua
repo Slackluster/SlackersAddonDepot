@@ -27,7 +27,7 @@ end)
 ----------------
 
 function app:CreateAddonList()
-	app.AddonListFrame = CreateFrame("Frame", nil, UIParent, "DefaultPanelTemplate")
+	app.AddonListFrame = CreateFrame("Frame", "SlackersAddonDepotAddonList", UIParent, "DefaultPanelTemplate")
 	app.AddonListFrame:SetSize(600, 600)
 	app.AddonListFrame:SetPoint("CENTER", UIParent)
 	app.AddonListFrame:EnableMouse(true)
@@ -37,7 +37,7 @@ function app:CreateAddonList()
 	local inset = 300
 	app.AddonListFrame:SetClampRectInsets(app.AddonListFrame:GetWidth()-inset, -(app.AddonListFrame:GetWidth()-inset), -(app.AddonListFrame:GetHeight()-inset), app.AddonListFrame:GetHeight()-inset)
 	app.AddonListFrame:Hide()
-
+	table.insert(UISpecialFrames, "SlackersAddonDepotAddonList")
 	app.AddonListFrame:SetScript("OnShow", function()
 		if app.Flag.SelectedCharacter == L.ALL then
 			app.AddonListFrame.CharListDropdown:SetDefaultText(L.ALL)
@@ -52,7 +52,6 @@ function app:CreateAddonList()
 		app.Flag.Changed = {}
 		app:GetAddonInfo()
 	end)
-
 	app.AddonListFrame:SetScript("OnMouseDown", function()
 		app.AddonListFrame:SetToplevel(true)
 	end)
