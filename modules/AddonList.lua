@@ -42,11 +42,10 @@ function app:CreateAddonList()
 	app.AddonListFrame:SetScript("OnShow", function()
 		app.AddonListFrame:ClearAllPoints()
 		app.AddonListFrame:SetPoint("CENTER")
-		if app.Flag.SelectedCharacter == L.ALL then
-			app.AddonListFrame.CharListDropdown:SetDefaultText(L.ALL)
-		else
-			app.AddonListFrame.CharListDropdown:SetDefaultText("|c" .. app.Cache.Characters[app.Flag.SelectedCharacter].classColor .. app.Cache.Characters[app.Flag.SelectedCharacter].name .. "-" .. app.Cache.Characters[app.Flag.SelectedCharacter].realmNorm)
-		end
+
+		app.Flag.SelectedCharacter = app.Info.GUID
+		app.AddonListFrame.CharListDropdown:SetDefaultText("|c" .. app.Cache.Characters[app.Flag.SelectedCharacter].classColor .. app.Cache.Characters[app.Flag.SelectedCharacter].name .. "-" .. app.Cache.Characters[app.Flag.SelectedCharacter].realmNorm)
+		app.AddonListFrame.CharListDropdown:SetupMenu(generatorFunctionCharList)
 
 		app:UpdateAddonList()
 	end)
@@ -198,9 +197,7 @@ function app:CreateAddonList()
 	app.AddonListFrame.CharListDropdown = CreateFrame("DropdownButton", nil, app.AddonListFrame, "WowStyle1DropdownTemplate")
 	app.AddonListFrame.CharListDropdown:SetWidth(200)
 	app.AddonListFrame.CharListDropdown:SetPoint("TOPLEFT", 11, -26)
-	app.AddonListFrame.CharListDropdown:SetupMenu(generatorFunctionCharList)
 	app:SetBorder(app.AddonListFrame.CharListDropdown, -1, 1, 1, 0)
-	app.Flag.SelectedCharacter = app.Info.GUID
 
 	function generatorFunctionListStyle(owner, rootDescription)
 		rootDescription:CreateButton(L.LISTSTYLE_CATEGORIES, function(data)
