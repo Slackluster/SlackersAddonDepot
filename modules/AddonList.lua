@@ -292,6 +292,7 @@ function app:CreateAddonList()
 
 		listItem:SetScript("OnEnter", function()
 			GameTooltip:ClearLines()
+			GameTooltip:ClearAllPoints()
 			GameTooltip:SetOwner(UIParent, "ANCHOR_NONE")
 			GameTooltip:AddDoubleLine(data.title, data.version)
 			if data.dependencies then
