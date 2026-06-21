@@ -14,6 +14,7 @@ app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 	if addOnName == appName then
 		SlackersAddonDepot_Settings = SlackersAddonDepot_Settings or {}
 		app.Settings = SlackersAddonDepot_Settings
+		SlackersAddonDepot_Cache = SlackersAddonDepot_Cache or {}
 		app.Cache = SlackersAddonDepot_Cache
 
 		app:CreateMinimapButton()
@@ -289,8 +290,17 @@ function app:CreateSettings()
 
 	checkbox("replaceMenuButton", L.SETTINGS_REPLACE_MENU_BUTTON, L.SETTINGS_REPLACE_MENU_BUTTON_DESC, true)
 
+	header(L.ADDON_LIST)
+
 	checkbox("loadOutOfDate", L.SETTINGS_LOAD_OUT_OF_DATE, L.SETTINGS_LOAD_OUT_OF_DATE_DESC, true, function()
 		C_AddOns.SetAddonVersionCheck(not app.Settings["loadOutOfDate"])
 		app:UpdateAddonList()
 	end)
+
+	checkbox("charListRealm", L.SETTINGS_CHARLIST_REALMS, L.SETTINGS_CHARLIST_REALMS_DESC, true)
+
+	dropdown("charListSort", L.SETTINGS_CHARLIST_SORT, L.SETTINGS_CHARLIST_SORT_DESC, 2, {
+		{ value = 1, name = L.ALPHABETICAL, description = nil },
+		{ value = 2, name = L.CLASS, description = nil },
+	})
 end

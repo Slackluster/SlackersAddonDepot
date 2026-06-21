@@ -12,19 +12,17 @@ local L = app.locales
 
 app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 	if addOnName == appName then
-		app.Info = {}
 		app:GetAddonInfo()
-		--app:GetCharacterInfo()
+		app:GetCharacterInfo()
 	end
 end)
-
-
 
 ----------------
 -- ADDON INFO --
 ----------------
 
 function app:GetAddonInfo()
+	app.Info = {}
 	app.Info.AddonList = {}
 
 	for i = 1, C_AddOns.GetNumAddOns() do
@@ -39,6 +37,37 @@ end
 --------------------
 
 function app:GetCharacterInfo()
-	app.Cache.Characters = {}
-	app.Cache.Characters[UnitGUID("player")] = {}
+	app.Info.GUID = UnitGUID("player")
+	local _, englishClass, _, _, _, name = GetPlayerInfoByGUID(app.Info.GUID)
+	local _, _, _, classColor = GetClassColor(englishClass)
+	local prof1, prof2, archaeology, fishing, cooking = GetProfessions()
+
+	app.Cache.Characters = app.Cache.Characters or {}
+	if app.Info.GUID then
+		app.Cache.Characters[app.Info.GUID] = {
+			guid = app.Info.GUID,
+			name = name or "",
+			realm = GetRealmName() or "",
+			realmNorm = GetNormalizedRealmName() or "",
+			class = englishClass or "",
+			classColor = classColor or "",
+			level = UnitLevel("player") or 0,
+			professions = { prof1 = prof1 or 0, prof2 = prof2 or 0, cooking = cooking or 0, fishing = fishing or 0, archaeology = archaeology or 0 }
+		}
+	end
 end
+
+app.Event:Register("PLAYER_ENTERING_WORLD", function(isInitialLogin, isReloadingUi)
+	if isInitialLogin or isReloadingUi then
+		app:GetCharacterInfo()
+	end
+end)
+
+app.Event:Register("PLAYER_LEVEL_UP", function(level, healthDelta, powerDelta, numNewTalents, numNewPvpTalentSlots, strengthDelta, agilityDelta, staminaDelta, intellectDelta)
+	app.Cache.Characters[app.Info.GUID].level = level
+end)
+
+app.Event:Register("SKILL_LINES_CHANGED", function()
+	local prof1, prof2, archaeology, fishing, cooking = GetProfessions()
+	app.Cache.Characters[app.Info.GUID].professions = { prof1 = prof1, prof2 = prof2, cooking = cooking, fishing = fishing, archaeology = archaeology }
+end)

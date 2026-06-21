@@ -34,6 +34,15 @@ local L = app.locales
 -- L.SETTINGS_LOAD_OUT_OF_DATE =            "Load out of date addons"
 -- L.SETTINGS_LOAD_OUT_OF_DATE_DESC =       "This may cause errors from incompatible addons."
 
+-- L.ADDON_LIST =                           "Addon List"
+
+-- L.SETTINGS_CHARLIST_REALMS =             "Character List Realms"
+-- L.SETTINGS_CHARLIST_REALMS_DESC =        "Categorize characters by realm."
+-- L.SETTINGS_CHARLIST_SORT =               "Character List Sort"
+-- L.SETTINGS_CHARLIST_SORT_DESC =          "Set the sorting method for the character list."
+-- L.ALPHABETICAL =                         HOUSING_CHEST_SORT_TYPE_ALPHABETICAL -- "Alphabetical"
+-- L.CLASS =                                CLASS -- "Class"
+
 -- General
 -- L.NEW_VERSION_AVAILABLE =                "There is a newer version of " .. app.NameLong .. " available:"
 -- L.SETTINGS_TOOLTIP =                     app.NameLong .. "\n|cffFFFFFF" ..
@@ -56,3 +65,4 @@ local L = app.locales
 -- L.REQUIRES_RELOAD =                      REQUIRES_RELOAD -- "Requires Reload"
 -- L.DEPENDENCIES =                         ADDON_DEPENDENCIES -- "Dependencies: " (note the included trailing space)
 -- L.UNCATEGORIZED =                        STABLE_PET_UNCATEGORIZED -- "Uncategorized"
+-- L.ALL =                                  ALL -- "All"

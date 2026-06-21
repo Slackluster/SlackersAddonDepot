@@ -39,6 +39,12 @@ function app:CreateAddonList()
 	app.AddonListFrame:Hide()
 
 	app.AddonListFrame:SetScript("OnShow", function()
+		if app.Flag.SelectedCharacter == L.ALL then
+			app.AddonListFrame.CharListDropdown:SetDefaultText(L.ALL)
+		else
+			app.AddonListFrame.CharListDropdown:SetDefaultText("|c" .. app.Cache.Characters[app.Flag.SelectedCharacter].classColor .. app.Cache.Characters[app.Flag.SelectedCharacter].name .. "-" .. app.Cache.Characters[app.Flag.SelectedCharacter].realmNorm)
+		end
+
 		app:UpdateAddonList()
 		app.AddonListFrame.ReloadButton:Disable()
 	end)
@@ -88,7 +94,108 @@ function app:CreateAddonList()
 	app.AddonListFrame.List.Background:SetAllPoints()
 	app.AddonListFrame.List.Background:SetAtlas("CreditsScreen-Background-2")
 
-	local function GeneratorFunction(owner, rootDescription)
+	function generatorFunctionCharList(owner, rootDescription)
+		local classSortOrder = {
+			["MAGE"] = 1,
+			["PRIEST"] = 2,
+			["WARLOCK"] = 3,
+			["DEMONHUNTER"] = 4,
+			["DRUID"] = 5,
+			["MONK"] = 6,
+			["ROGUE"] = 7,
+			["EVOKER"] = 8,
+			["HUNTER"] = 9,
+			["SHAMAN"] = 10,
+			["DEATHKNIGHT"] = 11,
+			["PALADIN"] = 12,
+			["WARRIOR"] = 13,
+		}
+
+		local function sortChars(tableName)
+			if app.Settings["charListSort"] == 1 then
+				table.sort(tableName, function(a, b)
+					if a.name == b.name then
+						return (a.realmNorm) < (b.realmNorm)
+					end
+					return a.name < b.name
+				end)
+			elseif app.Settings["charListSort"] == 2 then
+				table.sort(tableName, function(a, b)
+					local class1 = classSortOrder[a.class] or 999
+					local class2 = classSortOrder[b.class] or 999
+					if class1 ~= class2 then
+						return class1 < class2
+					end
+					if a.name ~= b.name then
+						return a.name < b.name
+					end
+            	return (a.realmNorm) < (b.realmNorm)
+				end)
+			end
+		end
+
+		local function addChars(table, realmSuffix)
+			for _, char in ipairs(table) do
+				local label
+				if realmSuffix then
+					label = "|c" .. char.classColor .. char.name .. "-" .. char.realmNorm
+				else
+					label = "|c" .. char.classColor .. char.name
+				end
+				rootDescription:CreateButton(label, function(data)
+					owner:SetDefaultText("|c" .. char.classColor .. char.name .. "-" .. char.realmNorm)
+					app.Flag.SelectedCharacter = char.guid
+					app:UpdateAddonList()
+				end)
+			end
+		end
+
+		rootDescription:SetGridMode(MenuConstants.VerticalGridDirection)
+		rootDescription:CreateButton(L.ALL, function(data)
+			owner:SetDefaultText(L.ALL)
+			app.Flag.SelectedCharacter = L.ALL
+			app:UpdateAddonList()
+		end)
+
+		if app.Settings["charListRealm"] then
+			local realms = {}
+			local seen = {}
+			for _, char in pairs(app.Cache.Characters) do
+				if not seen[char.realm] then
+					table.insert(realms, { realm = char.realm, characters = {} })
+					seen[char.realm] = true
+				end
+				for _, realm in ipairs(realms) do
+					if realm.realm == char.realm then
+						table.insert(realm.characters, char)
+					end
+				end
+
+			end
+			table.sort(realms, function(a, b) return a.realm < b.realm end)
+
+			for _, realm in ipairs(realms) do
+				sortChars(realm.characters)
+				rootDescription:CreateTitle(realm.realm)
+				addChars(realm.characters)
+			end
+		else
+			local characters = {}
+			for _, char in pairs(app.Cache.Characters) do
+				table.insert(characters, char)
+			end
+			sortChars(characters)
+			addChars(characters, true)
+		end
+	end
+	app.AddonListFrame.CharListDropdown = CreateFrame("DropdownButton", nil, app.AddonListFrame, "WowStyle1DropdownTemplate")
+	app.AddonListFrame.CharListDropdown:SetWidth(200)
+	app.AddonListFrame.CharListDropdown:SetPoint("TOPLEFT", 11, -26)
+	app.AddonListFrame.CharListDropdown:SetupMenu(generatorFunctionCharList)
+	app:SetBorder(app.AddonListFrame.CharListDropdown, -1, 1, 1, 0)
+	app.Flag.SelectedCharacter = app.Info.GUID
+
+	function generatorFunctionListStyle(owner, rootDescription)
 		rootDescription:CreateButton(L.LISTSTYLE_CATEGORIES, function(data)
 			app.Settings["headerStyle"] = 1
 			owner:SetDefaultText(L.LISTSTYLE_CATEGORIES)
@@ -108,7 +215,7 @@ function app:CreateAddonList()
 	end
 	app.AddonListFrame.ListStyleDropdown:SetWidth(120)
 	app.AddonListFrame.ListStyleDropdown:SetPoint("TOPRIGHT", -7, -26)
-	app.AddonListFrame.ListStyleDropdown:SetupMenu(GeneratorFunction)
+	app.AddonListFrame.ListStyleDropdown:SetupMenu(generatorFunctionListStyle)
 	app:SetBorder(app.AddonListFrame.ListStyleDropdown, -2, 1, 1, 0)
 
 	app.AddonListFrame.SearchBar = CreateFrame("EditBox", nil, app.AddonListFrame, "SearchBoxTemplate")
