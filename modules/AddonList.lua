@@ -273,7 +273,7 @@ function app:CreateAddonList()
 	app.AddonListFrame.EditSelectionButton = app:MakeButton(app.AddonListFrame, "Edit " .. app.Flag.SelectedNo .. " addons")
 	app.AddonListFrame.EditSelectionButton:SetPoint("LEFT", app.AddonListFrame.ClearButton, "RIGHT", 2, 0)
 	app.AddonListFrame.EditSelectionButton:SetScript("OnClick", function()
-
+		app.LoadConditionsPanel:Show()
 	end)
 
 	app.AddonListFrame.CancelButton = app:MakeButton(app.AddonListFrame, L.CANCEL)
