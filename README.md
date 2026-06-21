@@ -3,7 +3,14 @@ A World of Warcraft addon. Download locations: [CurseForge](https://www.cursefor
 
 [![](https://media.forgecdn.net/attachments/1439/398/buymeacoffee-png.png)](https://www.buymeacoffee.com/Slackluster)
 
-**Slacker's Addon Depot** bla
+**Slacker's Addon Depot** lets you automatically load addons based on load conditions.
+
+**Features**
+- Set load conditions and they will be automatically applied to any known character.
+- For characters SAD hasn't seen yet (so sad), it will prompt you to reload to enable the right addons.
+- You can also manually apply profiles for temporary addon loadouts.
+- Features a character list with all seen characters, including those from different realms.
+- Lets you show addons either by category, or by load state.
 
 **To Do**
 - Follow the CurseForge project
