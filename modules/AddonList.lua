@@ -276,10 +276,44 @@ function app:CreateAddonList()
 
 	function profilesGenerator(owner, rootDescription)
 
-		rootDescription:CreateButton("1", function(data)
-		end)
-		rootDescription:CreateButton("2", function(data)
-		end)
+		local login, standard = false, false
+		for _, profileInfo in ipairs(app.Data.Profiles) do
+			if profileInfo.type == "Login" then
+				if not login then
+					rootDescription:CreateTitle("Login Profiles")
+					login = true
+				end
+				local profile = rootDescription:CreateButton(profileInfo.name)
+				profile:CreateButton("Edit load conditions")
+				profile:CreateButton("Save " .. app.Flag.SelectedNo .. " addons")
+				profile:CreateDivider()
+				profile:CreateButton("Delete profile")
+			end
+		end
+		for _, profileInfo in ipairs(app.Data.Profiles) do
+			if profileInfo.type == "Standard" then
+				if not standard then
+					rootDescription:CreateTitle("Standard Profiles")
+					standard = true
+				end
+				local profile = rootDescription:CreateButton(profileInfo.name)
+				local label
+				if app.Flag.SelectedCharacter == "All" then
+					label = "All"
+				else
+					label = "|c" .. app.Data.Characters[app.Flag.SelectedCharacter].classColor .. app.Data.Characters[app.Flag.SelectedCharacter].name .. "-" .. app.Data.Characters[app.Flag.SelectedCharacter].realmNorm
+				end
+				profile:CreateButton("Apply profile to " .. label)
+				profile:CreateButton("Save " .. app.Flag.SelectedNo .. " addons")
+				local addons = profile:CreateButton("Addons")
+				profile:CreateDivider()
+				profile:CreateButton("Delete profile")
+
+				-- for _, addon in pairs(profileInfo.addons) do
+				-- 	addons:CreateButton(addon.title)
+				-- end
+			end
+		end
 
 		rootDescription:CreateDivider()
 		rootDescription:CreateButton("New Profile", function()
@@ -721,7 +755,11 @@ function app:CreateNewProfilePanel()
 	app.NewProfilePanel.NewStandardProfileButton = app:MakeButton(app.NewProfilePanel, "Standard Profile")
 	app.NewProfilePanel.NewStandardProfileButton:SetPoint("TOP", app.NewProfilePanel, (app.NewProfilePanel:GetWidth()-20)/4, -70)
 	app.NewProfilePanel.NewStandardProfileButton:SetScript("OnClick", function()
-		--
+		table.insert(app.Data.Profiles, { name = app.NewProfilePanel.ProfileNameEditbox:GetText(), type = "Standard", addons = {} })
+		table.sort(app.Data.Profiles, function(a, b)
+			return a.name < b.name
+		end)
+		app.NewProfilePanel:Hide()
 	end)
 
 	app.NewProfilePanel.NewStandardProfileText = app.NewProfilePanel:CreateFontString(nil, "ARTWORK", "GameFontNormal")

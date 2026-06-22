@@ -14,8 +14,9 @@ app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 	if addOnName == appName then
 		SlackersAddonDepot_Settings = SlackersAddonDepot_Settings or {}
 		app.Settings = SlackersAddonDepot_Settings
-		SlackersAddonDepot_Cache = SlackersAddonDepot_Cache or {}
-		app.Cache = SlackersAddonDepot_Cache
+		SlackersAddonDepot_Data = SlackersAddonDepot_Data or {}
+		app.Data = SlackersAddonDepot_Data
+		app.Data.Profiles = app.Data.Profiles or {}
 
 		if not app.Settings["headerStyle"] then app.Settings["headerStyle"] = 2 end
 
