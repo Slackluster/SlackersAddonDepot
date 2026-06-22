@@ -45,7 +45,7 @@ function app:CreateAddonList()
 		app.AddonListFrame:SetPoint("CENTER")
 
 		app.Flag.SelectedCharacter = app.Info.GUID
-		app.AddonListFrame.CharListDropdown:SetDefaultText("|c" .. app.Cache.Characters[app.Flag.SelectedCharacter].classColor .. app.Cache.Characters[app.Flag.SelectedCharacter].name .. "-" .. app.Cache.Characters[app.Flag.SelectedCharacter].realmNorm)
+		app.AddonListFrame.CharListDropdown:SetDefaultText("|c" .. app.Data.Characters[app.Flag.SelectedCharacter].classColor .. app.Data.Characters[app.Flag.SelectedCharacter].name .. "-" .. app.Data.Characters[app.Flag.SelectedCharacter].realmNorm)
 		app.AddonListFrame.CharListDropdown:SetupMenu(charListGenerator)
 
 		app:UpdateAddonList()
@@ -167,7 +167,7 @@ function app:CreateAddonList()
 		if app.Settings["charListRealm"] then
 			local realms = {}
 			local seen = {}
-			for _, char in pairs(app.Cache.Characters) do
+			for _, char in pairs(app.Data.Characters) do
 				if not seen[char.realm] then
 					table.insert(realms, { realm = char.realm, characters = {} })
 					seen[char.realm] = true
@@ -188,7 +188,7 @@ function app:CreateAddonList()
 			end
 		else
 			local characters = {}
-			for _, char in pairs(app.Cache.Characters) do
+			for _, char in pairs(app.Data.Characters) do
 				table.insert(characters, char)
 			end
 			sortChars(characters)

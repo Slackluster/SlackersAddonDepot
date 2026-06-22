@@ -12,7 +12,7 @@ local L = app.locales
 
 app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 	if addOnName == appName then
-		app.Cache.LoadConditions = app.Cache.LoadConditions or {}
+		app.Data.LoadConditions = app.Data.LoadConditions or {}
 
 		app:CreateLoadConditionsPanel()
 	end

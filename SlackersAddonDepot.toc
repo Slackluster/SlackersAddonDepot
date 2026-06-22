@@ -11,7 +11,7 @@
 ## AddonCompartmentFuncOnEnter: SlackersAddonDepot_Enter
 ## AddonCompartmentFuncOnLeave: SlackersAddonDepot_Leave
 
-## SavedVariables: SlackersAddonDepot_Settings, SlackersAddonDepot_Cache
+## SavedVariables: SlackersAddonDepot_Settings, SlackersAddonDepot_Data
 ## SavedVariablesPerCharacter:
 
 ## Category: User Interface

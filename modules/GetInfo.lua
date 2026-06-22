@@ -42,9 +42,9 @@ function app:GetCharacterInfo()
 	local _, _, _, classColor = GetClassColor(englishClass)
 	local prof1, prof2, archaeology, fishing, cooking = GetProfessions()
 
-	app.Cache.Characters = app.Cache.Characters or {}
+	app.Data.Characters = app.Data.Characters or {}
 	if app.Info.GUID then
-		app.Cache.Characters[app.Info.GUID] = {
+		app.Data.Characters[app.Info.GUID] = {
 			guid = app.Info.GUID,
 			name = name or "",
 			realm = GetRealmName() or "",
@@ -64,10 +64,10 @@ app.Event:Register("PLAYER_ENTERING_WORLD", function(isInitialLogin, isReloading
 end)
 
 app.Event:Register("PLAYER_LEVEL_UP", function(level, healthDelta, powerDelta, numNewTalents, numNewPvpTalentSlots, strengthDelta, agilityDelta, staminaDelta, intellectDelta)
-	app.Cache.Characters[app.Info.GUID].level = level
+	app.Data.Characters[app.Info.GUID].level = level
 end)
 
 app.Event:Register("SKILL_LINES_CHANGED", function()
 	local prof1, prof2, archaeology, fishing, cooking = GetProfessions()
-	app.Cache.Characters[app.Info.GUID].professions = { prof1 = prof1, prof2 = prof2, cooking = cooking, fishing = fishing, archaeology = archaeology }
+	app.Data.Characters[app.Info.GUID].professions = { prof1 = prof1, prof2 = prof2, cooking = cooking, fishing = fishing, archaeology = archaeology }
 end)
