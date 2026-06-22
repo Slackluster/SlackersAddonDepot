@@ -172,7 +172,7 @@ function app:SetBorder(parent, a, b, c, d)
 end
 
 function app:MakeButton(parent, text, name)
-	local frame = CreateFrame("Button", name, parent, "UIPanelButtonTemplate")
+	local frame = CreateFrame("Button", name, parent, template or "UIPanelButtonTemplate")
 	frame:SetText(text)
 	frame:SetWidth(frame:GetTextWidth()+20)
 

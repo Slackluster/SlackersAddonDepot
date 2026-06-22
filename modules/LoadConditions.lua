@@ -55,7 +55,7 @@ function app:CreateLoadConditionsPanel()
 	app.LoadConditionsPanel.TopText1:SetPoint("TOPLEFT", 20, -40)
 	app.LoadConditionsPanel.TopText1:SetText("Match")
 
-	function generatorFunctionPrimaryAnyAll(owner, rootDescription, id)
+	function primaryAnyAllGenerator(owner, rootDescription, id)
 		rootDescription:CreateButton("Any", function(data)
 			print(owner:GetName())
 		end)
@@ -71,7 +71,7 @@ function app:CreateLoadConditionsPanel()
 	-- end
 	app.LoadConditionsPanel.ConditionDropdown:SetWidth(60)
 	app.LoadConditionsPanel.ConditionDropdown:SetPoint("LEFT", app.LoadConditionsPanel.TopText1, "RIGHT", 10, 0)
-	app.LoadConditionsPanel.ConditionDropdown:SetupMenu(generatorFunctionPrimaryAnyAll)
+	app.LoadConditionsPanel.ConditionDropdown:SetupMenu(primaryAnyAllGenerator)
 
 	app.LoadConditionsPanel.TopText2 = app.LoadConditionsPanel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 	app.LoadConditionsPanel.TopText2:SetPoint("LEFT", app.LoadConditionsPanel.ConditionDropdown, "RIGHT", 10, 0)

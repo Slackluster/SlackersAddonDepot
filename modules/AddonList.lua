@@ -18,6 +18,7 @@ app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 		app.Flag.Search = ""
 
 		app:CreateAddonList()
+		app:CreateNewProfilePanel()
 		app:HookGameMenu()
 	end
 end)
@@ -45,7 +46,7 @@ function app:CreateAddonList()
 
 		app.Flag.SelectedCharacter = app.Info.GUID
 		app.AddonListFrame.CharListDropdown:SetDefaultText("|c" .. app.Cache.Characters[app.Flag.SelectedCharacter].classColor .. app.Cache.Characters[app.Flag.SelectedCharacter].name .. "-" .. app.Cache.Characters[app.Flag.SelectedCharacter].realmNorm)
-		app.AddonListFrame.CharListDropdown:SetupMenu(generatorFunctionCharList)
+		app.AddonListFrame.CharListDropdown:SetupMenu(charListGenerator)
 
 		app:UpdateAddonList()
 	end)
@@ -98,7 +99,7 @@ function app:CreateAddonList()
 	app.AddonListFrame.List.Background:SetAllPoints()
 	app.AddonListFrame.List.Background:SetAtlas("CreditsScreen-Background-2")
 
-	function generatorFunctionCharList(owner, rootDescription)
+	function charListGenerator(owner, rootDescription)
 		local classSortOrder = {
 			["MAGE"] = 1,
 			["PRIEST"] = 2,
@@ -199,7 +200,7 @@ function app:CreateAddonList()
 	app.AddonListFrame.CharListDropdown:SetPoint("TOPLEFT", 11, -26)
 	app:SetBorder(app.AddonListFrame.CharListDropdown, -1, 1, 1, 0)
 
-	function generatorFunctionListStyle(owner, rootDescription)
+	function listStyleGenerator(owner, rootDescription)
 		rootDescription:CreateButton(L.ALPHABETICAL, function(data)
 			app.Settings["headerStyle"] = 1
 			owner:SetDefaultText(L.ALPHABETICAL)
@@ -224,7 +225,7 @@ function app:CreateAddonList()
 	end
 	app.AddonListFrame.ListStyleDropdown:SetWidth(120)
 	app.AddonListFrame.ListStyleDropdown:SetPoint("TOPRIGHT", -7, -26)
-	app.AddonListFrame.ListStyleDropdown:SetupMenu(generatorFunctionListStyle)
+	app.AddonListFrame.ListStyleDropdown:SetupMenu(listStyleGenerator)
 	app:SetBorder(app.AddonListFrame.ListStyleDropdown, -2, 1, 1, 0)
 
 	app.AddonListFrame.SearchBar = CreateFrame("EditBox", nil, app.AddonListFrame, "SearchBoxTemplate")
@@ -273,10 +274,25 @@ function app:CreateAddonList()
 		app:UpdateAddonList()
 	end)
 
-	app.AddonListFrame.EditSelectionButton = app:MakeButton(app.AddonListFrame, "Edit " .. app.Flag.SelectedNo .. " addons")
-	app.AddonListFrame.EditSelectionButton:SetPoint("LEFT", app.AddonListFrame.ClearButton, "RIGHT", 2, 0)
-	app.AddonListFrame.EditSelectionButton:SetScript("OnClick", function()
-		app.LoadConditionsPanel:Show()
+	function profilesGenerator(owner, rootDescription)
+
+		rootDescription:CreateButton("1", function(data)
+		end)
+		rootDescription:CreateButton("2", function(data)
+		end)
+
+		rootDescription:CreateDivider()
+		rootDescription:CreateButton("New Profile", function()
+			app.NewProfilePanel:Show()
+		end)
+	end
+	local profilesMenu
+	app.AddonListFrame.ProfilesButton = app:MakeButton(app.AddonListFrame, "Profiles")
+	app.AddonListFrame.ProfilesButton:SetPoint("LEFT", app.AddonListFrame.ClearButton, "RIGHT", 2, 0)
+	app.AddonListFrame.ProfilesButton:SetScript("OnClick", function(self)
+		profilesMenu = MenuUtil.CreateContextMenu(self, profilesGenerator)
+		profilesMenu:ClearAllPoints()
+		profilesMenu:SetPoint("TOPLEFT", self, "BOTTOMLEFT")
 	end)
 
 	app.AddonListFrame.CancelButton = app:MakeButton(app.AddonListFrame, L.CANCEL)
@@ -553,13 +569,9 @@ function app:UpdateAddonList()
 
 	if app.Flag.SelectedNo > 0 then
 		app.AddonListFrame.ClearButton:Enable()
-		app.AddonListFrame.EditSelectionButton:Enable()
 	else
 		app.AddonListFrame.ClearButton:Disable()
-		app.AddonListFrame.EditSelectionButton:Disable()
 	end
-	app.AddonListFrame.EditSelectionButton:SetText("Edit " .. app.Flag.SelectedNo .. " addons")
-	app.AddonListFrame.EditSelectionButton:SetWidth(app.AddonListFrame.EditSelectionButton:GetTextWidth()+20)
 
 	for _, addon in ipairs(app.Info.AddonList) do
 		if app.Flag.SelectedCharacter == "All" then
@@ -653,6 +665,76 @@ function api:ToggleAddonList()
 	else
 		app.AddonListFrame:Show()
 	end
+end
+
+--------------
+-- PROFILES --
+--------------
+
+function app:CreateNewProfilePanel()
+	app.NewProfilePanel = CreateFrame("Frame", nil, app.AddonListFrame, "DefaultPanelTemplate")
+	app.NewProfilePanel:SetSize(560, 200)
+	app.NewProfilePanel:SetPoint("CENTER")
+	app.NewProfilePanel:SetFrameStrata("DIALOG")
+	app.NewProfilePanel:EnableMouse(true)
+	app.NewProfilePanel:Hide()
+	app.NewProfilePanel:SetScript("OnShow", function()
+	end)
+	app.NewProfilePanel:SetScript("OnHide", function()
+	end)
+
+	app.NewProfilePanel.TitleContainer.TitleText:SetText(app.NameLong .. ": New Profile")
+
+	app.NewProfilePanel.CloseButton = CreateFrame("Button", nil, app.NewProfilePanel, "UIPanelCloseButton")
+	app.NewProfilePanel.CloseButton:SetPoint("TOPRIGHT", app.NewProfilePanel)
+	app.NewProfilePanel.CloseButton:SetScript("OnClick", function()
+		app.NewProfilePanel:Hide()
+	end)
+
+	app.NewProfilePanel.ProfileNameEditbox = CreateFrame("EditBox", nil, app.NewProfilePanel, "InputBoxTemplate")
+	app.NewProfilePanel.ProfileNameEditbox:SetSize(160, 20)
+	app.NewProfilePanel.ProfileNameEditbox:SetPoint("TOP", 0, -40)
+	app.NewProfilePanel.ProfileNameEditbox:SetAutoFocus(false)
+	app.NewProfilePanel.ProfileNameEditbox:SetCursorPosition(0)
+	app.NewProfilePanel.ProfileNameEditbox:SetText("Profile name")
+	app.NewProfilePanel.ProfileNameEditbox:SetScript("OnEnterPressed", function(self)
+		self:ClearFocus()
+	end)
+	app.NewProfilePanel.ProfileNameEditbox:SetScript("OnEscapePressed", function(self)
+		self:ClearFocus()
+	end)
+	app:SetBorder(app.NewProfilePanel.ProfileNameEditbox, -7, 1, 2, -2)
+
+	app.NewProfilePanel.NewLoginProfileButton = app:MakeButton(app.NewProfilePanel, "Login Profile")
+	app.NewProfilePanel.NewLoginProfileButton:SetPoint("TOP", app.NewProfilePanel, -((app.NewProfilePanel:GetWidth()-20)/4), -70)
+	app.NewProfilePanel.NewLoginProfileButton:SetScript("OnClick", function()
+		--
+	end)
+	app.NewProfilePanel.NewLoginProfileButton:Disable()
+
+	app.NewProfilePanel.NewLoginProfileText = app.NewProfilePanel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+	app.NewProfilePanel.NewLoginProfileText:SetPoint("TOP", app.NewProfilePanel.NewLoginProfileButton, "BOTTOM", 0, -10)
+	app.NewProfilePanel.NewLoginProfileText:SetText("Login Profiles are automatically enabled on login, based on their load conditions.\nMultiple Login Profiles can be valid, so these only enable addons.")
+	app.NewProfilePanel.NewLoginProfileText:CanWordWrap(true)
+	app.NewProfilePanel.NewLoginProfileText:SetWidth(250)
+
+	app.NewProfilePanel.NewStandardProfileButton = app:MakeButton(app.NewProfilePanel, "Standard Profile")
+	app.NewProfilePanel.NewStandardProfileButton:SetPoint("TOP", app.NewProfilePanel, (app.NewProfilePanel:GetWidth()-20)/4, -70)
+	app.NewProfilePanel.NewStandardProfileButton:SetScript("OnClick", function()
+		--
+	end)
+
+	app.NewProfilePanel.NewStandardProfileText = app.NewProfilePanel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+	app.NewProfilePanel.NewStandardProfileText:SetPoint("TOP", app.NewProfilePanel.NewStandardProfileButton, "BOTTOM", 0, -10)
+	app.NewProfilePanel.NewStandardProfileText:SetText("Standard Profiles can be manually loaded, and both enable and disable addons.\n|cff6D6D6DYou can also set these to show a loading prompt when entering instances.")
+	app.NewProfilePanel.NewStandardProfileText:CanWordWrap(true)
+	app.NewProfilePanel.NewStandardProfileText:SetWidth(250)
+
+	app.NewProfilePanel:SetScript("OnShow", function()
+		RunNextFrame(function()
+			app.NewProfilePanel:SetHeight(math.abs(math.max(app.NewProfilePanel.NewLoginProfileText:GetBottom(), app.NewProfilePanel.NewStandardProfileText:GetBottom()) - app.NewProfilePanel:GetTop()) + 20)
+		end)
+	end)
 end
 
 --------------------
