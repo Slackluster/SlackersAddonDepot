@@ -17,6 +17,8 @@ app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 		SlackersAddonDepot_Cache = SlackersAddonDepot_Cache or {}
 		app.Cache = SlackersAddonDepot_Cache
 
+		if not app.Settings["headerStyle"] then app.Settings["headerStyle"] = 2 end
+
 		app:CreateMinimapButton()
 		app:CreateSettings()
 

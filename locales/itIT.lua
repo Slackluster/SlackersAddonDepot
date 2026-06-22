@@ -52,8 +52,9 @@ local L = app.locales
 -- L.INVALID_COMMAND =                      "Invalid command."
 
 -- Addon List
--- L.LISTSTYLE_CATEGORIES =                 CATEGORIES -- "Categories"
--- L.LISTSTYLE_ENABLESTATE =                "Enable State"
+-- L.INSTALLED =                            "Installed"
+-- L.CATEGORIES =                           CATEGORIES -- "Categories"
+-- L.ENABLESTATE =                          "Enable State"
 -- L.ENABLED =                              PVP_WAR_MODE_ENABLED -- "Enabled"
 -- L.DISABLED =                             ADDON_DISABLED -- "Disabled"
 -- L.CANCEL =                               CANCEL -- "Cancel"

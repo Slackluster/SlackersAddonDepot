@@ -65,9 +65,9 @@ function app:CreateLoadConditionsPanel()
 	end
 	app.LoadConditionsPanel.ConditionDropdown = CreateFrame("DropdownButton", "Primary", app.LoadConditionsPanel, "WowStyle1DropdownTemplate")
 	-- if app.Settings["headerStyle"] == 1 then
-	-- 	app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.LISTSTYLE_CATEGORIES)
+	-- 	app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.CATEGORIES)
 	-- elseif app.Settings["headerStyle"] == 2 then
-	-- 	app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.LISTSTYLE_ENABLESTATE)
+	-- 	app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.ENABLESTATE)
 	-- end
 	app.LoadConditionsPanel.ConditionDropdown:SetWidth(60)
 	app.LoadConditionsPanel.ConditionDropdown:SetPoint("LEFT", app.LoadConditionsPanel.TopText1, "RIGHT", 10, 0)

@@ -12,8 +12,6 @@ local L = app.locales
 
 app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 	if addOnName == appName then
-		if not app.Settings["headerStyle"] then app.Settings["headerStyle"] = 1 end
-
 		app.Flag.Changed = {}
 		app.Flag.Selected = {}
 		app.Flag.SelectedNo = 0
@@ -202,22 +200,27 @@ function app:CreateAddonList()
 	app:SetBorder(app.AddonListFrame.CharListDropdown, -1, 1, 1, 0)
 
 	function generatorFunctionListStyle(owner, rootDescription)
-		rootDescription:CreateButton(L.LISTSTYLE_CATEGORIES, function(data)
+		rootDescription:CreateButton(L.ALPHABETICAL, function(data)
 			app.Settings["headerStyle"] = 1
-			owner:SetDefaultText(L.LISTSTYLE_CATEGORIES)
+			owner:SetDefaultText(L.ALPHABETICAL)
 			app:UpdateAddonList()
 		end)
-		rootDescription:CreateButton(L.LISTSTYLE_ENABLESTATE, function(data)
+		rootDescription:CreateButton(L.CATEGORIES, function(data)
 			app.Settings["headerStyle"] = 2
-			owner:SetDefaultText(L.LISTSTYLE_ENABLESTATE)
+			owner:SetDefaultText(L.CATEGORIES)
+			app:UpdateAddonList()
+		end)
+		rootDescription:CreateButton(L.ENABLESTATE, function(data)
+			app.Settings["headerStyle"] = 3
+			owner:SetDefaultText(L.ENABLESTATE)
 			app:UpdateAddonList()
 		end)
 	end
 	app.AddonListFrame.ListStyleDropdown = CreateFrame("DropdownButton", nil, app.AddonListFrame, "WowStyle1DropdownTemplate")
 	if app.Settings["headerStyle"] == 1 then
-		app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.LISTSTYLE_CATEGORIES)
+		app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.CATEGORIES)
 	elseif app.Settings["headerStyle"] == 2 then
-		app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.LISTSTYLE_ENABLESTATE)
+		app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.ENABLESTATE)
 	end
 	app.AddonListFrame.ListStyleDropdown:SetWidth(120)
 	app.AddonListFrame.ListStyleDropdown:SetPoint("TOPRIGHT", -7, -26)
@@ -569,6 +572,14 @@ function app:UpdateAddonList()
 	local addonList = {}
 
 	if app.Settings["headerStyle"] == 1 then
+		table.insert(addonList, { category = L.INSTALLED, children = {} })
+
+		for _, addon in ipairs(app.Info.AddonList) do
+			if not addon.dependencies and addonNameSearch(addon, app.Flag.Search) then
+				table.insert(addonList[1].children, { addon = addon, children = {} })
+			end
+		end
+	elseif app.Settings["headerStyle"] == 2 then
 		local seen = {}
 
 		for i, addon in ipairs(app.Info.AddonList) do
@@ -589,7 +600,7 @@ function app:UpdateAddonList()
 				end
 			end
 		end
-	elseif app.Settings["headerStyle"] == 2 then
+	elseif app.Settings["headerStyle"] == 3 then
 		table.insert(addonList, { category = L.ENABLED, children = {} })
 		table.insert(addonList, { category = L.DISABLED, children = {} })
 
