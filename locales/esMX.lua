@@ -61,6 +61,7 @@ local L = app.locales
 -- L.APPLY_CHANGES =                        TRANSMOG_SITUATIONS_APPLY -- "Apply Changes"
 -- L.ENABLE_ALL =                           ENABLE_ALL_ADDONS -- "Enable All"
 -- L.DISABLE_ALL =                          DISABLE_ALL_ADDONS -- "Disable All"
+-- L.UNDO_CHANGES =                         "Undo Changes"
 -- L.OUT_OF_DATE =                          ADDON_INTERFACE_VERSION -- "Out of date"
 -- L.INCOMPATIBLE =                         ADDON_INCOMPATIBLE -- "Incompatible"
 -- L.REQUIRES_RELOAD =                      REQUIRES_RELOAD -- "Requires Reload"
@@ -69,3 +70,22 @@ local L = app.locales
 -- L.UNCATEGORIZED =                        STABLE_PET_UNCATEGORIZED -- "Uncategorized"
 -- L.ALL =                                  ALL -- "All"
 -- L.NOT_APPLICABLE =                       NOT_APPLICABLE -- "N/A"
+
+-- Profiles
+-- L.PROFILES =                             "Profiles"
+-- L.LOGIN_PROFILE =                        "Login Profile"
+-- L.LOGIN_PROFILES =                       "Login Profiles"
+-- L.LOGIN_PROFILE_DESC =                   "Enables addons on login.\n\nAutomatically applied to characters that meet load conditions. All matching profiles are applied."
+-- L.STANDARD_PROFILE =                     "Standard Profile"
+-- L.STANDARD_PROFILES =                    "Standard Profiles"
+-- L.STANDARD_PROFILE_DESC =                "Enables addons in-game.\n\nManually applied to specific characters. Apply one profile at a time."
+
+-- L.APPLY_PROFILE =                        "Apply profile to %s" -- %s becomes a character name
+-- L.ADDONS =                               "Addons"
+-- L.SAVE_ADDONS =                          "Save %d addons" -- %d becomes a number
+-- L.NEW_PROFILE =                          "New profile"
+-- L.RENAME_PROFILE =                       "Rename profile"
+-- L.DELETE_PROFILE =                       "Delete profile"
+-- L.PROFILE_NAME =                         "Profile name"
+-- L.PROFILE_NAME_NEW =                     "New profile name:"
+-- L.DELETE_PROFILE_Q =                     "Delete %s?" -- %s becomes a profile name

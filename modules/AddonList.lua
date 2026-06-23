@@ -230,33 +230,33 @@ function app:CreateAddonList()
 
 	function profilesGenerator(owner, rootDescription)
 		local login, standard = false, false
-		for _, profileInfo in ipairs(app.Data.Profiles) do
-			if profileInfo.type == "Login" then
-				if not login then
-					rootDescription:CreateTitle("Login Profiles")
-					login = true
-				end
-				local profile = rootDescription:CreateButton(profileInfo.name)
-				profile:CreateButton("Edit load conditions")
-				profile:CreateButton("Save " .. app.Flag.SelectedNo .. " addons")
-				profile:CreateDivider()
-				profile:CreateButton("Delete profile")
-			end
-		end
+		-- for _, profileInfo in ipairs(app.Data.Profiles) do
+		-- 	if profileInfo.type == "Login" then
+		-- 		if not login then
+		-- 			rootDescription:CreateTitle(L.LOGIN_PROFILES)
+		-- 			login = true
+		-- 		end
+		-- 		local profile = rootDescription:CreateButton(profileInfo.name)
+		-- 		profile:CreateButton("Edit load conditions")
+		-- 		profile:CreateButton(string.format(L.SAVE_ADDONS, app.Flag.SelectedNo))
+		-- 		profile:CreateDivider()
+		-- 		profile:CreateButton(L.DELETE_PROFILE)
+		-- 	end
+		-- end
 		for profileNo, profileInfo in ipairs(app.Data.Profiles) do
 			if profileInfo.type == "Standard" then
 				if not standard then
-					rootDescription:CreateTitle("Standard Profiles")
+					rootDescription:CreateTitle(L.STANDARD_PROFILES)
 					standard = true
 				end
 				local profile = rootDescription:CreateButton(profileInfo.name)
 				local label
 				if app.Flag.SelectedCharacter == "All" then
-					label = "All"
+					label = L.ALL
 				else
 					label = "|c" .. app.Data.Characters[app.Flag.SelectedCharacter].classColor .. app.Data.Characters[app.Flag.SelectedCharacter].name .. "-" .. app.Data.Characters[app.Flag.SelectedCharacter].realmNorm
 				end
-				profile:CreateButton("Apply profile to " .. label, function()
+				profile:CreateButton(string.format(L.APPLY_PROFILE, label), function()
 					for i, addon in pairs(app.Info.AddonList) do
 						if profileInfo.addons[addon.name] and addon.enabled ~= 2 then
 							app.Flag.Changed[i] = true
@@ -268,7 +268,7 @@ function app:CreateAddonList()
 					app:UpdateAddonList()
 				end)
 				profile:CreateDivider()
-				profile:CreateButton("Save " .. app.Flag.SelectedNo .. " addons", function()
+				profile:CreateButton(string.format(L.SAVE_ADDONS, app.Flag.SelectedNo), function()
 					profileInfo.addons = {}
 					for i, state in pairs(app.Flag.Changed) do
 						if state then
@@ -282,10 +282,10 @@ function app:CreateAddonList()
 					end
 					table.sort(profileInfo.addons, function(a, b) return a.title < b.title end)
 				end)
-				local addons = profile:CreateButton("Addons")
+				local addons = profile:CreateButton(L.ADDONS)
 				profile:CreateDivider()
-				profile:CreateButton("Rename profile", function() StaticPopup_Show("SLACKERSADDONDEPOT_RENAMEPROFILE", nil, nil, profileNo) end)
-				profile:CreateButton("Delete profile", function() StaticPopup_Show("SLACKERSADDONDEPOT_DELETEPROFILE", nil, nil, profileNo) end)
+				profile:CreateButton(L.RENAME_PROFILE, function() StaticPopup_Show("SLACKERSADDONDEPOT_RENAMEPROFILE", nil, nil, profileNo) end)
+				profile:CreateButton(L.DELETE_PROFILE, function() StaticPopup_Show("SLACKERSADDONDEPOT_DELETEPROFILE", nil, nil, profileNo) end)
 
 				for _, addon in pairs(profileInfo.addons) do
 					addons:CreateButton(addon.title)
@@ -294,12 +294,12 @@ function app:CreateAddonList()
 		end
 
 		rootDescription:CreateDivider()
-		rootDescription:CreateButton("New Profile", function()
+		rootDescription:CreateButton(L.NEW_PROFILE, function()
 			app.NewProfilePanel:Show()
 		end)
 	end
 	local profilesMenu
-	app.AddonListFrame.ProfilesButton = app:MakeButton(app.AddonListFrame, "Profiles")
+	app.AddonListFrame.ProfilesButton = app:MakeButton(app.AddonListFrame, L.PROFILES)
 	app.AddonListFrame.ProfilesButton:SetPoint("LEFT", app.AddonListFrame.CharListDropdown, "RIGHT", 6, 0)
 	app.AddonListFrame.ProfilesButton:SetScript("OnClick", function(self)
 		profilesMenu = MenuUtil.CreateContextMenu(self, profilesGenerator)
@@ -339,9 +339,9 @@ function app:CreateAddonList()
 		app.AddonListFrame:Hide()
 	end)
 
-	app.AddonListFrame.ReloadButton = app:MakeButton(app.AddonListFrame, L.APPLY_CHANGES)
-	app.AddonListFrame.ReloadButton:SetPoint("RIGHT", app.AddonListFrame.CancelButton, "LEFT", -2, 0)
-	app.AddonListFrame.ReloadButton:SetScript("OnClick", function()
+	app.AddonListFrame.ApplyButton = app:MakeButton(app.AddonListFrame, L.APPLY_CHANGES)
+	app.AddonListFrame.ApplyButton:SetPoint("RIGHT", app.AddonListFrame.CancelButton, "LEFT", -2, 0)
+	app.AddonListFrame.ApplyButton:SetScript("OnClick", function()
 		local guid = app.Flag.SelectedCharacter
 		if app.Flag.SelectedCharacter == "All" then
 			guid = nil
@@ -385,7 +385,7 @@ function app:CreateAddonList()
 		sendChangesAll(false)
 	end)
 
-	app.AddonListFrame.UndoButton = app:MakeButton(app.AddonListFrame, "Undo Changes")
+	app.AddonListFrame.UndoButton = app:MakeButton(app.AddonListFrame, L.UNDO_CHANGES)
 	app.AddonListFrame.UndoButton:SetPoint("LEFT", app.AddonListFrame.DisableAllButton, "RIGHT", 2, 0)
 	app.AddonListFrame.UndoButton:SetScript("OnClick", function()
 		app.Flag.Changed = {}
@@ -586,10 +586,10 @@ function app:UpdateAddonList()
 
 	local next = next
 	if next(app.Flag.Changed) == nil then
-		app.AddonListFrame.ReloadButton:Disable()
+		app.AddonListFrame.ApplyButton:Disable()
 		app.AddonListFrame.UndoButton:Disable()
 	else
-		app.AddonListFrame.ReloadButton:Enable()
+		app.AddonListFrame.ApplyButton:Enable()
 		app.AddonListFrame.UndoButton:Enable()
 	end
 
@@ -712,7 +712,7 @@ function app:CreateProfileWindows()
 	app.NewProfilePanel:SetScript("OnHide", function()
 	end)
 
-	app.NewProfilePanel.TitleContainer.TitleText:SetText(app.NameLong .. ": New Profile")
+	app.NewProfilePanel.TitleContainer.TitleText:SetText(app:Colour(L.NEW_PROFILE))
 
 	app.NewProfilePanel.CloseButton = CreateFrame("Button", nil, app.NewProfilePanel, "UIPanelCloseButton")
 	app.NewProfilePanel.CloseButton:SetPoint("TOPRIGHT", app.NewProfilePanel)
@@ -725,7 +725,7 @@ function app:CreateProfileWindows()
 	app.NewProfilePanel.ProfileNameEditbox:SetPoint("TOP", 0, -40)
 	app.NewProfilePanel.ProfileNameEditbox:SetAutoFocus(false)
 	app.NewProfilePanel.ProfileNameEditbox:SetCursorPosition(0)
-	app.NewProfilePanel.ProfileNameEditbox:SetText("Profile name")
+	app.NewProfilePanel.ProfileNameEditbox:SetText(L.PROFILE_NAME)
 	app.NewProfilePanel.ProfileNameEditbox:SetScript("OnEnterPressed", function(self)
 		self:ClearFocus()
 	end)
@@ -734,7 +734,7 @@ function app:CreateProfileWindows()
 	end)
 	app:SetBorder(app.NewProfilePanel.ProfileNameEditbox, -7, 1, 2, -2)
 
-	app.NewProfilePanel.NewLoginProfileButton = app:MakeButton(app.NewProfilePanel, "Login Profile")
+	app.NewProfilePanel.NewLoginProfileButton = app:MakeButton(app.NewProfilePanel, L.LOGIN_PROFILE)
 	app.NewProfilePanel.NewLoginProfileButton:SetPoint("TOP", app.NewProfilePanel, -((app.NewProfilePanel:GetWidth()-20)/4), -70)
 	app.NewProfilePanel.NewLoginProfileButton:SetScript("OnClick", function()
 		--
@@ -743,11 +743,11 @@ function app:CreateProfileWindows()
 
 	app.NewProfilePanel.NewLoginProfileText = app.NewProfilePanel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 	app.NewProfilePanel.NewLoginProfileText:SetPoint("TOP", app.NewProfilePanel.NewLoginProfileButton, "BOTTOM", 0, -10)
-	app.NewProfilePanel.NewLoginProfileText:SetText("Enables addons on login.\n\nAutomatically applied to characters that meet load conditions. All matching profiles are applied.")
+	app.NewProfilePanel.NewLoginProfileText:SetText(L.LOGIN_PROFILE_DESC)
 	app.NewProfilePanel.NewLoginProfileText:CanWordWrap(true)
 	app.NewProfilePanel.NewLoginProfileText:SetWidth(250)
 
-	app.NewProfilePanel.NewStandardProfileButton = app:MakeButton(app.NewProfilePanel, "Standard Profile")
+	app.NewProfilePanel.NewStandardProfileButton = app:MakeButton(app.NewProfilePanel, L.STANDARD_PROFILE)
 	app.NewProfilePanel.NewStandardProfileButton:SetPoint("TOP", app.NewProfilePanel, (app.NewProfilePanel:GetWidth()-20)/4, -70)
 	app.NewProfilePanel.NewStandardProfileButton:SetScript("OnClick", function()
 		table.insert(app.Data.Profiles, { name = app.NewProfilePanel.ProfileNameEditbox:GetText(), type = "Standard", addons = {} })
@@ -759,7 +759,7 @@ function app:CreateProfileWindows()
 
 	app.NewProfilePanel.NewStandardProfileText = app.NewProfilePanel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 	app.NewProfilePanel.NewStandardProfileText:SetPoint("TOP", app.NewProfilePanel.NewStandardProfileButton, "BOTTOM", 0, -10)
-	app.NewProfilePanel.NewStandardProfileText:SetText("Enables addons in-game.\n\nManually applied to specific characters. Apply one profile at a time.")
+	app.NewProfilePanel.NewStandardProfileText:SetText(L.STANDARD_PROFILE_DESC)
 	app.NewProfilePanel.NewStandardProfileText:CanWordWrap(true)
 	app.NewProfilePanel.NewStandardProfileText:SetWidth(250)
 
@@ -770,7 +770,7 @@ function app:CreateProfileWindows()
 	end)
 
 	StaticPopupDialogs["SLACKERSADDONDEPOT_RENAMEPROFILE"] = {
-		text = "New profile name:",
+		text = L.PROFILE_NAME_NEW,
 		button1 = APPLY,
 		button2 = CANCEL,
 		whileDead = true,
@@ -810,7 +810,7 @@ function app:CreateProfileWindows()
 			dialog:ClearAllPoints()
 			dialog:SetPoint("CENTER", UIParent)
 
-			StaticPopup1Text:SetText("Delete " .. app.Data.Profiles[data].name .. "?")
+			StaticPopup1Text:SetText(string.format(L.DELETE_PROFILE_Q, app.Data.Profiles[data].name))
 		end,
 		OnAccept = function(dialog, data)
 			table.remove(app.Data.Profiles, data)
