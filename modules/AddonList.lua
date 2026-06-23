@@ -276,7 +276,7 @@ function app:CreateAddonList()
 						end
 					end
 					for i, addon in ipairs(app.Info.AddonList) do
-						if addon.enabled == 2 then
+						if addon.enabled == 2 and app.Flag.Changed[i] == nil then
 							profileInfo.addons[addon.name] = { title = addon.title }
 						end
 					end
@@ -600,7 +600,7 @@ function app:UpdateAddonList()
 		else
 			addon.enabled = C_AddOns.GetAddOnEnableState(addon.id, app.Flag.SelectedCharacter)
 		end
-		if addon.enabled == 2 then
+		if addon.enabled == 2 and app.Flag.Changed[addon.id] == nil then
 			app.Flag.SelectedNo = app.Flag.SelectedNo + 1
 		end
 	end
