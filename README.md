@@ -8,7 +8,7 @@ A World of Warcraft addon. Download locations: [CurseForge](https://www.cursefor
 **Features**
 - Login Profiles: automatically load addons if the character matches the profile's load conditions.
 - For characters SAD hasn't seen yet (so sad), it will prompt you to reload to enable the right profile.
-- There are also Standard Profiles that let you manually enable a specific set of addons for the character you choose.
+- Standard Profiles: Manually enable a specific set of addons for the character you choose.
 - Features a character list with all seen characters, including those from different realms.
 - Lets you view addons either alphabetically, by category, or by load state.
 - Use Shift+click to quickly (de)select multiple addons.
