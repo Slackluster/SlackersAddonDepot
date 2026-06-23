@@ -13,8 +13,6 @@ local L = app.locales
 app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 	if addOnName == appName then
 		app.Flag.Changed = {}
-		app.Flag.Selected = {}
-		app.Flag.SelectedNo = 0
 		app.Flag.Search = ""
 
 		app:CreateAddonList()
@@ -95,7 +93,7 @@ function app:CreateAddonList()
 	end)
 
 	app.AddonListFrame.List = CreateFrame("Frame", nil, app.AddonListFrame, "InsetFrameTemplate")
-	app.AddonListFrame.List:SetPoint("TOPLEFT", app.AddonListFrame, 10, -84)
+	app.AddonListFrame.List:SetPoint("TOPLEFT", app.AddonListFrame, 10, -54)
 	app.AddonListFrame.List:SetPoint("BOTTOMRIGHT", app.AddonListFrame, -6, 34)
 	app.AddonListFrame.List.Background = app.AddonListFrame.List:CreateTexture(nil, "BACKGROUND")
 	app.AddonListFrame.List.Background:SetAllPoints()
@@ -230,54 +228,7 @@ function app:CreateAddonList()
 	app.AddonListFrame.ListStyleDropdown:SetupMenu(listStyleGenerator)
 	app:SetBorder(app.AddonListFrame.ListStyleDropdown, -2, 1, 1, 0)
 
-	app.AddonListFrame.SearchBar = CreateFrame("EditBox", nil, app.AddonListFrame, "SearchBoxTemplate")
-	app.AddonListFrame.SearchBar:SetSize(160, 20)
-	app.AddonListFrame.SearchBar:SetPoint("RIGHT", app.AddonListFrame.ListStyleDropdown, "LEFT", -6, 0)
-	app.AddonListFrame.SearchBar:SetAutoFocus(false)
-	app.AddonListFrame.SearchBar:SetCursorPosition(0)
-	app.AddonListFrame.SearchBar:SetScript("OnEditFocusGained", function(self)
-		self.Instructions:SetText("")
-	end)
-	app.AddonListFrame.SearchBar:SetScript("OnEditFocusLost", function(self)
-		if self:GetText() == "" then
-			self.Instructions:SetText(self.instructionText)
-		end
-	end)
-	app.AddonListFrame.SearchBar:SetScript("OnTextChanged", function(self)
-		app.Flag.Search = self:GetText()
-		app.UpdateAddonList()
-	end)
-	app.AddonListFrame.SearchBar:SetScript("OnEnterPressed", function(self)
-		self:ClearFocus()
-	end)
-	app.AddonListFrame.SearchBar:SetScript("OnEscapePressed", function(self)
-		self:SetText("")
-		self:ClearFocus()
-	end)
-	app:SetBorder(app.AddonListFrame.SearchBar, -7, 1, 2, -2)
-
-	app.AddonListFrame.SelectAllButton = app:MakeButton(app.AddonListFrame, "Select All")
-	app.AddonListFrame.SelectAllButton:SetPoint("TOPLEFT", 14, -60)
-	app.AddonListFrame.SelectAllButton:SetScript("OnClick", function()
-		for i = 1, #app.Info.AddonList do
-			app.Flag.Selected[i] = true
-		end
-		app.Flag.SelectedNo = #app.Info.AddonList
-		app:UpdateAddonList()
-	end)
-
-	app.AddonListFrame.ClearButton = app:MakeButton(app.AddonListFrame, "Clear")
-	app.AddonListFrame.ClearButton:SetPoint("LEFT", app.AddonListFrame.SelectAllButton, "RIGHT", 2, 0)
-	app.AddonListFrame.ClearButton:SetScript("OnClick", function()
-		for i = 1, #app.Info.AddonList do
-			app.Flag.Selected[i] = false
-		end
-		app.Flag.SelectedNo = 0
-		app:UpdateAddonList()
-	end)
-
 	function profilesGenerator(owner, rootDescription)
-
 		local login, standard = false, false
 		for _, profileInfo in ipairs(app.Data.Profiles) do
 			if profileInfo.type == "Login" then
@@ -319,8 +270,15 @@ function app:CreateAddonList()
 				profile:CreateDivider()
 				profile:CreateButton("Save " .. app.Flag.SelectedNo .. " addons", function()
 					profileInfo.addons = {}
-					for i, _ in pairs(app.Flag.Selected) do
-						profileInfo.addons[app.Info.AddonList[i].name] = { title = app.Info.AddonList[i].title }
+					for i, state in pairs(app.Flag.Changed) do
+						if state then
+							profileInfo.addons[app.Info.AddonList[i].name] = { title = app.Info.AddonList[i].title }
+						end
+					end
+					for i, addon in ipairs(app.Info.AddonList) do
+						if addon.enabled == 2 then
+							profileInfo.addons[addon.name] = { title = addon.title }
+						end
 					end
 					table.sort(profileInfo.addons, function(a, b) return a.title < b.title end)
 				end)
@@ -342,12 +300,38 @@ function app:CreateAddonList()
 	end
 	local profilesMenu
 	app.AddonListFrame.ProfilesButton = app:MakeButton(app.AddonListFrame, "Profiles")
-	app.AddonListFrame.ProfilesButton:SetPoint("LEFT", app.AddonListFrame.ClearButton, "RIGHT", 2, 0)
+	app.AddonListFrame.ProfilesButton:SetPoint("LEFT", app.AddonListFrame.CharListDropdown, "RIGHT", 6, 0)
 	app.AddonListFrame.ProfilesButton:SetScript("OnClick", function(self)
 		profilesMenu = MenuUtil.CreateContextMenu(self, profilesGenerator)
 		profilesMenu:ClearAllPoints()
 		profilesMenu:SetPoint("TOPLEFT", self, "BOTTOMLEFT")
 	end)
+
+	app.AddonListFrame.SearchBar = CreateFrame("EditBox", nil, app.AddonListFrame, "SearchBoxTemplate")
+	app.AddonListFrame.SearchBar:SetSize(160, 20)
+	app.AddonListFrame.SearchBar:SetPoint("RIGHT", app.AddonListFrame.ListStyleDropdown, "LEFT", -6, 0)
+	app.AddonListFrame.SearchBar:SetAutoFocus(false)
+	app.AddonListFrame.SearchBar:SetCursorPosition(0)
+	app.AddonListFrame.SearchBar:SetScript("OnEditFocusGained", function(self)
+		self.Instructions:SetText("")
+	end)
+	app.AddonListFrame.SearchBar:SetScript("OnEditFocusLost", function(self)
+		if self:GetText() == "" then
+			self.Instructions:SetText(self.instructionText)
+		end
+	end)
+	app.AddonListFrame.SearchBar:SetScript("OnTextChanged", function(self)
+		app.Flag.Search = self:GetText()
+		app.UpdateAddonList()
+	end)
+	app.AddonListFrame.SearchBar:SetScript("OnEnterPressed", function(self)
+		self:ClearFocus()
+	end)
+	app.AddonListFrame.SearchBar:SetScript("OnEscapePressed", function(self)
+		self:SetText("")
+		self:ClearFocus()
+	end)
+	app:SetBorder(app.AddonListFrame.SearchBar, -7, 1, 2, -2)
 
 	app.AddonListFrame.CancelButton = app:MakeButton(app.AddonListFrame, L.CANCEL)
 	app.AddonListFrame.CancelButton:SetPoint("BOTTOMRIGHT", app.AddonListFrame, -10, 8)
@@ -483,16 +467,6 @@ function app:CreateAddonList()
 			sendChanges(data.id, self:GetChecked())
 		end)
 
-		if not listItem.Highlight then
-			listItem.Highlight = listItem:CreateTexture(nil, "ARTWORK")
-			listItem.Highlight:SetAtlas("Options_List_Active")
-			listItem.Highlight:SetAllPoints()
-		end
-		if app.Flag.Selected[data.id] then
-			listItem.Highlight:Show()
-		else
-			listItem.Highlight:Hide()
-		end
 		listItem:SetScript("OnClick", function(self, button)
 			if not data.id then return end
 
@@ -508,21 +482,11 @@ function app:CreateAddonList()
 				for i = a, b do
 					local id = app.AddonList:FindElementData(i).data.id
 					if id then
-						app.Flag.Selected[id] = app.Flag.LastClicked.selected
-					end
-					app.Flag.SelectedNo = 0
-					for _, selected in pairs(app.Flag.Selected) do
-						if selected then app.Flag.SelectedNo = app.Flag.SelectedNo + 1 end
+						sendChanges(id, app.Flag.LastClicked.enabled)
 					end
 				end
-			elseif app.Flag.Selected[data.id] then
-				app.Flag.LastClicked = { id = listItem:GetElementDataIndex(), selected = false }
-				app.Flag.Selected[data.id] = nil
-				app.Flag.SelectedNo = app.Flag.SelectedNo - 1
 			else
-				app.Flag.LastClicked = { id = listItem:GetElementDataIndex(), selected = true }
-				app.Flag.Selected[data.id] = true
-				app.Flag.SelectedNo = app.Flag.SelectedNo + 1
+				listItem.Checkbox:Click()
 			end
 			app:UpdateAddonList()
 		end)
@@ -617,17 +581,20 @@ function app:UpdateAddonList()
 		app.AddonListFrame.ReloadButton:Enable()
 	end
 
-	if app.Flag.SelectedNo > 0 then
-		app.AddonListFrame.ClearButton:Enable()
-	else
-		app.AddonListFrame.ClearButton:Disable()
-	end
-
+	app.Flag.SelectedNo = 0
 	for _, addon in ipairs(app.Info.AddonList) do
 		if app.Flag.SelectedCharacter == "All" then
 			addon.enabled = C_AddOns.GetAddOnEnableState(addon.id)
 		else
 			addon.enabled = C_AddOns.GetAddOnEnableState(addon.id, app.Flag.SelectedCharacter)
+		end
+		if addon.enabled == 2 then
+			app.Flag.SelectedNo = app.Flag.SelectedNo + 1
+		end
+	end
+	for _, state in pairs(app.Flag.Changed) do
+		if state then
+			app.Flag.SelectedNo = app.Flag.SelectedNo + 1
 		end
 	end
 
