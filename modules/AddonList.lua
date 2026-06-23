@@ -454,9 +454,9 @@ function app:CreateAddonList()
 
 		local function sendChanges(i, checkboxState)
 			if app.Info.AddonList[i].enabled == 1 or (app.Info.AddonList[i].enabled == 0 and checkboxState == true) or (app.Info.AddonList[i].enabled == 2 and checkboxState == false) then
-				app.Flag.Changed[data.id] = checkboxState
+				app.Flag.Changed[i] = checkboxState
 			else
-				app.Flag.Changed[data.id] = nil
+				app.Flag.Changed[i] = nil
 			end
 			app:UpdateAddonList()
 		end
@@ -474,6 +474,7 @@ function app:CreateAddonList()
 		end
 		listItem.Checkbox:SetScript("OnClick", function(self)
 			sendChanges(data.id, self:GetChecked())
+			app.Flag.LastClicked = { id = data.id, enabled = self:GetChecked() }
 		end)
 
 		listItem:SetScript("OnClick", function(self, button)
