@@ -18,7 +18,7 @@ app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 		app.Flag.Search = ""
 
 		app:CreateAddonList()
-		app:CreateNewProfilePanel()
+		app:CreateProfileWindows()
 		app:HookGameMenu()
 	end
 end)
@@ -290,7 +290,7 @@ function app:CreateAddonList()
 				profile:CreateButton("Delete profile")
 			end
 		end
-		for _, profileInfo in ipairs(app.Data.Profiles) do
+		for profileNo, profileInfo in ipairs(app.Data.Profiles) do
 			if profileInfo.type == "Standard" then
 				if not standard then
 					rootDescription:CreateTitle("Standard Profiles")
@@ -314,8 +314,8 @@ function app:CreateAddonList()
 				end)
 				local addons = profile:CreateButton("Addons")
 				profile:CreateDivider()
-				profile:CreateButton("Rename profile")
-				profile:CreateButton("Delete profile")
+				profile:CreateButton("Rename profile", function() StaticPopup_Show("SLACKERSADDONDEPOT_RENAMEPROFILE", nil, nil, profileNo) end)
+				profile:CreateButton("Delete profile", function() StaticPopup_Show("SLACKERSADDONDEPOT_DELETEPROFILE", nil, nil, profileNo) end)
 
 				for _, addon in pairs(profileInfo.addons) do
 					addons:CreateButton(addon.title)
@@ -713,7 +713,7 @@ end
 -- PROFILES --
 --------------
 
-function app:CreateNewProfilePanel()
+function app:CreateProfileWindows()
 	app.NewProfilePanel = CreateFrame("Frame", nil, app.AddonListFrame, "DefaultPanelTemplate")
 	app.NewProfilePanel:SetSize(560, 200)
 	app.NewProfilePanel:SetPoint("CENTER")
@@ -781,6 +781,54 @@ function app:CreateNewProfilePanel()
 			app.NewProfilePanel:SetHeight(math.abs(math.max(app.NewProfilePanel.NewLoginProfileText:GetBottom(), app.NewProfilePanel.NewStandardProfileText:GetBottom()) - app.NewProfilePanel:GetTop()) + 20)
 		end)
 	end)
+
+	StaticPopupDialogs["SLACKERSADDONDEPOT_RENAMEPROFILE"] = {
+		text = "New profile name:",
+		button1 = APPLY,
+		button2 = CANCEL,
+		whileDead = true,
+		hasEditBox = true,
+		editBoxWidth = 240,
+		OnShow = function(dialog, data)
+			dialog:ClearAllPoints()
+			dialog:SetPoint("CENTER", UIParent)
+
+			local editBox = dialog.GetEditBox and dialog:GetEditBox() or dialog.editBox
+			editBox:SetText(app.Data.Profiles[data].name)
+			editBox:SetAutoFocus(true)
+			editBox:HighlightText()
+			editBox:SetScript("OnEditFocusLost", function()
+				editBox:SetFocus()
+			end)
+			editBox:SetScript("OnEscapePressed", function()
+				dialog:Hide()
+			end)
+		end,
+		OnAccept = function(dialog, data)
+			local editBox = dialog.GetEditBox and dialog:GetEditBox() or dialog.editBox
+			app.Data.Profiles[data].name = editBox:GetText()
+			table.sort(app.Data.Profiles, function(a, b)
+				return a.name < b.name
+			end)
+		end,
+	}
+
+	StaticPopupDialogs["SLACKERSADDONDEPOT_DELETEPROFILE"] = {
+		text = "",
+		button1 = YES,
+		button2 = NO,
+		whileDead = true,
+		hasEditBox = false,
+		OnShow = function(dialog, data)
+			dialog:ClearAllPoints()
+			dialog:SetPoint("CENTER", UIParent)
+
+			StaticPopup1Text:SetText("Delete " .. app.Data.Profiles[data].name .. "?")
+		end,
+		OnAccept = function(dialog, data)
+			table.remove(app.Data.Profiles, data)
+		end,
+	}
 end
 
 --------------------
