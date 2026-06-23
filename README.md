@@ -11,6 +11,7 @@ A World of Warcraft addon. Download locations: [CurseForge](https://www.cursefor
 - There are also Standard Profiles that let you manually enable a specific set of addons for the character you choose.
 - Features a character list with all seen characters, including those from different realms.
 - Lets you view addons either alphabetically, by category, or by load state.
+- Use Shift+click to quickly (de)select multiple addons.
 
 ## If you are experiencing issues
 - Check if the issue occurs with only this addon enabled, or if the issue is a feature you can disable from the addon's settings menu.
