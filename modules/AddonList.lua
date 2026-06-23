@@ -48,6 +48,8 @@ function app:CreateAddonList()
 		app.AddonListFrame.CharListDropdown:SetDefaultText("|c" .. app.Data.Characters[app.Flag.SelectedCharacter].classColor .. app.Data.Characters[app.Flag.SelectedCharacter].name .. "-" .. app.Data.Characters[app.Flag.SelectedCharacter].realmNorm)
 		app.AddonListFrame.CharListDropdown:SetupMenu(charListGenerator)
 
+		app.AddonListFrame.SearchBar:SetText("")
+
 		app:UpdateAddonList()
 	end)
 	app.AddonListFrame:SetScript("OnHide", function()
@@ -311,6 +313,7 @@ function app:CreateAddonList()
 							app.Flag.Changed[i] = false
 						end
 					end
+					app.AddonListFrame.SearchBar:SetText("")
 					app:UpdateAddonList()
 				end)
 				profile:CreateDivider()
