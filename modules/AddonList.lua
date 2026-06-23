@@ -304,14 +304,22 @@ function app:CreateAddonList()
 					label = "|c" .. app.Data.Characters[app.Flag.SelectedCharacter].classColor .. app.Data.Characters[app.Flag.SelectedCharacter].name .. "-" .. app.Data.Characters[app.Flag.SelectedCharacter].realmNorm
 				end
 				profile:CreateButton("Apply profile to " .. label)
-				profile:CreateButton("Save " .. app.Flag.SelectedNo .. " addons")
+				profile:CreateDivider()
+				profile:CreateButton("Save " .. app.Flag.SelectedNo .. " addons", function()
+					profileInfo.addons = {}
+					for i, _ in pairs(app.Flag.Selected) do
+						table.insert(profileInfo.addons, { name = app.Info.AddonList[i].name, title = app.Info.AddonList[i].title })
+					end
+					table.sort(profileInfo.addons, function(a, b) return a.title < b.title end)
+				end)
 				local addons = profile:CreateButton("Addons")
 				profile:CreateDivider()
+				profile:CreateButton("Rename profile")
 				profile:CreateButton("Delete profile")
 
-				-- for _, addon in pairs(profileInfo.addons) do
-				-- 	addons:CreateButton(addon.title)
-				-- end
+				for _, addon in pairs(profileInfo.addons) do
+					addons:CreateButton(addon.title)
+				end
 			end
 		end
 
