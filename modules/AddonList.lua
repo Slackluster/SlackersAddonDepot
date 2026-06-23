@@ -385,6 +385,13 @@ function app:CreateAddonList()
 		sendChangesAll(false)
 	end)
 
+	app.AddonListFrame.UndoButton = app:MakeButton(app.AddonListFrame, "Undo Changes")
+	app.AddonListFrame.UndoButton:SetPoint("LEFT", app.AddonListFrame.DisableAllButton, "RIGHT", 2, 0)
+	app.AddonListFrame.UndoButton:SetScript("OnClick", function()
+		app.Flag.Changed = {}
+		app:UpdateAddonList()
+	end)
+
 	local scrollBox = CreateFrame("Frame", nil, app.AddonListFrame.List, "WowScrollBoxList")
 	scrollBox:SetPoint("TOPLEFT", app.AddonListFrame.List, 2, -6)
 	scrollBox:SetPoint("BOTTOMRIGHT", app.AddonListFrame.List, -18, 4)
@@ -579,8 +586,10 @@ function app:UpdateAddonList()
 	local next = next
 	if next(app.Flag.Changed) == nil then
 		app.AddonListFrame.ReloadButton:Disable()
+		app.AddonListFrame.UndoButton:Disable()
 	else
 		app.AddonListFrame.ReloadButton:Enable()
+		app.AddonListFrame.UndoButton:Enable()
 	end
 
 	app.Flag.SelectedNo = 0
