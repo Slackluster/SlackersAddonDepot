@@ -742,7 +742,7 @@ function app:CreateProfileWindows()
 
 	app.NewProfilePanel.NewLoginProfileText = app.NewProfilePanel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 	app.NewProfilePanel.NewLoginProfileText:SetPoint("TOP", app.NewProfilePanel.NewLoginProfileButton, "BOTTOM", 0, -10)
-	app.NewProfilePanel.NewLoginProfileText:SetText("Login Profiles are automatically enabled on login, based on their load conditions.\nMultiple Login Profiles can be valid, so these only enable addons.")
+	app.NewProfilePanel.NewLoginProfileText:SetText("Enables addons on login.\n\nAutomatically applied to characters that meet load conditions. All matching profiles are applied.")
 	app.NewProfilePanel.NewLoginProfileText:CanWordWrap(true)
 	app.NewProfilePanel.NewLoginProfileText:SetWidth(250)
 
@@ -758,13 +758,13 @@ function app:CreateProfileWindows()
 
 	app.NewProfilePanel.NewStandardProfileText = app.NewProfilePanel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 	app.NewProfilePanel.NewStandardProfileText:SetPoint("TOP", app.NewProfilePanel.NewStandardProfileButton, "BOTTOM", 0, -10)
-	app.NewProfilePanel.NewStandardProfileText:SetText("Standard Profiles can be manually loaded, and both enable and disable addons.\n|cff6D6D6DYou can also set these to show a loading prompt when entering instances.")
+	app.NewProfilePanel.NewStandardProfileText:SetText("Enables addons in-game.\n\nManually applied to specific characters. Apply one profile at a time.")
 	app.NewProfilePanel.NewStandardProfileText:CanWordWrap(true)
 	app.NewProfilePanel.NewStandardProfileText:SetWidth(250)
 
 	app.NewProfilePanel:SetScript("OnShow", function()
 		RunNextFrame(function()
-			app.NewProfilePanel:SetHeight(math.abs(math.max(app.NewProfilePanel.NewLoginProfileText:GetBottom(), app.NewProfilePanel.NewStandardProfileText:GetBottom()) - app.NewProfilePanel:GetTop()) + 20)
+			app.NewProfilePanel:SetHeight(math.abs(math.min(app.NewProfilePanel.NewLoginProfileText:GetBottom(), app.NewProfilePanel.NewStandardProfileText:GetBottom()) - app.NewProfilePanel:GetTop()) + 20)
 		end)
 	end)
 
