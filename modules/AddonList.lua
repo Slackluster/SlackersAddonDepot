@@ -363,8 +363,10 @@ function app:CreateAddonList()
 
 	local function sendChangesAll(checkboxState)
 		for i, addon in ipairs(app.Info.AddonList) do
-			if (checkboxState and addon.enabled ~= 2) or (not checkboxState and addon.enabled ~= 0) then
+			if addon.enabled == 1 or (addon.enabled == 0 and checkboxState == true) or (addon.enabled == 2 and checkboxState == false) then
 				app.Flag.Changed[i] = checkboxState
+			else
+				app.Flag.Changed[i] = nil
 			end
 		end
 
