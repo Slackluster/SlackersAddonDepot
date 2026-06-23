@@ -303,12 +303,21 @@ function app:CreateAddonList()
 				else
 					label = "|c" .. app.Data.Characters[app.Flag.SelectedCharacter].classColor .. app.Data.Characters[app.Flag.SelectedCharacter].name .. "-" .. app.Data.Characters[app.Flag.SelectedCharacter].realmNorm
 				end
-				profile:CreateButton("Apply profile to " .. label)
+				profile:CreateButton("Apply profile to " .. label, function()
+					for i, addon in pairs(app.Info.AddonList) do
+						if profileInfo.addons[addon.name] and addon.enabled ~= 2 then
+							app.Flag.Changed[i] = true
+						elseif not profileInfo.addons[addon.name] and addon.enabled ~= 0 then
+							app.Flag.Changed[i] = false
+						end
+					end
+					app:UpdateAddonList()
+				end)
 				profile:CreateDivider()
 				profile:CreateButton("Save " .. app.Flag.SelectedNo .. " addons", function()
 					profileInfo.addons = {}
 					for i, _ in pairs(app.Flag.Selected) do
-						table.insert(profileInfo.addons, { name = app.Info.AddonList[i].name, title = app.Info.AddonList[i].title })
+						profileInfo.addons[app.Info.AddonList[i].name] = { title = app.Info.AddonList[i].title }
 					end
 					table.sort(profileInfo.addons, function(a, b) return a.title < b.title end)
 				end)
@@ -346,19 +355,15 @@ function app:CreateAddonList()
 	app.AddonListFrame.ReloadButton = app:MakeButton(app.AddonListFrame, L.APPLY_CHANGES)
 	app.AddonListFrame.ReloadButton:SetPoint("RIGHT", app.AddonListFrame.CancelButton, "LEFT", -2, 0)
 	app.AddonListFrame.ReloadButton:SetScript("OnClick", function()
+		local guid = app.Flag.SelectedCharacter
+		if app.Flag.SelectedCharacter == "All" then
+			guid = nil
+		end
 		for i, state in pairs(app.Flag.Changed) do
-			if app.Flag.SelectedCharacter == "All" then
-				if state then
-					C_AddOns.EnableAddOn(i)
-				else
-					C_AddOns.DisableAddOn(i)
-				end
+			if state then
+				C_AddOns.EnableAddOn(i, guid)
 			else
-				if state then
-					C_AddOns.EnableAddOn(i, app.Flag.SelectedCharacter)
-				else
-					C_AddOns.DisableAddOn(i, app.Flag.SelectedCharacter)
-				end
+				C_AddOns.DisableAddOn(i, guid)
 			end
 		end
 		if app.Flag.SelectedCharacter == app.Info.GUID or app.Flag.SelectedCharacter == "All" then
