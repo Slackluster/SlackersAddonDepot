@@ -280,7 +280,7 @@ function app:CreateAddonList()
 							profileInfo.addons[addon.name] = { title = addon.title }
 						end
 					end
-					table.sort(profileInfo.addons, function(a, b) return a.title < b.title end)
+					table.sort(profileInfo.addons, function(a, b) return a.id < b.id end)
 				end)
 				local addons = profile:CreateButton(L.ADDONS)
 				profile:CreateDivider()
