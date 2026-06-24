@@ -179,3 +179,8 @@ function app:MakeButton(parent, text, name)
 	app:SetBorder(frame, 0, 0, 0, -1)
 	return frame
 end
+
+function app:UpdateButton(button, text)
+	button:SetText(text)
+	button:SetWidth(button:GetTextWidth()+20)
+end

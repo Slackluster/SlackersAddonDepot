@@ -333,14 +333,20 @@ function app:CreateAddonList()
 	end)
 	app:SetBorder(app.AddonListFrame.SearchBar, -7, 1, 2, -2)
 
-	app.AddonListFrame.CancelButton = app:MakeButton(app.AddonListFrame, L.CANCEL)
-	app.AddonListFrame.CancelButton:SetPoint("BOTTOMRIGHT", app.AddonListFrame, -10, 8)
-	app.AddonListFrame.CancelButton:SetScript("OnClick", function()
-		app.AddonListFrame:Hide()
+	app.AddonListFrame.RevertOrCancelButton = app:MakeButton(app.AddonListFrame, "")
+	app.AddonListFrame.RevertOrCancelButton:SetPoint("BOTTOMRIGHT", app.AddonListFrame, -10, 8)
+	app.AddonListFrame.RevertOrCancelButton:SetScript("OnClick", function()
+		local next = next
+		if next(app.Flag.Changed) == nil then
+			app.AddonListFrame:Hide()
+		else
+			app.Flag.Changed = {}
+			app:UpdateAddonList()
+		end
 	end)
 
-	app.AddonListFrame.ApplyButton = app:MakeButton(app.AddonListFrame, L.APPLY_CHANGES)
-	app.AddonListFrame.ApplyButton:SetPoint("RIGHT", app.AddonListFrame.CancelButton, "LEFT", -2, 0)
+	app.AddonListFrame.ApplyButton = app:MakeButton(app.AddonListFrame, "")
+	app.AddonListFrame.ApplyButton:SetPoint("RIGHT", app.AddonListFrame.RevertOrCancelButton, "LEFT", -2, 0)
 	app.AddonListFrame.ApplyButton:SetScript("OnClick", function()
 		local guid = app.Flag.SelectedCharacter
 		if app.Flag.SelectedCharacter == "All" then
@@ -383,13 +389,6 @@ function app:CreateAddonList()
 	app.AddonListFrame.DisableAllButton:SetPoint("LEFT", app.AddonListFrame.EnableAllButton, "RIGHT", 2, 0)
 	app.AddonListFrame.DisableAllButton:SetScript("OnClick", function()
 		sendChangesAll(false)
-	end)
-
-	app.AddonListFrame.UndoButton = app:MakeButton(app.AddonListFrame, L.UNDO_CHANGES)
-	app.AddonListFrame.UndoButton:SetPoint("LEFT", app.AddonListFrame.DisableAllButton, "RIGHT", 2, 0)
-	app.AddonListFrame.UndoButton:SetScript("OnClick", function()
-		app.Flag.Changed = {}
-		app:UpdateAddonList()
 	end)
 
 	local scrollBox = CreateFrame("Frame", nil, app.AddonListFrame.List, "WowScrollBoxList")
@@ -602,10 +601,16 @@ function app:UpdateAddonList()
 	local next = next
 	if next(app.Flag.Changed) == nil then
 		app.AddonListFrame.ApplyButton:Disable()
-		app.AddonListFrame.UndoButton:Disable()
+		app:UpdateButton(app.AddonListFrame.RevertOrCancelButton, L.CANCEL)
 	else
 		app.AddonListFrame.ApplyButton:Enable()
-		app.AddonListFrame.UndoButton:Enable()
+		app:UpdateButton(app.AddonListFrame.RevertOrCancelButton, L.REVERT .. "  " .. CreateAtlasMarkup("common-icon-undo"))
+	end
+
+	if app.Flag.SelectedCharacter == app.Info.GUID or app.Flag.SelectedCharacter == "All" then
+		app:UpdateButton(app.AddonListFrame.ApplyButton, L.RELOADUI)
+	else
+		app:UpdateButton(app.AddonListFrame.ApplyButton, L.APPLY_CHANGES)
 	end
 
 	app.Flag.SelectedNo = 0
