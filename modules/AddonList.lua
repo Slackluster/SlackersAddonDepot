@@ -589,14 +589,14 @@ function app:CreateAddonList()
 end
 
 function app:UpdateAddonList()
-	local function addonNameSearch(addon, search)
+	local function addonSearch(addon, search)
 		if search == "" then
 			return true
 		end
 
 		search = search:lower()
 
-		return addon.title:lower():find(search, 1, true) or addon.name:lower():find(search, 1, true)
+		return addon.title:lower():find(search, 1, true) or addon.name:lower():find(search, 1, true) or addon.author:lower():find(search, 1, true)
 	end
 
 	local next = next
@@ -630,13 +630,13 @@ function app:UpdateAddonList()
 
 	if app.Settings["headerStyle"] == 1 then -- Alphabetical
 		for i, addon in ipairs(app.Info.AddonList) do
-			if not addon.dependencies and addonNameSearch(addon, app.Flag.Search) then
+			if not addon.dependencies and addonSearch(addon, app.Flag.Search) then
 				table.insert(addonList, { addon = addon, children = {} })
 			end
 		end
 
 		for i, addon in ipairs(app.Info.AddonList) do
-			if addon.dependencies and addonNameSearch(addon, app.Flag.Search) then
+			if addon.dependencies and addonSearch(addon, app.Flag.Search) then
 				for _, child in ipairs(addonList) do
 					if addon.dependencies == child.addon.name then
 						table.insert(child.children, { addon = addon })
@@ -667,7 +667,7 @@ function app:UpdateAddonList()
 
 		for _, header in ipairs(addonList) do
 			for i, addon in ipairs(app.Info.AddonList) do
-				if not addon.dependencies and addonNameSearch(addon, app.Flag.Search) then
+				if not addon.dependencies and addonSearch(addon, app.Flag.Search) then
 					if (not addon.category and header.category == L.UNCATEGORIZED) or addon.category == header.category then
 						table.insert(header.children, { addon = addon, children = {} })
 					end
@@ -676,7 +676,7 @@ function app:UpdateAddonList()
 		end
 
 		for _, addon in ipairs(app.Info.AddonList) do
-			if addon.dependencies and addonNameSearch(addon, app.Flag.Search) then
+			if addon.dependencies and addonSearch(addon, app.Flag.Search) then
 				for _, header in ipairs(addonList) do
 					for _, child in ipairs(header.children) do
 						if addon.dependencies == child.addon.name then
@@ -706,7 +706,7 @@ function app:UpdateAddonList()
 		table.insert(addonList, { category = L.DISABLED, children = {} })
 
 		for _, addon in ipairs(app.Info.AddonList) do
-			if not addon.dependencies and addonNameSearch(addon, app.Flag.Search) then
+			if not addon.dependencies and addonSearch(addon, app.Flag.Search) then
 				if addon.enabled == 0 then
 					table.insert(addonList[2].children, { addon = addon, children = {} })
 				else
@@ -718,7 +718,7 @@ function app:UpdateAddonList()
 		local seenDependencies = {}
 
 		for i, addon in ipairs(app.Info.AddonList) do
-			if addon.dependencies and addonNameSearch(addon, app.Flag.Search) then
+			if addon.dependencies and addonSearch(addon, app.Flag.Search) then
 				for _, header in ipairs(addonList) do
 					for _, child in ipairs(header.children) do
 						if addon.dependencies == child.addon.name and ((header.category == L.ENABLED and addon.enabled ~= 0) or (header.category == L.DISABLED and addon.enabled == 0)) then
@@ -731,7 +731,7 @@ function app:UpdateAddonList()
 		end
 
 		for i, addon in ipairs(app.Info.AddonList) do
-			if addon.dependencies and addonNameSearch(addon, app.Flag.Search) and not seenDependencies[i] then
+			if addon.dependencies and addonSearch(addon, app.Flag.Search) and not seenDependencies[i] then
 				if addon.enabled == 0 then
 					table.insert(addonList[2].children, { addon = addon, children = {} })
 				else
