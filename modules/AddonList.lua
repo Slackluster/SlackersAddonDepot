@@ -440,6 +440,10 @@ function app:CreateAddonList()
 			node:ToggleCollapsed()
 			updateToggleButton()
 		end)
+		listItem:SetScript("OnClick", function()
+			node:ToggleCollapsed()
+			updateToggleButton()
+		end)
 
 		listItem.Text1:SetText("|cffFFFFFF" .. data.title)
 	end
