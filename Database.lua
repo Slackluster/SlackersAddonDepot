@@ -14,10 +14,10 @@ _G["BINDING_NAME_SLACKWARE"] = "Slackware"
 
 -- Textures
 app.Icon = "Interface\\Icons\\inv_tinkermodule_blue"
-app.IconReady = "|TInterface\\RaidFrame\\ReadyCheck-Ready:0|t"
-app.IconNotReady = "|TInterface\\RaidFrame\\ReadyCheck-NotReady:0|t"
-app.IconLMB = "|TInterface\\TutorialFrame\\UI-Tutorial-Frame:12:12:0:0:512:512:10:65:228:283:0|t"
-app.IconRMB = "|TInterface\\TutorialFrame\\UI-Tutorial-Frame:12:12:0:0:512:512:10:65:330:385:0|t"
-app.IconNew = "|A:UI-Journeys-GreatVault-Tag-new:33:49|a"
+app.IconReady = CreateSimpleTextureMarkup("Interface\\RaidFrame\\ReadyCheck-Ready")
+app.IconNotReady = CreateSimpleTextureMarkup("Interface\\RaidFrame\\ReadyCheck-NotReady")
+app.IconLMB = CreateAtlasMarkup("housing-hotkey-icon-leftclick")
+app.IconRMB = CreateAtlasMarkup("housing-hotkey-icon-rightclick")
+app.IconNew = CreateAtlasMarkup("UI-Journeys-GreatVault-Tag-new")
 
 app.IconNone = "Interface\\Icons\\inv_misc_questionmark"
