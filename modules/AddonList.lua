@@ -611,16 +611,34 @@ function app:UpdateAddonList()
 	end
 
 	local addonList = {}
+	local DataProvider = CreateTreeDataProvider()
 
-	if app.Settings["headerStyle"] == 1 then
-		table.insert(addonList, { category = L.INSTALLED, children = {} })
-
-		for _, addon in ipairs(app.Info.AddonList) do
+	if app.Settings["headerStyle"] == 1 then -- Alphabetical
+		for i, addon in ipairs(app.Info.AddonList) do
 			if not addon.dependencies and addonNameSearch(addon, app.Flag.Search) then
-				table.insert(addonList[1].children, { addon = addon, children = {} })
+				table.insert(addonList, { addon = addon, children = {} })
 			end
 		end
-	elseif app.Settings["headerStyle"] == 2 then
+
+		for i, addon in ipairs(app.Info.AddonList) do
+			if addon.dependencies and addonNameSearch(addon, app.Flag.Search) then
+				for _, child in ipairs(addonList) do
+					if addon.dependencies == child.addon.name then
+						table.insert(child.children, { addon = addon })
+					end
+				end
+			end
+		end
+
+		for _, addon1 in ipairs(addonList) do
+			local addon = addon1.addon
+			local row1 = DataProvider:Insert({ id = addon.id, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+			for _, addon2 in ipairs(addon1.children) do
+				local addon = addon2.addon
+				row1:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+			end
+		end
+	elseif app.Settings["headerStyle"] == 2 then -- Categories
 		local seen = {}
 
 		for i, addon in ipairs(app.Info.AddonList) do
@@ -641,7 +659,34 @@ function app:UpdateAddonList()
 				end
 			end
 		end
-	elseif app.Settings["headerStyle"] == 3 then
+
+		for _, addon in ipairs(app.Info.AddonList) do
+			if addon.dependencies and addonNameSearch(addon, app.Flag.Search) then
+				for _, header in ipairs(addonList) do
+					for _, child in ipairs(header.children) do
+						if addon.dependencies == child.addon.name then
+							table.insert(child.children, { addon = addon })
+						end
+					end
+				end
+			end
+		end
+
+		for _, header in ipairs(addonList) do
+			local next = next
+			if next(header.children) ~= nil then
+				local row1 = DataProvider:Insert({ nodeType = "header", title = header.category })
+				for _, addon1 in ipairs(header.children) do
+					local addon = addon1.addon
+					local row2 = row1:Insert({ id = addon.id, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+					for _, addon2 in ipairs(addon1.children) do
+						local addon = addon2.addon
+						row2:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+					end
+				end
+			end
+		end
+	elseif app.Settings["headerStyle"] == 3 then -- Enable State
 		table.insert(addonList, { category = L.ENABLED, children = {} })
 		table.insert(addonList, { category = L.DISABLED, children = {} })
 
@@ -654,32 +699,54 @@ function app:UpdateAddonList()
 				end
 			end
 		end
-	end
 
-	for _, addon in ipairs(app.Info.AddonList) do
-		if addon.dependencies and addonNameSearch(addon, app.Flag.Search) then
-			for _, header in ipairs(addonList) do
-				for _, child in ipairs(header.children) do
-					if addon.dependencies == child.addon.name then
-						table.insert(child.children, { addon = addon })
+		local seenDependencies = {}
+
+		for i, addon in ipairs(app.Info.AddonList) do
+			if addon.dependencies and addonNameSearch(addon, app.Flag.Search) then
+				for _, header in ipairs(addonList) do
+					for _, child in ipairs(header.children) do
+						if addon.dependencies == child.addon.name and ((header.category == L.ENABLED and addon.enabled ~= 0) or (header.category == L.DISABLED and addon.enabled == 0)) then
+							table.insert(child.children, { addon = addon })
+							seenDependencies[i] = true
+						end
 					end
 				end
 			end
 		end
-	end
 
-	local DataProvider = CreateTreeDataProvider()
+		for i, addon in ipairs(app.Info.AddonList) do
+			if addon.dependencies and addonNameSearch(addon, app.Flag.Search) and not seenDependencies[i] then
+				if addon.enabled == 0 then
+					table.insert(addonList[2].children, { addon = addon, children = {} })
+				else
+					table.insert(addonList[1].children, { addon = addon, children = {} })
+				end
+			end
+		end
 
-	for _, header in ipairs(addonList) do
-		local next = next
-		if next(header.children) ~= nil then
-			local row1 = DataProvider:Insert({ nodeType = "header", title = header.category })
-			for _, addon1 in ipairs(header.children) do
-				local addon = addon1.addon
-				local row2 = row1:Insert({ id = addon.id, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
-				for _, addon2 in ipairs(addon1.children) do
-					local addon = addon2.addon
-					row2:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+		for _, header in ipairs(addonList) do
+			table.sort(header.children, function(a, b)
+				return a.addon.id < b.addon.id
+			end)
+			for _, child in ipairs(header.children) do
+				table.sort(child.children, function(a, b)
+					return a.addon.id < b.addon.id
+				end)
+			end
+		end
+
+		for _, header in ipairs(addonList) do
+			local next = next
+			if next(header.children) ~= nil then
+				local row1 = DataProvider:Insert({ nodeType = "header", title = header.category })
+				for _, addon1 in ipairs(header.children) do
+					local addon = addon1.addon
+					local row2 = row1:Insert({ id = addon.id, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+					for _, addon2 in ipairs(addon1.children) do
+						local addon = addon2.addon
+						row2:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+					end
 				end
 			end
 		end
