@@ -200,29 +200,19 @@ function app:CreateAddonList()
 	app.AddonListFrame.CharListDropdown:SetPoint("TOPLEFT", 11, -26)
 	app:SetBorder(app.AddonListFrame.CharListDropdown, -1, 1, 1, 0)
 
+	local function isSelected(index)
+		return app.Settings["headerStyle"] == index
+	end
+	local function setSelected(index)
+		app.Settings["headerStyle"] = index
+		app:UpdateAddonList()
+	end
 	function listStyleGenerator(owner, rootDescription)
-		rootDescription:CreateButton(L.ALPHABETICAL, function(data)
-			app.Settings["headerStyle"] = 1
-			owner:SetDefaultText(L.ALPHABETICAL)
-			app:UpdateAddonList()
-		end)
-		rootDescription:CreateButton(L.CATEGORIES, function(data)
-			app.Settings["headerStyle"] = 2
-			owner:SetDefaultText(L.CATEGORIES)
-			app:UpdateAddonList()
-		end)
-		rootDescription:CreateButton(L.ENABLESTATE, function(data)
-			app.Settings["headerStyle"] = 3
-			owner:SetDefaultText(L.ENABLESTATE)
-			app:UpdateAddonList()
-		end)
+		rootDescription:CreateRadio(L.ALPHABETICAL, isSelected, setSelected, 1)
+		rootDescription:CreateRadio(L.CATEGORIES, isSelected, setSelected, 2)
+		rootDescription:CreateRadio(L.ENABLESTATE, isSelected, setSelected, 3)
 	end
 	app.AddonListFrame.ListStyleDropdown = CreateFrame("DropdownButton", nil, app.AddonListFrame, "WowStyle1DropdownTemplate")
-	if app.Settings["headerStyle"] == 1 then
-		app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.CATEGORIES)
-	elseif app.Settings["headerStyle"] == 2 then
-		app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.ENABLESTATE)
-	end
 	app.AddonListFrame.ListStyleDropdown:SetWidth(120)
 	app.AddonListFrame.ListStyleDropdown:SetPoint("TOPRIGHT", -7, -26)
 	app.AddonListFrame.ListStyleDropdown:SetupMenu(listStyleGenerator)
@@ -597,6 +587,14 @@ function app:UpdateAddonList()
 		search = search:lower()
 
 		return addon.title:lower():find(search, 1, true) or addon.name:lower():find(search, 1, true) or addon.author:lower():find(search, 1, true)
+	end
+
+	if app.Settings["headerStyle"] == 1 then
+		app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.ALPHABETICAL)
+	elseif app.Settings["headerStyle"] == 2 then
+		app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.CATEGORIES)
+	elseif app.Settings["headerStyle"] == 3 then
+		app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.ENABLESTATE)
 	end
 
 	local next = next
