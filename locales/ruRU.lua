@@ -54,6 +54,7 @@ local L = app.locales
 -- Addon List
 -- L.INSTALLED =                            "Installed"
 -- L.CATEGORIES =                           CATEGORIES -- "Categories"
+-- L.CATEGORIES_WIKI =                      L.CATEGORIES .. " (Wiki)"
 -- L.ENABLESTATE =                          "Enable State"
 -- L.ENABLED =                              PVP_WAR_MODE_ENABLED -- "Enabled"
 -- L.DISABLED =                             ADDON_DISABLED -- "Disabled"

@@ -210,7 +210,8 @@ function app:CreateAddonList()
 	function listStyleGenerator(owner, rootDescription)
 		rootDescription:CreateRadio(L.ALPHABETICAL, isSelected, setSelected, 1)
 		rootDescription:CreateRadio(L.CATEGORIES, isSelected, setSelected, 2)
-		rootDescription:CreateRadio(L.ENABLESTATE, isSelected, setSelected, 3)
+		rootDescription:CreateRadio(L.CATEGORIES_WIKI, isSelected, setSelected, 3)
+		rootDescription:CreateRadio(L.ENABLESTATE, isSelected, setSelected, 4)
 	end
 	app.AddonListFrame.ListStyleDropdown = CreateFrame("DropdownButton", nil, app.AddonListFrame, "WowStyle1DropdownTemplate")
 	app.AddonListFrame.ListStyleDropdown:SetWidth(120)
@@ -593,6 +594,8 @@ function app:UpdateAddonList()
 	elseif app.Settings["headerStyle"] == 2 then
 		app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.CATEGORIES)
 	elseif app.Settings["headerStyle"] == 3 then
+		app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.CATEGORIES_WIKI)
+	elseif app.Settings["headerStyle"] == 4 then
 		app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.ENABLESTATE)
 	end
 
@@ -704,7 +707,55 @@ function app:UpdateAddonList()
 				end
 			end
 		end
-	elseif app.Settings["headerStyle"] == 3 then -- Enable State
+	elseif app.Settings["headerStyle"] == 3 then -- Categories (Wiki)
+		local seen = {}
+
+		for i, addon in ipairs(app.Info.AddonList) do
+			if not addon.dependencies and addon.category and app.WikiCategories[GetLocale()][addon.category] and not seen[addon.category] then
+				table.insert(addonList, { category = addon.category, children = {} })
+				seen[addon.category] = true
+			end
+		end
+		table.sort(addonList, function(a, b) return a.category < b.category end)
+		table.insert(addonList, { category = L.UNCATEGORIZED, children = {} })
+
+		for _, header in ipairs(addonList) do
+			for i, addon in ipairs(app.Info.AddonList) do
+				if not addon.dependencies and addonSearch(addon, app.Flag.Search) then
+					if ((not addon.category or not app.WikiCategories[GetLocale()][addon.category]) and header.category == L.UNCATEGORIZED) or addon.category == header.category then
+						table.insert(header.children, { addon = addon, children = {} })
+					end
+				end
+			end
+		end
+
+		for _, addon in ipairs(app.Info.AddonList) do
+			if addon.dependencies and addonSearch(addon, app.Flag.Search) then
+				for _, header in ipairs(addonList) do
+					for _, child in ipairs(header.children) do
+						if addon.dependencies == child.addon.name then
+							table.insert(child.children, { addon = addon })
+						end
+					end
+				end
+			end
+		end
+
+		for _, header in ipairs(addonList) do
+			local next = next
+			if next(header.children) ~= nil then
+				local row1 = DataProvider:Insert({ nodeType = "header", title = header.category })
+				for _, addon1 in ipairs(header.children) do
+					local addon = addon1.addon
+					local row2 = row1:Insert({ id = addon.id, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+					for _, addon2 in ipairs(addon1.children) do
+						local addon = addon2.addon
+						row2:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+					end
+				end
+			end
+		end
+	elseif app.Settings["headerStyle"] == 4 then -- Enable State
 		table.insert(addonList, { category = L.ENABLED, children = {} })
 		table.insert(addonList, { category = L.DISABLED, children = {} })
 
