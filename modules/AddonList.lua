@@ -259,6 +259,7 @@ function app:CreateAddonList()
 					app:UpdateAddonList()
 				end)
 				profile:CreateDivider()
+				local addons = profile:CreateButton(L.ADDONS)
 				profile:CreateButton(string.format(L.SAVE_ADDONS, app.Flag.SelectedNo), function()
 					profileInfo.addons = {}
 					for i, state in pairs(app.Flag.Changed) do
@@ -273,7 +274,6 @@ function app:CreateAddonList()
 					end
 					table.sort(profileInfo.addons, function(a, b) return a.id < b.id end)
 				end)
-				local addons = profile:CreateButton(L.ADDONS)
 				profile:CreateDivider()
 				profile:CreateButton(L.RENAME_PROFILE, function() StaticPopup_Show("SLACKERSADDONDEPOT_RENAMEPROFILE", nil, nil, profileNo) end)
 				profile:CreateButton(L.DELETE_PROFILE, function() StaticPopup_Show("SLACKERSADDONDEPOT_DELETEPROFILE", nil, nil, profileNo) end)
