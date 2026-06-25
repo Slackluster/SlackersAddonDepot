@@ -506,21 +506,20 @@ function app:CreateAddonList()
 		listItem.Text1:SetText(data.title)
 
 		local _, _, _, interfaceVersion = GetBuildInfo()
-		local dependencyID
-		if data.dependencies then
-			local name = C_AddOns.GetAddOnDependencies(data.id)
-			for i, addon in ipairs(app.Info.AddonList) do
-				if name == addon.name then
-					dependencyID = addon.id
-					break
-				end
-			end
+		local dependencyData = app.AddonList:FindElementDataByPredicate(function(elementData)
+			return elementData.data and elementData.data.name == data.dependencies
+		end)
+		local dependencyID, dependencyEnabled
+		if dependencyData then
+			dependencyID = dependencyData.data.id
+			dependencyEnabled = dependencyData.data.enabled
 		end
+
 		if data.interface < 119999 or data.interface > interfaceVersion then
 			listItem.Text2:SetText("|cffFF0000" .. L.INCOMPATIBLE)
 		elseif data.interface < interfaceVersion and not app.Settings["loadOutOfDate"] then
 			listItem.Text2:SetText("|cffFF0000" .. L.OUT_OF_DATE)
-		elseif data.dependencies and app.Flag.Changed[data.id] ~= false and (data.enabled ~= 0 or app.Flag.Changed[data.id]) and ((not C_AddOns.IsAddOnLoaded(dependencyID) and app.Flag.Changed[dependencyID] ~= true) or (C_AddOns.IsAddOnLoaded(dependencyID) and app.Flag.Changed[dependencyID] == false)) then
+		elseif data.dependencies and app.Flag.Changed[data.id] ~= false and (data.enabled ~= 0 or app.Flag.Changed[data.id]) and ((dependencyEnabled == 0 and app.Flag.Changed[dependencyID] ~= true) or (dependencyEnabled ~= 0 and app.Flag.Changed[dependencyID] == false)) then
 			listItem.Text2:SetText("|cffFF0000" .. L.DEPENDENCY_DISABLED)
 		elseif app.Flag.Changed[data.id] ~= nil then
 			if app.Flag.SelectedCharacter == app.Info.GUID or app.Flag.SelectedCharacter == "All" then
