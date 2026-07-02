@@ -27,7 +27,12 @@ function app:GetAddonInfo()
 
 	for i = 1, C_AddOns.GetNumAddOns() do
 		local name, title, notes = C_AddOns.GetAddOnInfo(i)
-		table.insert(app.Info.AddonList, { id = i, iconTexture = C_AddOns.GetAddOnMetadata(i, "IconTexture"), iconAtlas = C_AddOns.GetAddOnMetadata(i, "IconAtlas"), name = name, title = title, notes = notes, version = C_AddOns.GetAddOnMetadata(i, "Version"), interface = C_AddOns.GetAddOnInterfaceVersion(i), author = C_AddOns.GetAddOnMetadata(i, "Author") or " ", category = C_AddOns.GetAddOnMetadata(i, "Category"), dependencies = C_AddOns.GetAddOnDependencies(i) })
+		local dependencies = C_AddOns.GetAddOnDependencies(i)
+		if dependencies and string.match(dependencies, "Blizzard_") then
+			dependencies = nil
+		end
+
+		table.insert(app.Info.AddonList, { id = i, iconTexture = C_AddOns.GetAddOnMetadata(i, "IconTexture"), iconAtlas = C_AddOns.GetAddOnMetadata(i, "IconAtlas"), name = name, title = title, notes = notes, version = C_AddOns.GetAddOnMetadata(i, "Version"), interface = C_AddOns.GetAddOnInterfaceVersion(i), author = C_AddOns.GetAddOnMetadata(i, "Author") or " ", category = C_AddOns.GetAddOnMetadata(i, "Category"), dependencies = dependencies })
 	end
 end
 

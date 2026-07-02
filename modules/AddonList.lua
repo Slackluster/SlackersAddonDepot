@@ -631,12 +631,18 @@ function app:UpdateAddonList()
 		end
 	end
 
+	-- Check for uninstalled dependencies
+	local addons = {} -- To
+	for i, addon in ipairs(app.Info.AddonList) do
+		addons[addon.name] = true
+	end
+
 	local addonList = {}
 	local DataProvider = CreateTreeDataProvider()
 
 	if app.Settings["headerStyle"] == 1 then -- Alphabetical
 		for i, addon in ipairs(app.Info.AddonList) do
-			if not addon.dependencies and addonSearch(addon, app.Flag.Search) then
+			if (not addon.dependencies or not addons[addon.dependencies]) and addonSearch(addon, app.Flag.Search) then
 				table.insert(addonList, { addon = addon, children = {} })
 			end
 		end
@@ -663,7 +669,7 @@ function app:UpdateAddonList()
 		local seen = {}
 
 		for i, addon in ipairs(app.Info.AddonList) do
-			if not addon.dependencies and addon.category and not seen[addon.category] then
+			if (not addon.dependencies or not addons[addon.dependencies]) and addon.category and not seen[addon.category] then
 				table.insert(addonList, { category = addon.category, children = {} })
 				seen[addon.category] = true
 			end
@@ -673,7 +679,7 @@ function app:UpdateAddonList()
 
 		for _, header in ipairs(addonList) do
 			for i, addon in ipairs(app.Info.AddonList) do
-				if not addon.dependencies and addonSearch(addon, app.Flag.Search) then
+				if (not addon.dependencies or not addons[addon.dependencies]) and addonSearch(addon, app.Flag.Search) then
 					if (not addon.category and header.category == L.UNCATEGORIZED) or addon.category == header.category then
 						table.insert(header.children, { addon = addon, children = {} })
 					end
@@ -711,7 +717,7 @@ function app:UpdateAddonList()
 		local seen = {}
 
 		for i, addon in ipairs(app.Info.AddonList) do
-			if not addon.dependencies and addon.category and app.WikiCategories[GetLocale()][addon.category] and not seen[addon.category] then
+			if (not addon.dependencies or not addons[addon.dependencies]) and addon.category and app.WikiCategories[GetLocale()][addon.category] and not seen[addon.category] then
 				table.insert(addonList, { category = addon.category, children = {} })
 				seen[addon.category] = true
 			end
@@ -721,7 +727,7 @@ function app:UpdateAddonList()
 
 		for _, header in ipairs(addonList) do
 			for i, addon in ipairs(app.Info.AddonList) do
-				if not addon.dependencies and addonSearch(addon, app.Flag.Search) then
+				if (not addon.dependencies or not addons[addon.dependencies]) and addonSearch(addon, app.Flag.Search) then
 					if ((not addon.category or not app.WikiCategories[GetLocale()][addon.category]) and header.category == L.UNCATEGORIZED) or addon.category == header.category then
 						table.insert(header.children, { addon = addon, children = {} })
 					end
@@ -760,7 +766,7 @@ function app:UpdateAddonList()
 		table.insert(addonList, { category = L.DISABLED, children = {} })
 
 		for _, addon in ipairs(app.Info.AddonList) do
-			if not addon.dependencies and addonSearch(addon, app.Flag.Search) then
+			if (not addon.dependencies or not addons[addon.dependencies]) and addonSearch(addon, app.Flag.Search) then
 				if addon.enabled == 0 then
 					table.insert(addonList[2].children, { addon = addon, children = {} })
 				else
