@@ -246,7 +246,11 @@ function app:CreateAddonList()
 				end)
 			end
 			profile:CreateDivider()
-			local addons = profile:CreateButton(L.ADDONS)
+			local addonCount = 0
+			for _, _ in pairs(profileInfo.addons) do
+				addonCount = addonCount + 1
+			end
+			local addons = profile:CreateButton(L.ADDONS .. " (" .. addonCount .. ")")
 			profile:CreateButton(string.format(L.SAVE_ADDONS, app.Flag.SelectedNo), function()
 				profileInfo.addons = {}
 				for i, state in pairs(app.Flag.Changed) do
