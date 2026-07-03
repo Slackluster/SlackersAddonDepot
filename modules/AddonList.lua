@@ -275,7 +275,7 @@ function app:CreateAddonList()
 		end
 
 		local login, standard = false, false
-		for _, profileInfo in ipairs(app.Data.Profiles) do
+		for profileNo, profileInfo in ipairs(app.Data.Profiles) do
 			if profileInfo.type == "Login" then
 				if not login then
 					rootDescription:CreateTitle(L.LOGIN_PROFILES)
@@ -642,7 +642,7 @@ function app:UpdateAddonList()
 	end
 
 	-- Check for uninstalled dependencies
-	local addons = {} -- To
+	local addons = {}
 	for i, addon in ipairs(app.Info.AddonList) do
 		addons[addon.name] = true
 	end
