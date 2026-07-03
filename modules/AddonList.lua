@@ -16,7 +16,6 @@ app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 		app.Flag.Search = ""
 
 		app:CreateAddonList()
-		app:CreateProfileWindows()
 		app:HookGameMenu()
 	end
 end)
@@ -220,27 +219,14 @@ function app:CreateAddonList()
 	app:SetBorder(app.AddonListFrame.ListStyleDropdown, -2, 1, 1, 0)
 
 	function profilesGenerator(owner, rootDescription)
-		local login, standard = false, false
-		-- for _, profileInfo in ipairs(app.Data.Profiles) do
-		-- 	if profileInfo.type == "Login" then
-		-- 		if not login then
-		-- 			rootDescription:CreateTitle(L.LOGIN_PROFILES)
-		-- 			login = true
-		-- 		end
-		-- 		local profile = rootDescription:CreateButton(profileInfo.name)
-		-- 		profile:CreateButton("Edit load conditions")
-		-- 		profile:CreateButton(string.format(L.SAVE_ADDONS, app.Flag.SelectedNo))
-		-- 		profile:CreateDivider()
-		-- 		profile:CreateButton(L.DELETE_PROFILE)
-		-- 	end
-		-- end
-		for profileNo, profileInfo in ipairs(app.Data.Profiles) do
-			if profileInfo.type == "Standard" then
-				if not standard then
-					rootDescription:CreateTitle(L.STANDARD_PROFILES)
-					standard = true
-				end
-				local profile = rootDescription:CreateButton(profileInfo.name)
+		local function makeProfileEntry(profileNo, profileInfo)
+			local profile = rootDescription:CreateButton(profileInfo.name)
+			if profileInfo.type == "Login" then
+				profile:CreateButton("Set load conditions", function()
+					app.Flag.SelectedProfile = profileNo
+					app.LoadConditionsPanel:Show()
+				end)
+			elseif profileInfo.type == "Standard" then
 				local label
 				if app.Flag.SelectedCharacter == "All" then
 					label = L.ALL
@@ -258,29 +244,49 @@ function app:CreateAddonList()
 					app.AddonListFrame.SearchBar:SetText("")
 					app:UpdateAddonList()
 				end)
-				profile:CreateDivider()
-				local addons = profile:CreateButton(L.ADDONS)
-				profile:CreateButton(string.format(L.SAVE_ADDONS, app.Flag.SelectedNo), function()
-					profileInfo.addons = {}
-					for i, state in pairs(app.Flag.Changed) do
-						if state then
-							profileInfo.addons[app.Info.AddonList[i].name] = { title = app.Info.AddonList[i].title }
-						end
+			end
+			profile:CreateDivider()
+			local addons = profile:CreateButton(L.ADDONS)
+			profile:CreateButton(string.format(L.SAVE_ADDONS, app.Flag.SelectedNo), function()
+				profileInfo.addons = {}
+				for i, state in pairs(app.Flag.Changed) do
+					if state then
+						profileInfo.addons[app.Info.AddonList[i].name] = { title = app.Info.AddonList[i].title }
 					end
-					for i, addon in ipairs(app.Info.AddonList) do
-						if addon.enabled == 2 and app.Flag.Changed[i] == nil then
-							profileInfo.addons[addon.name] = { title = addon.title }
-						end
-					end
-					table.sort(profileInfo.addons, function(a, b) return a.id < b.id end)
-				end)
-				profile:CreateDivider()
-				profile:CreateButton(L.RENAME_PROFILE, function() StaticPopup_Show("SLACKERSADDONDEPOT_RENAMEPROFILE", nil, nil, profileNo) end)
-				profile:CreateButton(L.DELETE_PROFILE, function() StaticPopup_Show("SLACKERSADDONDEPOT_DELETEPROFILE", nil, nil, profileNo) end)
-
-				for _, addon in pairs(profileInfo.addons) do
-					addons:CreateButton(addon.title)
 				end
+				for i, addon in ipairs(app.Info.AddonList) do
+					if addon.enabled == 2 and app.Flag.Changed[i] == nil then
+						profileInfo.addons[addon.name] = { title = addon.title }
+					end
+				end
+				table.sort(profileInfo.addons, function(a, b) return a.id < b.id end)
+			end)
+			profile:CreateDivider()
+			profile:CreateButton(L.RENAME_PROFILE, function() StaticPopup_Show("SLACKERSADDONDEPOT_RENAMEPROFILE", nil, nil, profileNo) end)
+			profile:CreateButton(L.DELETE_PROFILE, function() StaticPopup_Show("SLACKERSADDONDEPOT_DELETEPROFILE", nil, nil, profileNo) end)
+
+			for _, addon in pairs(profileInfo.addons) do
+				addons:CreateButton(addon.title)
+			end
+		end
+
+		local login, standard = false, false
+		for _, profileInfo in ipairs(app.Data.Profiles) do
+			if profileInfo.type == "Login" then
+				if not login then
+					rootDescription:CreateTitle(L.LOGIN_PROFILES)
+					login = true
+				end
+				makeProfileEntry(profileNo, profileInfo)
+			end
+		end
+		for profileNo, profileInfo in ipairs(app.Data.Profiles) do
+			if profileInfo.type == "Standard" then
+				if not standard then
+					rootDescription:CreateTitle(L.STANDARD_PROFILES)
+					standard = true
+				end
+				makeProfileEntry(profileNo, profileInfo)
 			end
 		end
 
@@ -836,128 +842,6 @@ function api:ToggleAddonList()
 	else
 		app.AddonListFrame:Show()
 	end
-end
-
---------------
--- PROFILES --
---------------
-
-function app:CreateProfileWindows()
-	app.NewProfilePanel = CreateFrame("Frame", nil, app.AddonListFrame, "DefaultPanelTemplate")
-	app.NewProfilePanel:SetSize(560, 200)
-	app.NewProfilePanel:SetPoint("CENTER")
-	app.NewProfilePanel:SetFrameStrata("DIALOG")
-	app.NewProfilePanel:EnableMouse(true)
-	app.NewProfilePanel:Hide()
-	app.NewProfilePanel:SetScript("OnShow", function()
-	end)
-	app.NewProfilePanel:SetScript("OnHide", function()
-	end)
-
-	app.NewProfilePanel.TitleContainer.TitleText:SetText(app:Colour(L.NEW_PROFILE))
-
-	app.NewProfilePanel.CloseButton = CreateFrame("Button", nil, app.NewProfilePanel, "UIPanelCloseButton")
-	app.NewProfilePanel.CloseButton:SetPoint("TOPRIGHT", app.NewProfilePanel)
-	app.NewProfilePanel.CloseButton:SetScript("OnClick", function()
-		app.NewProfilePanel:Hide()
-	end)
-
-	app.NewProfilePanel.ProfileNameEditbox = CreateFrame("EditBox", nil, app.NewProfilePanel, "InputBoxTemplate")
-	app.NewProfilePanel.ProfileNameEditbox:SetSize(160, 20)
-	app.NewProfilePanel.ProfileNameEditbox:SetPoint("TOP", 0, -40)
-	app.NewProfilePanel.ProfileNameEditbox:SetAutoFocus(false)
-	app.NewProfilePanel.ProfileNameEditbox:SetCursorPosition(0)
-	app.NewProfilePanel.ProfileNameEditbox:SetText(L.PROFILE_NAME)
-	app.NewProfilePanel.ProfileNameEditbox:SetScript("OnEnterPressed", function(self)
-		self:ClearFocus()
-	end)
-	app.NewProfilePanel.ProfileNameEditbox:SetScript("OnEscapePressed", function(self)
-		self:ClearFocus()
-	end)
-	app:SetBorder(app.NewProfilePanel.ProfileNameEditbox, -7, 1, 2, -2)
-
-	app.NewProfilePanel.NewLoginProfileButton = app:MakeButton(app.NewProfilePanel, L.LOGIN_PROFILE)
-	app.NewProfilePanel.NewLoginProfileButton:SetPoint("TOP", app.NewProfilePanel, -((app.NewProfilePanel:GetWidth()-20)/4), -70)
-	app.NewProfilePanel.NewLoginProfileButton:SetScript("OnClick", function()
-		--
-	end)
-	app.NewProfilePanel.NewLoginProfileButton:Disable()
-
-	app.NewProfilePanel.NewLoginProfileText = app.NewProfilePanel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-	app.NewProfilePanel.NewLoginProfileText:SetPoint("TOP", app.NewProfilePanel.NewLoginProfileButton, "BOTTOM", 0, -10)
-	app.NewProfilePanel.NewLoginProfileText:SetText(L.LOGIN_PROFILE_DESC)
-	app.NewProfilePanel.NewLoginProfileText:CanWordWrap(true)
-	app.NewProfilePanel.NewLoginProfileText:SetWidth(250)
-
-	app.NewProfilePanel.NewStandardProfileButton = app:MakeButton(app.NewProfilePanel, L.STANDARD_PROFILE)
-	app.NewProfilePanel.NewStandardProfileButton:SetPoint("TOP", app.NewProfilePanel, (app.NewProfilePanel:GetWidth()-20)/4, -70)
-	app.NewProfilePanel.NewStandardProfileButton:SetScript("OnClick", function()
-		table.insert(app.Data.Profiles, { name = app.NewProfilePanel.ProfileNameEditbox:GetText(), type = "Standard", addons = {} })
-		table.sort(app.Data.Profiles, function(a, b)
-			return a.name < b.name
-		end)
-		app.NewProfilePanel:Hide()
-	end)
-
-	app.NewProfilePanel.NewStandardProfileText = app.NewProfilePanel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-	app.NewProfilePanel.NewStandardProfileText:SetPoint("TOP", app.NewProfilePanel.NewStandardProfileButton, "BOTTOM", 0, -10)
-	app.NewProfilePanel.NewStandardProfileText:SetText(L.STANDARD_PROFILE_DESC)
-	app.NewProfilePanel.NewStandardProfileText:CanWordWrap(true)
-	app.NewProfilePanel.NewStandardProfileText:SetWidth(250)
-
-	app.NewProfilePanel:SetScript("OnShow", function()
-		RunNextFrame(function()
-			app.NewProfilePanel:SetHeight(math.abs(math.min(app.NewProfilePanel.NewLoginProfileText:GetBottom(), app.NewProfilePanel.NewStandardProfileText:GetBottom()) - app.NewProfilePanel:GetTop()) + 20)
-		end)
-	end)
-
-	StaticPopupDialogs["SLACKERSADDONDEPOT_RENAMEPROFILE"] = {
-		text = L.PROFILE_NAME_NEW,
-		button1 = APPLY,
-		button2 = CANCEL,
-		whileDead = true,
-		hasEditBox = true,
-		editBoxWidth = 240,
-		OnShow = function(dialog, data)
-			dialog:ClearAllPoints()
-			dialog:SetPoint("CENTER", UIParent)
-
-			local editBox = dialog.GetEditBox and dialog:GetEditBox() or dialog.editBox
-			editBox:SetText(app.Data.Profiles[data].name)
-			editBox:SetAutoFocus(true)
-			editBox:HighlightText()
-			editBox:SetScript("OnEditFocusLost", function()
-				editBox:SetFocus()
-			end)
-			editBox:SetScript("OnEscapePressed", function()
-				dialog:Hide()
-			end)
-		end,
-		OnAccept = function(dialog, data)
-			local editBox = dialog.GetEditBox and dialog:GetEditBox() or dialog.editBox
-			app.Data.Profiles[data].name = editBox:GetText()
-			table.sort(app.Data.Profiles, function(a, b)
-				return a.name < b.name
-			end)
-		end,
-	}
-
-	StaticPopupDialogs["SLACKERSADDONDEPOT_DELETEPROFILE"] = {
-		text = "",
-		button1 = YES,
-		button2 = NO,
-		whileDead = true,
-		hasEditBox = false,
-		OnShow = function(dialog, data)
-			dialog:ClearAllPoints()
-			dialog:SetPoint("CENTER", UIParent)
-
-			StaticPopup1Text:SetText(string.format(L.DELETE_PROFILE_Q, app.Data.Profiles[data].name))
-		end,
-		OnAccept = function(dialog, data)
-			table.remove(app.Data.Profiles, data)
-		end,
-	}
 end
 
 --------------------

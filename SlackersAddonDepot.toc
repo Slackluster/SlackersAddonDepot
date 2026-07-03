@@ -36,6 +36,7 @@ FrameTemplates.xml
 modules\GetInfo.lua
 modules\AddonList.lua
 modules\LoadConditions.lua
+modules\Profiles.lua
 locales\enUS.lua
 locales\deDE.lua
 locales\esES.lua
