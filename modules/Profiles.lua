@@ -155,8 +155,9 @@ function app:CreateLoadConditionsPanel()
 	app.LoadConditionsPanel:RegisterForDrag("LeftButton")
 	app.LoadConditionsPanel:Hide()
 	app.LoadConditionsPanel:SetScript("OnShow", function()
+		app.CachedLoadConditions = CopyTable(app.Data.Profiles[app.Flag.SelectedProfile].loadConditions, false)
 		app.LoadConditionsPanel.TopText3:SetText(string.format(L.LOADCONDITION_MATCH2, "|cffFFFFFF" .. app.Data.Profiles[app.Flag.SelectedProfile].name .. "|R"))
-		app:UpdateLoadConditionsList()
+		app:UpdateLoadConditionsList(true)
 	end)
 	app.LoadConditionsPanel:SetScript("OnHide", function()
 	end)
@@ -170,12 +171,6 @@ function app:CreateLoadConditionsPanel()
 	end)
 
 	app.LoadConditionsPanel.TitleContainer.TitleText:SetText(app.NameLong)
-
-	app.LoadConditionsPanel.CloseButton = CreateFrame("Button", nil, app.LoadConditionsPanel, "UIPanelCloseButton")
-	app.LoadConditionsPanel.CloseButton:SetPoint("TOPRIGHT", app.LoadConditionsPanel)
-	app.LoadConditionsPanel.CloseButton:SetScript("OnClick", function()
-		app.LoadConditionsPanel:Hide()
-	end)
 
 	app.LoadConditionsPanel.TopText1 = app.LoadConditionsPanel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 	app.LoadConditionsPanel.TopText1:SetPoint("TOPLEFT", 14, -36)
@@ -211,7 +206,7 @@ function app:CreateLoadConditionsPanel()
 	app.LoadConditionsPanel.List = CreateFrame("Frame", nil, app.LoadConditionsPanel)
 	app.LoadConditionsPanel.List:SetPoint("LEFT", app.LoadConditionsPanel, 18, 0)
 	app.LoadConditionsPanel.List:SetPoint("TOP", app.LoadConditionsPanel.ConditionDropdown, "BOTTOM")
-	app.LoadConditionsPanel.List:SetPoint("BOTTOMRIGHT", app.LoadConditionsPanel, 0, 4)
+	app.LoadConditionsPanel.List:SetPoint("BOTTOMRIGHT", app.LoadConditionsPanel, 0, 30)
 
 	local scrollBox = CreateFrame("Frame", nil, app.LoadConditionsPanel.List, "WowScrollBoxList")
 	scrollBox:SetPoint("TOPLEFT", app.LoadConditionsPanel.List, 2, -6)
@@ -460,18 +455,39 @@ function app:CreateLoadConditionsPanel()
 
 	app.LoadConditionsList:SetElementInitializer("SlackersAddonDepot_LoadCondition", conditionInitializer)
 
+	app.LoadConditionsPanel.RevertOrCancelButton = app:MakeButton(app.LoadConditionsPanel, "")
+	app.LoadConditionsPanel.RevertOrCancelButton:SetPoint("BOTTOMRIGHT", app.LoadConditionsPanel, -6, 8)
+
+	app.LoadConditionsPanel.ApplyButton = app:MakeButton(app.LoadConditionsPanel, L.APPLY_CHANGES)
+	app.LoadConditionsPanel.ApplyButton:SetPoint("RIGHT", app.LoadConditionsPanel.RevertOrCancelButton, "LEFT", -2, 0)
+	app.LoadConditionsPanel.ApplyButton:SetScript("OnClick", function()
+		-- Update load conditions execution
+		app.LoadConditionsPanel:Hide()
+	end)
+
 	app.LoadConditionsPanel:SetFlattensRenderLayers(true)
 end
 
-function app:UpdateLoadConditionsList()
+function app:UpdateLoadConditionsList(onShow)
+	if onShow then
+		app.LoadConditionsPanel.ApplyButton:Disable()
+		app:UpdateButton(app.LoadConditionsPanel.RevertOrCancelButton, L.CANCEL)
+		app.LoadConditionsPanel.RevertOrCancelButton:SetScript("OnClick", function()
+			app.LoadConditionsPanel:Hide()
+		end)
+	else
+		app.LoadConditionsPanel.ApplyButton:Enable()
+		app:UpdateButton(app.LoadConditionsPanel.RevertOrCancelButton, L.REVERT .. "  " .. CreateAtlasMarkup("common-icon-undo"))
+		app.LoadConditionsPanel.RevertOrCancelButton:SetScript("OnClick", function()
+			app.Data.Profiles[app.Flag.SelectedProfile].loadConditions = CopyTable(app.CachedLoadConditions, false)
+			app:UpdateLoadConditionsList(true)
+		end)
+	end
+
 	local DataProvider = CreateTreeDataProvider()
 
-	if #app.Data.Profiles[app.Flag.SelectedProfile].loadConditions > 0 then
-		for i, loadCondition in ipairs(app.Data.Profiles[app.Flag.SelectedProfile].loadConditions) do
-			DataProvider:Insert({ id = i })
-		end
-	else
-		DataProvider:Insert({ id = 1 })
+	for i, loadCondition in ipairs(app.Data.Profiles[app.Flag.SelectedProfile].loadConditions) do
+		DataProvider:Insert({ id = i })
 	end
 
 	app.LoadConditionsList:SetDataProvider(DataProvider, true)
