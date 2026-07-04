@@ -282,8 +282,31 @@ function app:CreateLoadConditionsPanel()
 
 		local data = node:GetData()
 
+		if app.Flag.SelectedProfile and app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition and app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionState and app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue then
+			listItem.Icon:SetText(app.IconReady)
+			listItem.Icon:SetScript("OnEnter", function(self)
+				GameTooltip:ClearLines()
+				GameTooltip:SetOwner(self, "ANCHOR_NONE")
+				GameTooltip:SetPoint("RIGHT", self, "LEFT")
+				GameTooltip:AddLine(L.LOADCONDITION_VALID)
+				GameTooltip:Show()
+			end)
+		else
+			listItem.Icon:SetText(app.IconNotReady)
+			listItem.Icon:SetScript("OnEnter", function(self)
+				GameTooltip:ClearLines()
+				GameTooltip:SetOwner(self, "ANCHOR_NONE")
+				GameTooltip:SetPoint("RIGHT", self, "LEFT")
+				GameTooltip:AddLine(L.LOADCONDITION_INCOMPLETE)
+				GameTooltip:Show()
+			end)
+		end
+		listItem.Icon:SetScript("OnLeave", function(self)
+			GameTooltip:Hide()
+		end)
+
 		local function isSelected(index)
-			if app.Flag.SelectedProfile and app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id] then
+			if app.Flag.SelectedProfile then
 				return app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == index
 			end
 		end
@@ -300,7 +323,7 @@ function app:CreateLoadConditionsPanel()
 		listItem.Dropdown1:SetupMenu(primaryConditionGenerator)
 
 		local function isSelected(index)
-			if app.Flag.SelectedProfile and app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id] then
+			if app.Flag.SelectedProfile then
 				return app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionState == index
 			end
 		end
@@ -309,7 +332,7 @@ function app:CreateLoadConditionsPanel()
 			app:UpdateLoadConditionsList()
 		end
 		function secondaryConditionGenerator(owner, rootDescription)
-			if app.Flag.SelectedProfile and app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition then
+			if app.Flag.SelectedProfile then
 				for i = 1, 10 do
 					if app.ValidStates[app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition][i] then
 						rootDescription:CreateRadio(L.CONDITIONSTATE[i], isSelected, setSelected, i)

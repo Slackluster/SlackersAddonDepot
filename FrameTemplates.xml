@@ -122,23 +122,33 @@
 
 	<Button name="SlackersAddonDepot_LoadCondition" virtual="true">
 		<Size x="200" y="40" />
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString parentKey="Icon" inherits="GameFontNormalHuge" justifyH="LEFT">
+					<Anchors>
+						<Anchor point="LEFT" x="0" />
+					</Anchors>
+					<Size x="40" y="40" />
+				</FontString>
+			</Layer>
+		</Layers>
 		<Frames>
 			<DropdownButton parentKey="Dropdown1" inherits="WowStyle1DropdownTemplate">
-				<Size x="150" y="25" />
+				<Size x="130" y="25" />
 				<Anchors>
-					<Anchor point="LEFT" x="0" y="0" />
+					<Anchor point="LEFT" x="25" y="0" />
 				</Anchors>
 			</DropdownButton>
 			<DropdownButton parentKey="Dropdown2" inherits="WowStyle1DropdownTemplate">
 				<Size x="140" y="25" />
 				<Anchors>
-					<Anchor point="LEFT" x="160" y="0" />
+					<Anchor point="LEFT" x="165" y="0" />
 				</Anchors>
 			</DropdownButton>
 			<DropdownButton parentKey="Dropdown3" inherits="WowStyle1DropdownTemplate">
-				<Size x="167" y="25" />
+				<Size x="162" y="25" />
 				<Anchors>
-					<Anchor point="LEFT" x="310" y="0" />
+					<Anchor point="LEFT" x="315" y="0" />
 				</Anchors>
 			</DropdownButton>
 			<Button parentKey="AddButton" inherits="UIButtonTemplate">

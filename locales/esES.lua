@@ -111,3 +111,5 @@ local L = app.locales
 -- L.CONDITIONSTATE[8] =                    "ends with"
 -- L.CONDITIONSTATE[9] =                    "contains"
 -- L.CONDITIONSTATE[10] =                   "does not contain"
+-- L.LOADCONDITION_VALID =                  "Load condition is valid."
+-- L.LOADCONDITION_INCOMPLETE =             "Load condition is incomplete."
