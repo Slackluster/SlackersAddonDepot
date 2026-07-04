@@ -320,12 +320,8 @@ function app:CreateLoadConditionsPanel()
 				if app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Level and value ~= "" then
 					value = tonumber(value)
 					if not value then value = 0 end
-				elseif app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Name and value ~= "" then
-					value = value:gsub("[%d%p]", "") -- Remove numbers and punctuation
-					value = value:match("^%s*(.-)%s*$") -- Trim trailing whitespaces
-				elseif app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Realm and value ~= "" then
+				elseif (app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Name or app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Realm) and value ~= "" then
 					value = value:gsub("%d", "") -- Remove numbers
-					value = value:match("^%s*(.-)%s*$") -- Trim trailing whitespaces
 				end
 				app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue = value
 				app:UpdateLoadConditionsList()
