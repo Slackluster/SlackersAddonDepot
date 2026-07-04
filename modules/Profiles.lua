@@ -473,7 +473,7 @@ function app:CreateLoadConditionsPanel()
 			table.insert(app.Data.Profiles[app.Flag.SelectedProfile].loadConditions, {})
 			app:UpdateLoadConditionsList()
 		end)
-		if data.id == 1 then
+		if data.id == 1 and #app.Data.Profiles[app.Flag.SelectedProfile].loadConditions == 1 then
 			listItem.RemoveButton:Disable()
 		else
 			listItem.RemoveButton:Enable()
