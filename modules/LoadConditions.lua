@@ -94,6 +94,14 @@ function app:CharacterMatchesLoadCondition(loadCondition, guid)
 		end
 	end
 
+	local function class()
+		if loadCondition.conditionState == app.Enum.ConditionState.IsAnyOf then
+			return loadCondition.conditionValue[app.Data.Characters[guid].class] and true or false
+		elseif loadCondition.conditionState == app.Enum.ConditionState.IsNotAnyOf then
+			return not loadCondition.conditionValue[app.Data.Characters[guid].class] and false or true
+		end
+	end
+
 	if loadCondition.condition == app.Enum.Condition.Character then
 		return character()
 	elseif loadCondition.condition == app.Enum.Condition.Name then
@@ -104,6 +112,8 @@ function app:CharacterMatchesLoadCondition(loadCondition, guid)
 		return nameOrRealm(nil, loadCondition.conditionValue)
 	elseif loadCondition.condition == app.Enum.Condition.Profession then
 		return profession()
+	elseif loadCondition.condition == app.Enum.Condition.Class then
+		return class()
 	end
 end
 

@@ -265,7 +265,7 @@ function app:CreateLoadConditionsPanel()
 				app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id] = app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id] or {}
 				app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition = index
 				app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionState = nil
-				if index == app.Enum.Condition.Character or index == app.Enum.Condition.Profession then
+				if index == app.Enum.Condition.Character or index == app.Enum.Condition.Profession or index == app.Enum.Condition.Class then
 					app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue = {}
 				elseif index == app.Enum.Condition.Name or index == app.Enum.Condition.Level or index == app.Enum.Condition.Realm then
 					app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue = ""
@@ -299,7 +299,8 @@ function app:CreateLoadConditionsPanel()
 
 			if app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition then
 				if app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Character
-				or app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Profession then
+				or app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Profession
+				or app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Class then
 					listItem.Dropdown3:Show()
 					listItem.Editbox1:Hide()
 				elseif app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Name
@@ -427,6 +428,27 @@ function app:CreateLoadConditionsPanel()
 						rootDescription:SetGridMode(MenuConstants.VerticalGridDirection)
 						for _, profession in ipairs(app.Professions) do
 							rootDescription:CreateCheckbox(profession.icon .. " " .. C_TradeSkillUI.GetProfessionInfoBySkillLineID(profession.tradeSkillLineID).professionName, isSelected, setSelected, profession.tradeSkillLineID)
+						end
+					elseif app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Class then
+						local classes = {
+							{ classFile = "MAGE", id = 8 },
+							{ classFile = "PRIEST", id = 5 },
+							{ classFile = "WARLOCK", id = 9 },
+							{ classFile = "DEMONHUNTER", id = 12 },
+							{ classFile = "DRUID", id = 11 },
+							{ classFile = "MONK", id = 10 },
+							{ classFile = "ROGUE", id = 4 },
+							{ classFile = "EVOKER", id = 13 },
+							{ classFile = "HUNTER", id = 3 },
+							{ classFile = "SHAMAN", id = 7 },
+							{ classFile = "DEATHKNIGHT", id = 6 },
+							{ classFile = "PALADIN", id = 2 },
+							{ classFile = "WARRIOR", id = 1 },
+						}
+						for _, class in ipairs(classes) do
+							local className, classFile = GetClassInfo(class.id)
+							local _, _, _, classColor = GetClassColor(classFile)
+							rootDescription:CreateCheckbox("|c" .. classColor .. className, isSelected, setSelected, classFile)
 						end
 					end
 				end

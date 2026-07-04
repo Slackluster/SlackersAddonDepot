@@ -45,6 +45,7 @@ app.Enum = {
 		Level = 3,
 		Realm = 4,
 		Profession = 5,
+		Class = 6,
 	},
 	ConditionState = {
 		Any = 1,
@@ -88,6 +89,10 @@ app.ValidStates = {
 		[app.Enum.ConditionState.DoesNotContain] = true,
 	},
 	[app.Enum.Condition.Profession] = {
+		[app.Enum.ConditionState.IsAnyOf] = true,
+		[app.Enum.ConditionState.IsNotAnyOf] = true,
+	},
+	[app.Enum.Condition.Class] = {
 		[app.Enum.ConditionState.IsAnyOf] = true,
 		[app.Enum.ConditionState.IsNotAnyOf] = true,
 	},

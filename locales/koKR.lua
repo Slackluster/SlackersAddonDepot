@@ -95,11 +95,12 @@ local L = app.locales
 -- L.DELETE_PROFILE_Q =                     "Delete %s?" -- %s becomes a profile name
 
 -- L.CONDITION = {}
--- L.CONDITION[1] =                         "Character"
--- L.CONDITION[2] =                         "Name"
--- L.CONDITION[3] =                         "Level"
+-- L.CONDITION[1] =                         CHARACTER -- "Character"
+-- L.CONDITION[2] =                         NAME -- "Name"
+-- L.CONDITION[3] =                         LEVEL -- "Level"
 -- L.CONDITION[4] =                         "Realm"
--- L.CONDITION[5] =                         "Profession"
+-- L.CONDITION[5] =                         TRANSMOG_SOURCE_6 -- "Profession"
+-- L.CONDITION[6] =                         CLASS -- "Class"
 -- L.CONDITIONSTATE = {}
 -- L.CONDITIONSTATE[1] =                    "any"
 -- L.CONDITIONSTATE[2] =                    "all"
