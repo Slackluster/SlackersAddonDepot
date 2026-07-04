@@ -262,6 +262,9 @@ function app:CreateAddonList()
 					end
 				end
 				table.sort(profileInfo.addons, function(a, b) return a.id < b.id end)
+				if profileInfo.type == "Login" then
+					app:ApplyLoadConditions()
+				end
 			end)
 			profile:CreateDivider()
 			profile:CreateButton(L.RENAME_PROFILE, function() StaticPopup_Show("SLACKERSADDONDEPOT_RENAMEPROFILE", nil, nil, profileNo) end)
@@ -852,7 +855,7 @@ end
 --------------------
 
 function app:HookGameMenu()
-	if not app.Flag.MenuHooked then
+	if not app.Flag.AddonButtonHooked then
 		local originalOnClick
 		GameMenuFrame:HookScript("OnShow", function()
 			for button in GameMenuFrame.buttonPool:EnumerateActive() do
@@ -872,6 +875,6 @@ function app:HookGameMenu()
 				end
 			end
 		end)
-		app.Flag.MenuHooked = true
+		app.Flag.AddonButtonHooked = true
 	end
 end

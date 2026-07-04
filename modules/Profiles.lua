@@ -457,7 +457,7 @@ function app:CreateLoadConditionsPanel()
 	app.LoadConditionsPanel.ApplyButton = app:MakeButton(app.LoadConditionsPanel, L.APPLY_CHANGES)
 	app.LoadConditionsPanel.ApplyButton:SetPoint("RIGHT", app.LoadConditionsPanel.RevertOrCancelButton, "LEFT", -2, 0)
 	app.LoadConditionsPanel.ApplyButton:SetScript("OnClick", function()
-		-- Update load conditions execution
+		app:ApplyLoadConditions(true)
 		app.LoadConditionsPanel:Hide()
 	end)
 
