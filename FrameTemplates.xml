@@ -119,4 +119,46 @@
 			</CheckButton>
 		</Frames>
 	</Button>
+
+	<Button name="SlackersAddonDepot_LoadCondition" virtual="true">
+		<Size x="200" y="40" />
+		<Frames>
+			<DropdownButton parentKey="Dropdown1" inherits="WowStyle1DropdownTemplate">
+				<Size x="150" y="25" />
+				<Anchors>
+					<Anchor point="LEFT" x="0" y="0" />
+				</Anchors>
+			</DropdownButton>
+			<DropdownButton parentKey="Dropdown2" inherits="WowStyle1DropdownTemplate">
+				<Size x="140" y="25" />
+				<Anchors>
+					<Anchor point="LEFT" x="160" y="0" />
+				</Anchors>
+			</DropdownButton>
+			<DropdownButton parentKey="Dropdown3" inherits="WowStyle1DropdownTemplate">
+				<Size x="167" y="25" />
+				<Anchors>
+					<Anchor point="LEFT" x="310" y="0" />
+				</Anchors>
+			</DropdownButton>
+			<Button parentKey="AddButton" inherits="UIButtonTemplate">
+				<Size x="30" y="30"/>
+				<Anchors>
+					<Anchor point="RIGHT" x="-10" y="0"/>
+				</Anchors>
+				<KeyValues>
+					<KeyValue key="buttonArtKit" value="128-redbutton-plus" type="string"/>
+				</KeyValues>
+			</Button>
+			<Button parentKey="RemoveButton" inherits="UIButtonTemplate">
+				<Size x="30" y="30"/>
+				<Anchors>
+					<Anchor point="RIGHT" x="-45" y="0"/>
+				</Anchors>
+				<KeyValues>
+					<KeyValue key="buttonArtKit" value="128-redbutton-minus" type="string"/>
+				</KeyValues>
+			</Button>
+		</Frames>
+	</Button>
 </Ui>

@@ -12,6 +12,59 @@ local L = app.locales
 
 app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 	if addOnName == appName then
+		app.Enum = {
+			Condition = {
+				Character = 1,
+				Name = 2,
+				Level = 3,
+				Realm = 4,
+				Profession = 5,
+			},
+			ConditionState = {
+				Any = 1,
+				All = 2,
+				IsLessThan = 3,
+				Is = 4,
+				IsGreaterThan = 5,
+				IsNot = 6,
+				StartsWith = 7,
+				EndsWith = 8,
+				Contains = 9,
+				DoesNotContain = 10,
+			},
+		}
+		app.ValidStates = {
+			[app.Enum.Condition.Character] = {
+				[app.Enum.ConditionState.Is] = true,
+				[app.Enum.ConditionState.IsNot] = true,
+			},
+			[app.Enum.Condition.Name] = {
+				[app.Enum.ConditionState.Is] = true,
+				[app.Enum.ConditionState.IsNot] = true,
+				[app.Enum.ConditionState.StartsWith] = true,
+				[app.Enum.ConditionState.EndsWith] = true,
+				[app.Enum.ConditionState.Contains] = true,
+				[app.Enum.ConditionState.DoesNotContain] = true,
+			},
+			[app.Enum.Condition.Level] = {
+				[app.Enum.ConditionState.IsLessThan] = true,
+				[app.Enum.ConditionState.Is] = true,
+				[app.Enum.ConditionState.IsGreaterThan] = true,
+			},
+			[app.Enum.Condition.Realm] = {
+				[app.Enum.ConditionState.Is] = true,
+				[app.Enum.ConditionState.IsNot] = true,
+				[app.Enum.ConditionState.StartsWith] = true,
+				[app.Enum.ConditionState.EndsWith] = true,
+				[app.Enum.ConditionState.Contains] = true,
+				[app.Enum.ConditionState.DoesNotContain] = true,
+			},
+			[app.Enum.Condition.Profession] = {
+				[app.Enum.ConditionState.Is] = true,
+				[app.Enum.ConditionState.IsNot] = true,
+			},
+		}
+
 		app:CreateNewProfilePanel()
 		app:CreateLoadConditionsPanel()
 	end
@@ -58,7 +111,7 @@ function app:CreateNewProfilePanel()
 	app.NewProfilePanel.NewLoginProfileButton = app:MakeButton(app.NewProfilePanel, L.LOGIN_PROFILE)
 	app.NewProfilePanel.NewLoginProfileButton:SetPoint("TOP", app.NewProfilePanel, -((app.NewProfilePanel:GetWidth()-20)/4), -70)
 	app.NewProfilePanel.NewLoginProfileButton:SetScript("OnClick", function()
-		table.insert(app.Data.Profiles, { name = app.NewProfilePanel.ProfileNameEditbox:GetText(), type = "Login", addons = {}, loadConditions = {} })
+		table.insert(app.Data.Profiles, { name = app.NewProfilePanel.ProfileNameEditbox:GetText(), type = "Login", addons = {}, loadConditions = { primary = app.Enum.ConditionState.Any, {} } })
 		table.sort(app.Data.Profiles, function(a, b)
 			return a.name < b.name
 		end)
@@ -155,6 +208,7 @@ function app:CreateLoadConditionsPanel()
 	app.LoadConditionsPanel:RegisterForDrag("LeftButton")
 	app.LoadConditionsPanel:Hide()
 	app.LoadConditionsPanel:SetScript("OnShow", function()
+		app:UpdateLoadConditionsList()
 	end)
 	app.LoadConditionsPanel:SetScript("OnHide", function()
 	end)
@@ -179,27 +233,124 @@ function app:CreateLoadConditionsPanel()
 	app.LoadConditionsPanel.TopText1:SetPoint("TOPLEFT", 20, -40)
 	app.LoadConditionsPanel.TopText1:SetText("Match")
 
-	-- app.Flag.SelectedProfile
-
-	function primaryAnyAllGenerator(owner, rootDescription, id)
-		rootDescription:CreateButton("Any", function(data)
-			print(owner:GetName())
-		end)
-		rootDescription:CreateButton("All", function(data)
-			print(owner:GetName())
-		end)
-	end
 	app.LoadConditionsPanel.ConditionDropdown = CreateFrame("DropdownButton", "Primary", app.LoadConditionsPanel, "WowStyle1DropdownTemplate")
-	-- if app.Settings["headerStyle"] == 1 then
-	-- 	app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.CATEGORIES)
-	-- elseif app.Settings["headerStyle"] == 2 then
-	-- 	app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.ENABLESTATE)
-	-- end
+	local function isSelected(index)
+		if app.Flag.SelectedProfile then
+			return app.Data.Profiles[app.Flag.SelectedProfile].loadConditions.primary == index
+		end
+	end
+	local function setSelected(index)
+		app.Data.Profiles[app.Flag.SelectedProfile].loadConditions.primary = index
+	end
+	function primaryConditionGenerator(owner, rootDescription)
+		rootDescription:CreateRadio(L.CONDITIONSTATE[app.Enum.ConditionState.Any], isSelected, setSelected, app.Enum.ConditionState.Any)
+		rootDescription:CreateRadio(L.CONDITIONSTATE[app.Enum.ConditionState.All], isSelected, setSelected, app.Enum.ConditionState.All)
+	end
+
 	app.LoadConditionsPanel.ConditionDropdown:SetWidth(60)
-	app.LoadConditionsPanel.ConditionDropdown:SetPoint("LEFT", app.LoadConditionsPanel.TopText1, "RIGHT", 10, 0)
-	app.LoadConditionsPanel.ConditionDropdown:SetupMenu(primaryAnyAllGenerator)
+	app.LoadConditionsPanel.ConditionDropdown:SetPoint("LEFT", app.LoadConditionsPanel.TopText1, "RIGHT", 6, 0)
+	app.LoadConditionsPanel.ConditionDropdown:SetupMenu(primaryConditionGenerator)
 
 	app.LoadConditionsPanel.TopText2 = app.LoadConditionsPanel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-	app.LoadConditionsPanel.TopText2:SetPoint("LEFT", app.LoadConditionsPanel.ConditionDropdown, "RIGHT", 10, 0)
+	app.LoadConditionsPanel.TopText2:SetPoint("LEFT", app.LoadConditionsPanel.ConditionDropdown, "RIGHT", 6, 0)
 	app.LoadConditionsPanel.TopText2:SetText("of these conditions:")
+
+	app.LoadConditionsPanel.List = CreateFrame("Frame", nil, app.LoadConditionsPanel)
+	app.LoadConditionsPanel.List:SetPoint("TOPLEFT", app.LoadConditionsPanel, 18, -60)
+	app.LoadConditionsPanel.List:SetPoint("BOTTOMRIGHT", app.LoadConditionsPanel, 0, 4)
+
+	local scrollBox = CreateFrame("Frame", nil, app.LoadConditionsPanel.List, "WowScrollBoxList")
+	scrollBox:SetPoint("TOPLEFT", app.LoadConditionsPanel.List, 2, -6)
+	scrollBox:SetPoint("BOTTOMRIGHT", app.LoadConditionsPanel.List, -18, 4)
+	scrollBox:EnableMouse(true)
+	scrollBox:RegisterForDrag("LeftButton")
+	scrollBox:SetScript("OnDragStart", function() app.AddonListFrame:StartMoving() end)
+	scrollBox:SetScript("OnDragStop", function() app.AddonListFrame:StopMovingOrSizing() end)
+
+	local scrollBar = CreateFrame("EventFrame", nil, app.LoadConditionsPanel.List, "MinimalScrollBar")
+	scrollBar:SetPoint("TOPLEFT", scrollBox, "TOPRIGHT")
+	scrollBar:SetPoint("BOTTOMLEFT", scrollBox, "BOTTOMRIGHT")
+
+	app.LoadConditionsList = CreateScrollBoxListTreeListView()
+	ScrollUtil.InitScrollBoxListWithScrollBar(scrollBox, scrollBar, app.LoadConditionsList)
+
+	local function conditionInitializer(listItem, node)
+		listItem:EnableMouse(true)
+		listItem:RegisterForDrag("LeftButton")
+		listItem:SetScript("OnDragStart", function() app.AddonListFrame:StartMoving() end)
+		listItem:SetScript("OnDragStop", function() app.AddonListFrame:StopMovingOrSizing() end)
+
+		local data = node:GetData()
+
+		local function isSelected(index)
+			if app.Flag.SelectedProfile and app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id] then
+				return app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == index
+			end
+		end
+		local function setSelected(index)
+			app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id] = app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id] or {}
+			app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition = index
+			app:UpdateLoadConditionsList()
+		end
+		function primaryConditionGenerator(owner, rootDescription)
+			for i = 1, 5 do
+				rootDescription:CreateRadio(L.CONDITION[i], isSelected, setSelected, i)
+			end
+		end
+		listItem.Dropdown1:SetupMenu(primaryConditionGenerator)
+
+		local function isSelected(index)
+			if app.Flag.SelectedProfile and app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id] then
+				return app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionState == index
+			end
+		end
+		local function setSelected(index)
+			app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionState = index
+			app:UpdateLoadConditionsList()
+		end
+		function secondaryConditionGenerator(owner, rootDescription)
+			if app.Flag.SelectedProfile and app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition then
+				for i = 1, 10 do
+					if app.ValidStates[app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition][i] then
+						rootDescription:CreateRadio(L.CONDITIONSTATE[i], isSelected, setSelected, i)
+					end
+				end
+			end
+		end
+		listItem.Dropdown2:SetupMenu(secondaryConditionGenerator)
+
+		--listItem.Dropdown3
+
+		listItem.RemoveButton:SetScript("OnClick", function()
+			table.remove(app.Data.Profiles[app.Flag.SelectedProfile].loadConditions, data.id)
+			app:UpdateLoadConditionsList()
+		end)
+		listItem.AddButton:SetScript("OnClick", function()
+			table.insert(app.Data.Profiles[app.Flag.SelectedProfile].loadConditions, {})
+			app:UpdateLoadConditionsList()
+		end)
+		if data.id == 1 then
+			listItem.RemoveButton:Disable()
+		else
+			listItem.RemoveButton:Enable()
+		end
+	end
+
+	app.LoadConditionsList:SetElementInitializer("SlackersAddonDepot_LoadCondition", conditionInitializer)
+
+	app.LoadConditionsPanel:SetFlattensRenderLayers(true)
+end
+
+function app:UpdateLoadConditionsList()
+	local DataProvider = CreateTreeDataProvider()
+
+	if #app.Data.Profiles[app.Flag.SelectedProfile].loadConditions > 0 then
+		for i, loadCondition in ipairs(app.Data.Profiles[app.Flag.SelectedProfile].loadConditions) do
+			DataProvider:Insert({ id = i })
+		end
+	else
+		DataProvider:Insert({ id = 1 })
+	end
+
+	app.LoadConditionsList:SetDataProvider(DataProvider, true)
 end
