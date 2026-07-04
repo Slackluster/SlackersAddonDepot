@@ -44,7 +44,16 @@ function app:GetCharacterInfo()
 	app.Info.GUID = UnitGUID("player")
 	local _, englishClass, _, _, _, name = GetPlayerInfoByGUID(app.Info.GUID)
 	local _, _, _, classColor = GetClassColor(englishClass)
-	local prof1, prof2, archaeology, fishing, cooking = GetProfessions()
+
+	local profs = {}
+	profs[1], profs[2], profs[3], profs[4], profs[5] = GetProfessions()
+	local professions = {}
+	for i = 1, 5 do
+		if profs[i] then
+			local _, _, _, _, _, _, skillLine = GetProfessionInfo(profs[i])
+			professions[skillLine] = true
+		end
+	end
 
 	app.Data.Characters = app.Data.Characters or {}
 	if app.Info.GUID then
@@ -56,7 +65,7 @@ function app:GetCharacterInfo()
 			class = englishClass or "",
 			classColor = classColor or "",
 			level = UnitLevel("player") or 0,
-			professions = { prof1 = prof1 or 0, prof2 = prof2 or 0, cooking = cooking or 0, fishing = fishing or 0, archaeology = archaeology or 0 }
+			professions = professions
 		}
 	end
 end

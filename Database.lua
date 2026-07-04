@@ -22,6 +22,23 @@ app.IconNew = CreateAtlasMarkup("UI-Journeys-GreatVault-Tag-new")
 
 app.IconNone = "Interface\\Icons\\inv_misc_questionmark"
 
+app.Professions = {
+	{ tradeSkillLineID = 171 }, -- Alchemy
+	{ tradeSkillLineID = 164 }, -- Blacksmithing
+	{ tradeSkillLineID = 333 }, -- Enchanting
+	{ tradeSkillLineID = 202 }, -- Engineering
+	{ tradeSkillLineID = 773 }, -- Inscription
+	{ tradeSkillLineID = 755 }, -- Jewelcrafting
+	{ tradeSkillLineID = 165 }, -- Leatherworking
+	{ tradeSkillLineID = 197 }, -- Tailoring
+	{ tradeSkillLineID = 182 }, -- Herbalism
+	{ tradeSkillLineID = 186 }, -- Mining
+	{ tradeSkillLineID = 393 }, -- Skinning
+	{ tradeSkillLineID = 185 }, -- Cooking
+	{ tradeSkillLineID = 356 }, -- Fishing
+	{ tradeSkillLineID = 794 }, -- Archaeology
+}
+
 app.WikiCategories = {
 	["enUS"] = {
 		["Action Bars"] = true,

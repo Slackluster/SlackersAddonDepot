@@ -25,18 +25,20 @@ app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 				All = 2,
 				IsLessThan = 3,
 				Is = 4,
-				IsGreaterThan = 5,
-				IsNot = 6,
-				StartsWith = 7,
-				EndsWith = 8,
-				Contains = 9,
-				DoesNotContain = 10,
+				IsAnyOf = 5,
+				IsGreaterThan = 6,
+				IsNot = 7,
+				IsNotAnyOf = 8,
+				StartsWith = 9,
+				EndsWith = 10,
+				Contains = 11,
+				DoesNotContain = 12,
 			},
 		}
 		app.ValidStates = {
 			[app.Enum.Condition.Character] = {
-				[app.Enum.ConditionState.Is] = true,
-				[app.Enum.ConditionState.IsNot] = true,
+				[app.Enum.ConditionState.IsAnyOf] = true,
+				[app.Enum.ConditionState.IsNotAnyOf] = true,
 			},
 			[app.Enum.Condition.Name] = {
 				[app.Enum.ConditionState.Is] = true,
@@ -60,8 +62,8 @@ app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 				[app.Enum.ConditionState.DoesNotContain] = true,
 			},
 			[app.Enum.Condition.Profession] = {
-				[app.Enum.ConditionState.Is] = true,
-				[app.Enum.ConditionState.IsNot] = true,
+				[app.Enum.ConditionState.IsAnyOf] = true,
+				[app.Enum.ConditionState.IsNotAnyOf] = true,
 			},
 		}
 
@@ -289,7 +291,7 @@ function app:CreateLoadConditionsPanel()
 
 		local data = node:GetData()
 
-		if app.Flag.SelectedProfile and app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition and app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionState and app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue then
+		if app.Flag.SelectedProfile and app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition and app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionState and ((type(app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue) == "string" and app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue ~= "") or (type(app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue) == "table" and next(app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue) ~= nil)) then
 			listItem.Icon:SetText(app.IconReady)
 			listItem.Icon:SetScript("OnEnter", function(self)
 				GameTooltip:ClearLines()
@@ -320,6 +322,12 @@ function app:CreateLoadConditionsPanel()
 		local function setSelected(index)
 			app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id] = app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id] or {}
 			app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition = index
+			app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionState = nil
+			if index == app.Enum.Condition.Character or index == app.Enum.Condition.Profession then
+				app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue = {}
+			elseif index == app.Enum.Condition.Name or index == app.Enum.Condition.Level or index == app.Enum.Condition.Realm then
+				app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue = ""
+			end
 			app:UpdateLoadConditionsList()
 		end
 		function primaryConditionGenerator(owner, rootDescription)
@@ -341,7 +349,7 @@ function app:CreateLoadConditionsPanel()
 		function secondaryConditionGenerator(owner, rootDescription)
 			if app.Flag.SelectedProfile then
 				for i = 1, 10 do
-					if app.ValidStates[app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition][i] then
+					if app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition and app.ValidStates[app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition][i] then
 						rootDescription:CreateRadio(L.CONDITIONSTATE[i], isSelected, setSelected, i)
 					end
 				end
@@ -349,7 +357,113 @@ function app:CreateLoadConditionsPanel()
 		end
 		listItem.Dropdown2:SetupMenu(secondaryConditionGenerator)
 
-		--listItem.Dropdown3
+		local function isSelected(index)
+			if app.Flag.SelectedProfile then
+				return app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue[index]
+			end
+		end
+		local function setSelected(index)
+			if not app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue[index] then
+				app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue[index] = true
+			else
+				app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue[index] = nil
+			end
+			app:UpdateLoadConditionsList()
+		end
+		function tertiaryConditionGenerator(owner, rootDescription)
+			if app.Flag.SelectedProfile and app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition then
+				if app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Character then
+					local classSortOrder = {
+						["MAGE"] = 1,
+						["PRIEST"] = 2,
+						["WARLOCK"] = 3,
+						["DEMONHUNTER"] = 4,
+						["DRUID"] = 5,
+						["MONK"] = 6,
+						["ROGUE"] = 7,
+						["EVOKER"] = 8,
+						["HUNTER"] = 9,
+						["SHAMAN"] = 10,
+						["DEATHKNIGHT"] = 11,
+						["PALADIN"] = 12,
+						["WARRIOR"] = 13,
+					}
+
+					local function sortChars(tableName)
+						if app.Settings["charListSort"] == 1 then
+							table.sort(tableName, function(a, b)
+								if a.name == b.name then
+									return (a.realmNorm) < (b.realmNorm)
+								end
+								return a.name < b.name
+							end)
+						elseif app.Settings["charListSort"] == 2 then
+							table.sort(tableName, function(a, b)
+								local class1 = classSortOrder[a.class] or 999
+								local class2 = classSortOrder[b.class] or 999
+								if class1 ~= class2 then
+									return class1 < class2
+								end
+								if a.name ~= b.name then
+									return a.name < b.name
+								end
+								return (a.realmNorm) < (b.realmNorm)
+							end)
+						end
+					end
+
+					local function addChars(table, realmSuffix)
+						for _, char in ipairs(table) do
+							local label
+							if realmSuffix then
+								label = "|c" .. char.classColor .. char.name .. "-" .. char.realmNorm
+							else
+								label = "|c" .. char.classColor .. char.name
+							end
+							rootDescription:CreateCheckbox(label, isSelected, setSelected, char.guid)
+						end
+					end
+
+					rootDescription:SetGridMode(MenuConstants.VerticalGridDirection)
+					if app.Settings["charListRealm"] then
+						local realms = {}
+						local seen = {}
+						for _, char in pairs(app.Data.Characters) do
+							if not seen[char.realm] then
+								table.insert(realms, { realm = char.realm, characters = {} })
+								seen[char.realm] = true
+							end
+							for _, realm in ipairs(realms) do
+								if realm.realm == char.realm then
+									table.insert(realm.characters, char)
+								end
+							end
+
+						end
+						table.sort(realms, function(a, b) return a.realm < b.realm end)
+
+						for _, realm in ipairs(realms) do
+							sortChars(realm.characters)
+							rootDescription:CreateTitle(realm.realm)
+							addChars(realm.characters)
+						end
+					else
+						local characters = {}
+						for _, char in pairs(app.Data.Characters) do
+							table.insert(characters, char)
+						end
+						sortChars(characters)
+						addChars(characters, true)
+					end
+				elseif app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Profession then
+					rootDescription:SetGridMode(MenuConstants.VerticalGridDirection)
+					for _, profession in ipairs(app.Professions) do
+						rootDescription:CreateCheckbox(C_TradeSkillUI.GetProfessionInfoBySkillLineID(profession.tradeSkillLineID).professionName, isSelected, setSelected, profession.tradeSkillLineID)
+					end
+				end
+			end
+		end
+		listItem.Dropdown3:SetupMenu(tertiaryConditionGenerator)
 
 		listItem.RemoveButton:SetScript("OnClick", function()
 			table.remove(app.Data.Profiles[app.Flag.SelectedProfile].loadConditions, data.id)
