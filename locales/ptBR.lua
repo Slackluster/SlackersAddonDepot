@@ -68,6 +68,7 @@ local L = app.locales
 -- L.INCOMPATIBLE =                         ADDON_INCOMPATIBLE -- "Incompatible"
 -- L.REQUIRES_RELOAD =                      REQUIRES_RELOAD -- "Requires Reload"
 -- L.DEPENDENCY_DISABLED =                  ADDON_DEP_DISABLED -- "Dependency disabled"
+-- L.DEPENDENCY_MISSING =                   ADDON_DEP_MISSING -- "Dependency missing"
 -- L.CHANGE_PENDING =                       "Change Pending"
 -- L.DEPENDENCIES =                         ADDON_DEPENDENCIES -- "Dependencies: " (note the included trailing space)
 -- L.UNCATEGORIZED =                        STABLE_PET_UNCATEGORIZED -- "Uncategorized"
