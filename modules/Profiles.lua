@@ -237,7 +237,8 @@ function app:CreateLoadConditionsPanel()
 		local data = node:GetData()
 
 		if app.Flag.SelectedProfile then
-			if app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition and app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionState and ((type(app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue) == "string" and app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue ~= "") or (type(app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue) == "table" and next(app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue) ~= nil)) then
+			if app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition and app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionState and
+			((type(app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue) == "string" and app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue ~= "") or (type(app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue) == "table" and next(app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue) ~= nil) or type(app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue) == "number") then
 				listItem.Icon:SetText(app.IconReady)
 				listItem.Icon:SetScript("OnEnter", function(self)
 					GameTooltip:ClearLines()
@@ -319,7 +320,19 @@ function app:CreateLoadConditionsPanel()
 			end
 
 			listItem.Editbox1:SetScript("OnEditFocusLost", function(self)
-				app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue = self:GetText()
+				local value = self:GetText() or ""
+				value = value:match("^%s*(.-)%s*$") -- Trim trailing whitespaces
+				if app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Level and value ~= "" then
+					value = tonumber(value)
+					if not value then value = 0 end
+				elseif app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Name and value ~= "" then
+					value = value:gsub("[%d%p]", "") -- Remove numbers and punctuation
+					value = value:match("^%s*(.-)%s*$") -- Trim trailing whitespaces
+				elseif app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Realm and value ~= "" then
+					value = value:gsub("%d", "") -- Remove numbers
+					value = value:match("^%s*(.-)%s*$") -- Trim trailing whitespaces
+				end
+				app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue = value
 				app:UpdateLoadConditionsList()
 			end)
 
