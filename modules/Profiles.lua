@@ -12,61 +12,6 @@ local L = app.locales
 
 app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 	if addOnName == appName then
-		app.Enum = {
-			Condition = {
-				Character = 1,
-				Name = 2,
-				Level = 3,
-				Realm = 4,
-				Profession = 5,
-			},
-			ConditionState = {
-				Any = 1,
-				All = 2,
-				IsLessThan = 3,
-				Is = 4,
-				IsAnyOf = 5,
-				IsGreaterThan = 6,
-				IsNot = 7,
-				IsNotAnyOf = 8,
-				StartsWith = 9,
-				EndsWith = 10,
-				Contains = 11,
-				DoesNotContain = 12,
-			},
-		}
-		app.ValidStates = {
-			[app.Enum.Condition.Character] = {
-				[app.Enum.ConditionState.IsAnyOf] = true,
-				[app.Enum.ConditionState.IsNotAnyOf] = true,
-			},
-			[app.Enum.Condition.Name] = {
-				[app.Enum.ConditionState.Is] = true,
-				[app.Enum.ConditionState.IsNot] = true,
-				[app.Enum.ConditionState.StartsWith] = true,
-				[app.Enum.ConditionState.EndsWith] = true,
-				[app.Enum.ConditionState.Contains] = true,
-				[app.Enum.ConditionState.DoesNotContain] = true,
-			},
-			[app.Enum.Condition.Level] = {
-				[app.Enum.ConditionState.IsLessThan] = true,
-				[app.Enum.ConditionState.Is] = true,
-				[app.Enum.ConditionState.IsGreaterThan] = true,
-			},
-			[app.Enum.Condition.Realm] = {
-				[app.Enum.ConditionState.Is] = true,
-				[app.Enum.ConditionState.IsNot] = true,
-				[app.Enum.ConditionState.StartsWith] = true,
-				[app.Enum.ConditionState.EndsWith] = true,
-				[app.Enum.ConditionState.Contains] = true,
-				[app.Enum.ConditionState.DoesNotContain] = true,
-			},
-			[app.Enum.Condition.Profession] = {
-				[app.Enum.ConditionState.IsAnyOf] = true,
-				[app.Enum.ConditionState.IsNotAnyOf] = true,
-			},
-		}
-
 		app:CreateNewProfilePanel()
 		app:CreateLoadConditionsPanel()
 	end
@@ -331,7 +276,8 @@ function app:CreateLoadConditionsPanel()
 			app:UpdateLoadConditionsList()
 		end
 		function primaryConditionGenerator(owner, rootDescription)
-			for i = 1, 5 do
+			for i = 1, 100 do
+				if not L.CONDITION[i] then break end
 				rootDescription:CreateRadio(L.CONDITION[i], isSelected, setSelected, i)
 			end
 		end
@@ -348,7 +294,8 @@ function app:CreateLoadConditionsPanel()
 		end
 		function secondaryConditionGenerator(owner, rootDescription)
 			if app.Flag.SelectedProfile then
-				for i = 1, 10 do
+				for i = 1, 100 do
+					if not L.CONDITIONSTATE[i] then break end
 					if app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition and app.ValidStates[app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition][i] then
 						rootDescription:CreateRadio(L.CONDITIONSTATE[i], isSelected, setSelected, i)
 					end

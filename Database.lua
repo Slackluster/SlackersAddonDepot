@@ -19,7 +19,6 @@ app.IconNotReady = CreateSimpleTextureMarkup("Interface\\RaidFrame\\ReadyCheck-N
 app.IconLMB = CreateAtlasMarkup("housing-hotkey-icon-leftclick")
 app.IconRMB = CreateAtlasMarkup("housing-hotkey-icon-rightclick")
 app.IconNew = CreateAtlasMarkup("UI-Journeys-GreatVault-Tag-new")
-
 app.IconNone = "Interface\\Icons\\inv_misc_questionmark"
 
 app.Professions = {
@@ -37,6 +36,61 @@ app.Professions = {
 	{ tradeSkillLineID = 185, icon = CreateSimpleTextureMarkup("Interface\\Icons\\ui_profession_cooking") },
 	{ tradeSkillLineID = 356, icon = CreateSimpleTextureMarkup("Interface\\Icons\\ui_profession_fishing") },
 	{ tradeSkillLineID = 794, icon = CreateSimpleTextureMarkup("Interface\\Icons\\trade_archaeology") },
+}
+
+app.Enum = {
+	Condition = {
+		Character = 1,
+		Name = 2,
+		Level = 3,
+		Realm = 4,
+		Profession = 5,
+	},
+	ConditionState = {
+		Any = 1,
+		All = 2,
+		IsLessThan = 3,
+		Is = 4,
+		IsAnyOf = 5,
+		IsGreaterThan = 6,
+		IsNot = 7,
+		IsNotAnyOf = 8,
+		StartsWith = 9,
+		EndsWith = 10,
+		Contains = 11,
+		DoesNotContain = 12,
+	},
+}
+app.ValidStates = {
+	[app.Enum.Condition.Character] = {
+		[app.Enum.ConditionState.IsAnyOf] = true,
+		[app.Enum.ConditionState.IsNotAnyOf] = true,
+	},
+	[app.Enum.Condition.Name] = {
+		[app.Enum.ConditionState.Is] = true,
+		[app.Enum.ConditionState.IsNot] = true,
+		[app.Enum.ConditionState.StartsWith] = true,
+		[app.Enum.ConditionState.EndsWith] = true,
+		[app.Enum.ConditionState.Contains] = true,
+		[app.Enum.ConditionState.DoesNotContain] = true,
+	},
+	[app.Enum.Condition.Level] = {
+		[app.Enum.ConditionState.IsLessThan] = true,
+		[app.Enum.ConditionState.Is] = true,
+		[app.Enum.ConditionState.IsGreaterThan] = true,
+	},
+	[app.Enum.Condition.Realm] = {
+		[app.Enum.ConditionState.Is] = true,
+		[app.Enum.ConditionState.IsNot] = true,
+		[app.Enum.ConditionState.StartsWith] = true,
+		[app.Enum.ConditionState.EndsWith] = true,
+		[app.Enum.ConditionState.Contains] = true,
+		[app.Enum.ConditionState.DoesNotContain] = true,
+	},
+	[app.Enum.Condition.Profession] = {
+		[app.Enum.ConditionState.IsAnyOf] = true,
+		[app.Enum.ConditionState.IsNotAnyOf] = true,
+	},
 }
 
 app.WikiCategories = {
