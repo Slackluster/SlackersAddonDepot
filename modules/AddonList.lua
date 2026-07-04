@@ -261,7 +261,6 @@ function app:CreateAddonList()
 						profileInfo.addons[addon.name] = { title = addon.title }
 					end
 				end
-				table.sort(profileInfo.addons, function(a, b) return a.id < b.id end)
 				if profileInfo.type == "Login" then
 					app:ApplyLoadConditions()
 				end
@@ -270,8 +269,17 @@ function app:CreateAddonList()
 			profile:CreateButton(L.RENAME_PROFILE, function() StaticPopup_Show("SLACKERSADDONDEPOT_RENAMEPROFILE", nil, nil, profileNo) end)
 			profile:CreateButton(L.DELETE_PROFILE, function() StaticPopup_Show("SLACKERSADDONDEPOT_DELETEPROFILE", nil, nil, profileNo) end)
 
-			for _, addon in pairs(profileInfo.addons) do
+			local addonsList = {}
+			for name, addon in pairs(profileInfo.addons) do
+				table.insert(addonsList, { name = name, title = addon.title })
+			end
+			table.sort(addonsList, function(a, b) return a.title:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "") < b.title:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "") end) -- Strip colour codes before sorting
+			for _, addon in ipairs(addonsList) do
 				addons:CreateButton(addon.title)
+			end
+
+			if #addonsList > 20 then
+				addons:SetGridMode(MenuConstants.VerticalGridDirection)
 			end
 		end
 
