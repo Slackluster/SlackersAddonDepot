@@ -197,7 +197,6 @@ function app:CreateAddonList()
 	app.AddonListFrame.CharListDropdown = CreateFrame("DropdownButton", nil, app.AddonListFrame, "WowStyle1DropdownTemplate")
 	app.AddonListFrame.CharListDropdown:SetWidth(200)
 	app.AddonListFrame.CharListDropdown:SetPoint("TOPLEFT", 11, -26)
-	app:SetBorder(app.AddonListFrame.CharListDropdown, -1, 1, 1, 0)
 
 	local function isSelected(index)
 		return app.Settings["headerStyle"] == index
@@ -216,7 +215,6 @@ function app:CreateAddonList()
 	app.AddonListFrame.ListStyleDropdown:SetWidth(120)
 	app.AddonListFrame.ListStyleDropdown:SetPoint("TOPRIGHT", -7, -26)
 	app.AddonListFrame.ListStyleDropdown:SetupMenu(listStyleGenerator)
-	app:SetBorder(app.AddonListFrame.ListStyleDropdown, -2, 1, 1, 0)
 
 	function profilesGenerator(owner, rootDescription)
 		local function makeProfileEntry(profileNo, profileInfo)
@@ -333,7 +331,6 @@ function app:CreateAddonList()
 		self:SetText("")
 		self:ClearFocus()
 	end)
-	app:SetBorder(app.AddonListFrame.SearchBar, -7, 1, 2, -2)
 
 	app.AddonListFrame.RevertOrCancelButton = app:MakeButton(app.AddonListFrame, "")
 	app.AddonListFrame.RevertOrCancelButton:SetPoint("BOTTOMRIGHT", app.AddonListFrame, -6, 8)
