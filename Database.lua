@@ -23,20 +23,20 @@ app.IconNew = CreateAtlasMarkup("UI-Journeys-GreatVault-Tag-new")
 app.IconNone = "Interface\\Icons\\inv_misc_questionmark"
 
 app.Professions = {
-	{ tradeSkillLineID = 171 }, -- Alchemy
-	{ tradeSkillLineID = 164 }, -- Blacksmithing
-	{ tradeSkillLineID = 333 }, -- Enchanting
-	{ tradeSkillLineID = 202 }, -- Engineering
-	{ tradeSkillLineID = 773 }, -- Inscription
-	{ tradeSkillLineID = 755 }, -- Jewelcrafting
-	{ tradeSkillLineID = 165 }, -- Leatherworking
-	{ tradeSkillLineID = 197 }, -- Tailoring
-	{ tradeSkillLineID = 182 }, -- Herbalism
-	{ tradeSkillLineID = 186 }, -- Mining
-	{ tradeSkillLineID = 393 }, -- Skinning
-	{ tradeSkillLineID = 185 }, -- Cooking
-	{ tradeSkillLineID = 356 }, -- Fishing
-	{ tradeSkillLineID = 794 }, -- Archaeology
+	{ tradeSkillLineID = 171, icon = CreateSimpleTextureMarkup("Interface\\Icons\\ui_profession_alchemy") },
+	{ tradeSkillLineID = 164, icon = CreateSimpleTextureMarkup("Interface\\Icons\\ui_profession_blacksmithing") },
+	{ tradeSkillLineID = 333, icon = CreateSimpleTextureMarkup("Interface\\Icons\\ui_profession_enchanting") },
+	{ tradeSkillLineID = 202, icon = CreateSimpleTextureMarkup("Interface\\Icons\\ui_profession_engineering") },
+	{ tradeSkillLineID = 773, icon = CreateSimpleTextureMarkup("Interface\\Icons\\ui_profession_inscription") },
+	{ tradeSkillLineID = 755, icon = CreateSimpleTextureMarkup("Interface\\Icons\\ui_profession_jewelcrafting") },
+	{ tradeSkillLineID = 165, icon = CreateSimpleTextureMarkup("Interface\\Icons\\ui_profession_leatherworking") },
+	{ tradeSkillLineID = 197, icon = CreateSimpleTextureMarkup("Interface\\Icons\\ui_profession_tailoring") },
+	{ tradeSkillLineID = 182, icon = CreateSimpleTextureMarkup("Interface\\Icons\\ui_profession_herbalism") },
+	{ tradeSkillLineID = 186, icon = CreateSimpleTextureMarkup("Interface\\Icons\\ui_profession_mining") },
+	{ tradeSkillLineID = 393, icon = CreateSimpleTextureMarkup("Interface\\Icons\\ui_profession_skinning") },
+	{ tradeSkillLineID = 185, icon = CreateSimpleTextureMarkup("Interface\\Icons\\ui_profession_cooking") },
+	{ tradeSkillLineID = 356, icon = CreateSimpleTextureMarkup("Interface\\Icons\\ui_profession_fishing") },
+	{ tradeSkillLineID = 794, icon = CreateSimpleTextureMarkup("Interface\\Icons\\trade_archaeology") },
 }
 
 app.WikiCategories = {

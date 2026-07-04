@@ -458,7 +458,7 @@ function app:CreateLoadConditionsPanel()
 				elseif app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Profession then
 					rootDescription:SetGridMode(MenuConstants.VerticalGridDirection)
 					for _, profession in ipairs(app.Professions) do
-						rootDescription:CreateCheckbox(C_TradeSkillUI.GetProfessionInfoBySkillLineID(profession.tradeSkillLineID).professionName, isSelected, setSelected, profession.tradeSkillLineID)
+						rootDescription:CreateCheckbox(profession.icon .. " " .. C_TradeSkillUI.GetProfessionInfoBySkillLineID(profession.tradeSkillLineID).professionName, isSelected, setSelected, profession.tradeSkillLineID)
 					end
 				end
 			end
