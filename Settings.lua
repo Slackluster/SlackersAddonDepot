@@ -36,12 +36,69 @@ function app:OpenSettings()
 end
 
 function app:CreateMinimapButton()
+	StaticPopupDialogs["SLACKERSADDONDEPOT_LOADPROFILE"] = {
+		text = "",
+		button1 = L.RELOADUI,
+		button2 = NO,
+		whileDead = true,
+		hasEditBox = false,
+		OnShow = function(dialog, data)
+			dialog:ClearAllPoints()
+			dialog:SetPoint("CENTER", UIParent)
+
+			StaticPopup1Text:SetText(string.format(L.RELOAD_AND_ENABLE, app:Colour(app.Data.Profiles[data].name)))
+		end,
+		OnAccept = function(dialog, data)
+			for i, addon in ipairs(app.Info.AddonList) do
+				if app.Data.Profiles[data].addons[addon.name] then
+					C_AddOns.EnableAddOn(i, app.Info.GUID)
+				else
+					C_AddOns.DisableAddOn(i, app.Info.GUID)
+				end
+			end
+			ReloadUI()
+		end,
+	}
+
 	local miniButton = LibStub("LibDataBroker-1.1"):NewDataObject(app.NameLong, {
 		type = "data source",
 		text = app.NameLong,
 		icon = app.Icon,
 
-		OnClick = SlackersAddonDepot_Click,
+		OnClick = function(self)
+			local function profilesGenerator(owner, rootDescription)
+				for profileNo, profileInfo in ipairs(app.Data.Profiles) do
+					if profileInfo.type == "Standard" then
+						rootDescription:CreateButton(profileInfo.name, function()
+							StaticPopup_Show("SLACKERSADDONDEPOT_LOADPROFILE", nil, nil, profileNo)
+						end)
+					end
+				end
+				rootDescription:CreateDivider()
+				rootDescription:CreateButton(L.ADDON_LIST, function()
+					api:ToggleAddonList()
+				end)
+			end
+
+			local profilesMenu
+			local standardProfileCount = 0
+			for _, profileInfo in ipairs(app.Data.Profiles) do
+				if profileInfo.type == "Standard" then
+					standardProfileCount = standardProfileCount + 1
+				end
+			end
+			if standardProfileCount > 0 then
+				self:EnableMouse(false)
+				profilesMenu = MenuUtil.CreateContextMenu(self, profilesGenerator)
+				profilesMenu:ClearAllPoints()
+				profilesMenu:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT")
+				profilesMenu:SetScript("OnHide", function()
+					self:EnableMouse(true)
+				end)
+			else
+				api:ToggleAddonList()
+			end
+		end,
 
 		OnTooltipShow = function(tooltip)
 			if not tooltip or not tooltip.AddLine then return end
