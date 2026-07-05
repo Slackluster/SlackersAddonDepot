@@ -57,7 +57,7 @@ function app:CreateNewProfilePanel()
 		self:ClearFocus()
 	end)
 	app.NewProfilePanel.ProfileNameEditbox:SetScript("OnTextChanged", function(self)
-		local newName = self:GetText():match("^%s*(.-)%s*$")
+		local newName = self:GetText():match("^%s*(.-)%s*$")-- Trim trailing whitespaces
 		local exists = false
 		local invalid = false
 		if newName == "" then
@@ -88,7 +88,7 @@ function app:CreateNewProfilePanel()
 	app.NewProfilePanel.NewLoginProfileButton = app:MakeButton(app.NewProfilePanel, L.LOGIN_PROFILE)
 	app.NewProfilePanel.NewLoginProfileButton:SetPoint("TOP", app.NewProfilePanel, -((app.NewProfilePanel:GetWidth()-20)/4), -85)
 	app.NewProfilePanel.NewLoginProfileButton:SetScript("OnClick", function()
-		table.insert(app.Data.Profiles, { name = app.NewProfilePanel.ProfileNameEditbox:GetText():match("^%s*(.-)%s*$"), type = "Login", addons = {}, loadConditions = { primary = app.Enum.ConditionState.Any, {} } })
+		table.insert(app.Data.Profiles, { name = app.NewProfilePanel.ProfileNameEditbox:GetText():match("^%s*(.-)%s*$"), type = "Login", addons = {}, loadConditions = { primary = app.Enum.ConditionState.Any, {} } }) -- Trim trailing whitespaces
 		table.sort(app.Data.Profiles, function(a, b)
 			return a.name < b.name
 		end)
@@ -104,7 +104,7 @@ function app:CreateNewProfilePanel()
 	app.NewProfilePanel.NewStandardProfileButton = app:MakeButton(app.NewProfilePanel, L.STANDARD_PROFILE)
 	app.NewProfilePanel.NewStandardProfileButton:SetPoint("TOP", app.NewProfilePanel, (app.NewProfilePanel:GetWidth()-20)/4, -85)
 	app.NewProfilePanel.NewStandardProfileButton:SetScript("OnClick", function()
-		table.insert(app.Data.Profiles, { name = app.NewProfilePanel.ProfileNameEditbox:GetText():match("^%s*(.-)%s*$"), type = "Standard", addons = {} })
+		table.insert(app.Data.Profiles, { name = app.NewProfilePanel.ProfileNameEditbox:GetText():match("^%s*(.-)%s*$"), type = "Standard", addons = {} }) -- Trim trailing whitespaces
 		table.sort(app.Data.Profiles, function(a, b)
 			return a.name < b.name
 		end)
@@ -145,7 +145,7 @@ function app:CreateNewProfilePanel()
 				dialog:Hide()
 			end)
 			editBox:SetScript("OnTextChanged", function(self)
-				local newName = self:GetText():match("^%s*(.-)%s*$")
+				local newName = self:GetText():match("^%s*(.-)%s*$") -- Trim trailing whitespaces
 				local exists = false
 				local invalid = false
 				if newName == "" then
@@ -174,7 +174,7 @@ function app:CreateNewProfilePanel()
 		end,
 		OnAccept = function(dialog, data)
 			local editBox = dialog.GetEditBox and dialog:GetEditBox() or dialog.editBox
-			app.Data.Profiles[data].name = editBox:GetText():match("^%s*(.-)%s*$")
+			app.Data.Profiles[data].name = editBox:GetText():match("^%s*(.-)%s*$") -- Trim trailing whitespaces
 			table.sort(app.Data.Profiles, function(a, b)
 				return a.name < b.name
 			end)
