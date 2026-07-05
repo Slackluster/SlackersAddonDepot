@@ -270,8 +270,9 @@ function app:CreateAddonList()
 					end
 				end
 				if profileInfo.type == "Login" then
-					app:ApplyLoadConditions()
+					app:ApplyLoadConditions(true)
 				end
+				app:UpdateAddonList()
 			end)
 			profile:CreateDivider()
 			profile:CreateButton(L.RENAME_PROFILE, function() StaticPopup_Show("SLACKERSADDONDEPOT_RENAMEPROFILE", nil, nil, profileNo) end)

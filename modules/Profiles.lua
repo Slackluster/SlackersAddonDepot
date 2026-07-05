@@ -195,6 +195,7 @@ function app:CreateNewProfilePanel()
 		end,
 		OnAccept = function(dialog, data)
 			table.remove(app.Data.Profiles, data)
+			app:UpdateAddonList()
 		end,
 	}
 end
