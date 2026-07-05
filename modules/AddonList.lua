@@ -536,7 +536,7 @@ function app:CreateAddonList()
 
 		if data.interface < 119999 or data.interface > interfaceVersion then
 			listItem.Text2:SetText("|cffFF0000" .. L.INCOMPATIBLE)
-		elseif data.dependencies and not app.Info.InstalledAddonsByName[data.dependencies] then
+		elseif data.dependencies and app.Info.InstalledAddonsByName[data.dependencies] == nil then
 			listItem.Text2:SetText("|cffFF0000" .. L.DEPENDENCY_MISSING)
 		elseif data.interface < interfaceVersion and not app.Settings["loadOutOfDate"] then
 			listItem.Text2:SetText("|cffFF0000" .. L.OUT_OF_DATE)
@@ -606,7 +606,7 @@ function app:UpdateAddonList()
 
 		search = search:lower()
 
-		return addon.title:lower():find(search, 1, true) or addon.name:lower():find(search, 1, true) or addon.author:lower():find(search, 1, true)
+		return not not (addon.title:lower():find(search, 1, true) or addon.name:lower():find(search, 1, true) or addon.author:lower():find(search, 1, true))
 	end
 
 	if app.Settings["headerStyle"] == 1 then
@@ -651,10 +651,10 @@ function app:UpdateAddonList()
 		end
 	end
 
-	-- Check for uninstalled dependencies
+	-- Check for uninstalled or filtered dependencies
 	app.Info.InstalledAddonsByName = {}
 	for i, addon in ipairs(app.Info.AddonList) do
-		app.Info.InstalledAddonsByName[addon.name] = addon
+		app.Info.InstalledAddonsByName[addon.name] = addonSearch(addon, app.Flag.Search)
 	end
 
 	local addonList = {}
@@ -795,39 +795,15 @@ function app:UpdateAddonList()
 			end
 		end
 
-		local seenDependencies = {}
-
 		for i, addon in ipairs(app.Info.AddonList) do
 			if addon.dependencies and addonSearch(addon, app.Flag.Search) then
 				for _, header in ipairs(addonList) do
 					for _, child in ipairs(header.children) do
 						if addon.dependencies == child.addon.name and ((header.category == L.ENABLED and addon.enabled ~= 0) or (header.category == L.DISABLED and addon.enabled == 0)) then
 							table.insert(child.children, { addon = addon })
-							seenDependencies[i] = true
 						end
 					end
 				end
-			end
-		end
-
-		for i, addon in ipairs(app.Info.AddonList) do
-			if addon.dependencies and addonSearch(addon, app.Flag.Search) and not seenDependencies[i] then
-				if addon.enabled == 0 then
-					table.insert(addonList[2].children, { addon = addon, children = {} })
-				else
-					table.insert(addonList[1].children, { addon = addon, children = {} })
-				end
-			end
-		end
-
-		for _, header in ipairs(addonList) do
-			table.sort(header.children, function(a, b)
-				return a.addon.id < b.addon.id
-			end)
-			for _, child in ipairs(header.children) do
-				table.sort(child.children, function(a, b)
-					return a.addon.id < b.addon.id
-				end)
 			end
 		end
 
