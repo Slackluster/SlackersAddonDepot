@@ -57,6 +57,9 @@ function app:GetCharacterInfo()
 
 	app.Data.Characters = app.Data.Characters or {}
 	if app.Info.GUID then
+		if not app.Data.Characters[app.Info.GUID] then
+			app.Flag.NewChar = true
+		end
 		app.Data.Characters[app.Info.GUID] = {
 			guid = app.Info.GUID,
 			name = name or "",

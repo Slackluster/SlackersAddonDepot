@@ -16,8 +16,13 @@ app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 		app.Data.LoadConditions = nil
 
 		app:HookLogout()
+		app:CreateNewCharPopup()
 	end
 end)
+
+---------------------
+-- LOAD CONDITIONS --
+---------------------
 
 function app:ShouldApplyLoadConditions()
 	for _, profile in ipairs(app.Data.Profiles) do
@@ -214,3 +219,31 @@ function app:HookLogout()
 		app.Flag.LogoutButtonHooked = true
 	end
 end
+
+-----------------------
+-- UNSEEN CHARACTERS --
+-----------------------
+
+function app:CreateNewCharPopup()
+	StaticPopupDialogs["SLACKERSADDONDEPOT_NEWCHAR"] = {
+		text = L.LOADCONDITION_NEWCHAR1 .. "\n\n" .. L.LOADCONDITION_NEWCHAR2,
+		button1 = L.RELOADUI,
+		button2 = NO,
+		whileDead = true,
+		hasEditBox = false,
+		OnShow = function(dialog)
+			dialog:ClearAllPoints()
+			dialog:SetPoint("CENTER", UIParent)
+		end,
+		OnAccept = function()
+			app:ApplyLoadConditions()
+			ReloadUI()
+		end,
+	}
+end
+
+app.Event:Register("PLAYER_ENTERING_WORLD", function(isInitialLogin, isReloadingUi)
+	if isInitialLogin and app.Flag.NewChar and app:ShouldApplyLoadConditions() then
+		StaticPopup_Show("SLACKERSADDONDEPOT_NEWCHAR")
+	end
+end)

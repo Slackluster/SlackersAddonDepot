@@ -121,3 +121,6 @@ L.LOADCONDITION_MATCH1 =                 "Match" -- followed by an any/all dropd
 L.LOADCONDITION_MATCH2 =                 "of these conditions for profile %s:" -- preceded by an any/all dropdown, %s becomes a profile name
 L.LOADCONDITION_VALID =                  "Load condition is valid."
 L.LOADCONDITION_INCOMPLETE =             "Load condition is incomplete."
+
+L.LOADCONDITION_NEWCHAR1 =               app.NameLong .. " has not seen this character before (so sad)." -- You can omit the (so sad) joke if it doesn't work in your language
+L.LOADCONDITION_NEWCHAR2 =               "Reload to apply Login Profiles?"
