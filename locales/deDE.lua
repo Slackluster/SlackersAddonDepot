@@ -116,7 +116,7 @@ local L = app.locales
 -- L.CONDITIONSTATE[12] =                   "does not contain"
 
 -- L.LOADCONDITION_WARNING1 =               "WARNING:" -- Uppercase
--- L.LOADCONDITION_WARNING2 =               "addons that are not in any matching Login Profiles will be disabled on login."
+-- L.LOADCONDITION_WARNING2 =               "Addons that are not in any matching Login Profiles will be disabled on login."
 -- L.LOADCONDITION_MATCH1 =                 "Match" -- followed by an any/all dropdown
 -- L.LOADCONDITION_MATCH2 =                 "of these conditions for profile %s:" -- preceded by an any/all dropdown, %s becomes a profile name
 -- L.LOADCONDITION_VALID =                  "Load condition is valid."
