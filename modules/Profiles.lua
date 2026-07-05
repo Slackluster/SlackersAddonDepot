@@ -191,7 +191,7 @@ function app:CreateNewProfilePanel()
 			dialog:ClearAllPoints()
 			dialog:SetPoint("CENTER", UIParent)
 
-			StaticPopup1Text:SetText(string.format(L.DELETE_NAME_Q, app.Data.Profiles[data].name))
+			StaticPopup1Text:SetText(string.format(L.DELETE_NAME_Q, app:Colour(app.Data.Profiles[data].name)))
 		end,
 		OnAccept = function(dialog, data)
 			table.remove(app.Data.Profiles, data)
