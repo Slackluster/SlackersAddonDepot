@@ -41,8 +41,10 @@ end
 function app:CharacterMatchesLoadCondition(loadCondition, guid)
 	local function character()
 		if loadCondition.conditionState == app.Enum.ConditionState.IsAnyOf then
+			app:Debug("Character.IsAnyOf", loadCondition.conditionValue[guid])
 			return loadCondition.conditionValue[guid] and true or false
 		elseif loadCondition.conditionState == app.Enum.ConditionState.IsNotAnyOf then
+			app:Debug("Character.IsNotAnyOf", loadCondition.conditionValue[guid])
 			return loadCondition.conditionValue[guid] and false or true
 		end
 	end
@@ -58,26 +60,35 @@ function app:CharacterMatchesLoadCondition(loadCondition, guid)
 		end
 
 		if loadCondition.conditionState == app.Enum.ConditionState.Is then
+			app:Debug("NameOrRealm.Is", conditionValue)
 			return charValue == conditionValue
 		elseif loadCondition.conditionState == app.Enum.ConditionState.IsNot then
+			app:Debug("NameOrRealm.IsNot", conditionValue)
 			return charValue ~= conditionValue
 		elseif loadCondition.conditionState == app.Enum.ConditionState.StartsWith then
+			app:Debug("NameOrRealm.StartsWith", conditionValue)
 			return charValue:sub(1, #conditionValue) == conditionValue
 		elseif loadCondition.conditionState == app.Enum.ConditionState.EndsWith then
+			app:Debug("NameOrRealm.EndsWith", conditionValue)
 			return charValue:sub(-#conditionValue) == conditionValue
 		elseif loadCondition.conditionState == app.Enum.ConditionState.Contains then
+			app:Debug("NameOrRealm.Contains", conditionValue)
 			return charValue:find(conditionValue, 1, true)
 		elseif loadCondition.conditionState == app.Enum.ConditionState.DoesNotContain then
+			app:Debug("NameOrRealm.DoesNotContain", conditionValue)
 			return charValue:find(conditionValue, 1, true) == nil
 		end
 	end
 
 	local function level()
 		if loadCondition.conditionState == app.Enum.ConditionState.IsLessThan then
+			app:Debug("Level.IsLessThan", loadCondition.conditionValue)
 			return app.Data.Characters[guid].level < loadCondition.conditionValue
 		elseif loadCondition.conditionState == app.Enum.ConditionState.Is then
+			app:Debug("Level.Is", loadCondition.conditionValue)
 			return app.Data.Characters[guid].level == loadCondition.conditionValue
 		elseif loadCondition.conditionState == app.Enum.ConditionState.IsGreaterThan then
+			app:Debug("Level.IsGreaterThan", loadCondition.conditionValue)
 			return app.Data.Characters[guid].level > loadCondition.conditionValue
 		end
 	end
@@ -86,28 +97,35 @@ function app:CharacterMatchesLoadCondition(loadCondition, guid)
 		if loadCondition.conditionState == app.Enum.ConditionState.IsAnyOf then
 			for tradeSkillID, _ in pairs(loadCondition.conditionValue) do
 				if app.Data.Characters[guid].professions[tradeSkillID] then
+					app:Debug("Profession.IsAnyOf", tradeSkillID)
 					return true
 				end
 			end
+			app:Debug("Profession.IsAnyOf", "false")
 			return false
 		elseif loadCondition.conditionState == app.Enum.ConditionState.IsNotAnyOf then
 			for tradeSkillID, _ in pairs(loadCondition.conditionValue) do
 				if app.Data.Characters[guid].professions[tradeSkillID] then
+					app:Debug("Profession.IsNotAnyOf", tradeSkillID)
 					return false
 				end
 			end
+			app:Debug("Profession.IsNotAnyOf", "true")
 			return true
 		end
 	end
 
 	local function class()
 		if loadCondition.conditionState == app.Enum.ConditionState.IsAnyOf then
+			app:Debug("Class.IsAnyOf", loadCondition.conditionValue)
 			return loadCondition.conditionValue[app.Data.Characters[guid].class] and true or false
 		elseif loadCondition.conditionState == app.Enum.ConditionState.IsNotAnyOf then
+			app:Debug("Class.IsNotAnyOf", loadCondition.conditionValue)
 			return not loadCondition.conditionValue[app.Data.Characters[guid].class] and false or true
 		end
 	end
 
+	app:Debug(loadCondition.condition, guid)
 	if loadCondition.condition == app.Enum.Condition.Character then
 		return character()
 	elseif loadCondition.condition == app.Enum.Condition.Name then

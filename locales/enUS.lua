@@ -52,6 +52,8 @@ L.SETTINGS_TOOLTIP =                     app.NameLong .. "\n|cffFFFFFF" ..
                                          app.IconRMB .. ": " .. L.SLASH_OPEN_SETTINGS
 
 L.INVALID_COMMAND =                      "Invalid command."
+L.DEBUG_ENABLED =                        "Debug mode enabled."
+L.DEBUG_DISABLED =                       "Debug mode disabled."
 
 -- Addon List
 L.INSTALLED =                            "Installed"
