@@ -248,7 +248,7 @@ function app:CreateLoadConditionsPanel()
 	local function setSelected(index)
 		app.Data.Profiles[app.Flag.SelectedProfile].loadConditions.primary = index
 	end
-	function primaryConditionGenerator(owner, rootDescription)
+	local function primaryConditionGenerator(owner, rootDescription)
 		rootDescription:CreateRadio(L.CONDITIONSTATE[app.Enum.ConditionState.Any], isSelected, setSelected, app.Enum.ConditionState.Any)
 		rootDescription:CreateRadio(L.CONDITIONSTATE[app.Enum.ConditionState.All], isSelected, setSelected, app.Enum.ConditionState.All)
 	end
@@ -329,7 +329,7 @@ function app:CreateLoadConditionsPanel()
 				end
 				app:UpdateLoadConditionsList()
 			end
-			function primaryConditionGenerator(owner, rootDescription)
+			local function primaryConditionGenerator(owner, rootDescription)
 				for i = 1, 100 do
 					if not L.CONDITION[i] then break end
 					rootDescription:CreateRadio(L.CONDITION[i], isSelected, setSelected, i)
@@ -344,7 +344,7 @@ function app:CreateLoadConditionsPanel()
 				app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionState = index
 				app:UpdateLoadConditionsList()
 			end
-			function secondaryConditionGenerator(owner, rootDescription)
+			local function secondaryConditionGenerator(owner, rootDescription)
 				for i = 1, 100 do
 					if not L.CONDITIONSTATE[i] then break end
 					if app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition and app.ValidStates[app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition][i] then
@@ -396,7 +396,7 @@ function app:CreateLoadConditionsPanel()
 				end
 				app:UpdateLoadConditionsList()
 			end
-			function tertiaryConditionGenerator(owner, rootDescription)
+			local function tertiaryConditionGenerator(owner, rootDescription)
 				if app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition then
 					if app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Character then
 						local classSortOrder = {

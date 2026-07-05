@@ -37,21 +37,6 @@ function app:CreateAddonList()
 	app.AddonListFrame:SetClampRectInsets(app.AddonListFrame:GetWidth()-inset, -(app.AddonListFrame:GetWidth()-inset), -(app.AddonListFrame:GetHeight()-inset), app.AddonListFrame:GetHeight()-inset)
 	app.AddonListFrame:Hide()
 	table.insert(UISpecialFrames, "SlackersAddonDepotAddonList")
-	app.AddonListFrame:SetScript("OnShow", function()
-		app.AddonListFrame:ClearAllPoints()
-		app.AddonListFrame:SetPoint("CENTER")
-
-		app.Flag.SelectedCharacter = app.Info.GUID
-		app.AddonListFrame.CharListDropdown:SetDefaultText("|c" .. app.Data.Characters[app.Flag.SelectedCharacter].classColor .. app.Data.Characters[app.Flag.SelectedCharacter].name .. "-" .. app.Data.Characters[app.Flag.SelectedCharacter].realmNorm)
-		app.AddonListFrame.CharListDropdown:SetupMenu(charListGenerator)
-
-		app.AddonListFrame.SearchBar:SetText("")
-
-		app:UpdateAddonList()
-	end)
-	app.AddonListFrame:SetScript("OnHide", function()
-		app.Flag.Changed = {}
-	end)
 	app.AddonListFrame:SetScript("OnMouseDown", function()
 		app.AddonListFrame:SetToplevel(true)
 	end)
@@ -119,7 +104,7 @@ function app:CreateAddonList()
 		GameTooltip:Hide()
 	end)
 
-	function charListGenerator(owner, rootDescription)
+	local function charListGenerator(owner, rootDescription)
 		local classSortOrder = {
 			["MAGE"] = 1,
 			["PRIEST"] = 2,
@@ -226,7 +211,7 @@ function app:CreateAddonList()
 		app.Settings["headerStyle"] = index
 		app:UpdateAddonList()
 	end
-	function listStyleGenerator(owner, rootDescription)
+	local function listStyleGenerator(owner, rootDescription)
 		rootDescription:CreateRadio(L.ALPHABETICAL, isSelected, setSelected, 1)
 		rootDescription:CreateRadio(L.CATEGORIES, isSelected, setSelected, 2)
 		rootDescription:CreateRadio(L.CATEGORIES_WIKI, isSelected, setSelected, 3)
@@ -237,7 +222,7 @@ function app:CreateAddonList()
 	app.AddonListFrame.ListStyleDropdown:SetPoint("TOPRIGHT", -7, -26)
 	app.AddonListFrame.ListStyleDropdown:SetupMenu(listStyleGenerator)
 
-	function profilesGenerator(owner, rootDescription)
+	local function profilesGenerator(owner, rootDescription)
 		local function makeProfileEntry(profileNo, profileInfo)
 			local profile = rootDescription:CreateButton(profileInfo.name)
 			if profileInfo.type == "Login" then
@@ -620,6 +605,21 @@ function app:CreateAddonList()
 		end
 	end)
 
+	app.AddonListFrame:SetScript("OnShow", function()
+		app.AddonListFrame:ClearAllPoints()
+		app.AddonListFrame:SetPoint("CENTER")
+
+		app.Flag.SelectedCharacter = app.Info.GUID
+		app.AddonListFrame.CharListDropdown:SetDefaultText("|c" .. app.Data.Characters[app.Flag.SelectedCharacter].classColor .. app.Data.Characters[app.Flag.SelectedCharacter].name .. "-" .. app.Data.Characters[app.Flag.SelectedCharacter].realmNorm)
+		app.AddonListFrame.CharListDropdown:SetupMenu(charListGenerator)
+
+		app.AddonListFrame.SearchBar:SetText("")
+
+		app:UpdateAddonList()
+	end)
+	app.AddonListFrame:SetScript("OnHide", function()
+		app.Flag.Changed = {}
+	end)
 	app.AddonListFrame:SetFlattensRenderLayers(true)
 
 	StaticPopupDialogs["SLACKERSADDONDEPOT_DELETECHARACTER"] = {
