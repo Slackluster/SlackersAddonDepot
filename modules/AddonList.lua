@@ -498,7 +498,7 @@ function app:CreateAddonList()
 		end
 		listItem.Checkbox:SetScript("OnClick", function(self)
 			sendChanges(data.id, self:GetChecked())
-			app.Flag.LastClicked = { id = data.id, enabled = self:GetChecked() }
+			app.Flag.LastClicked = { id = listItem:GetElementDataIndex(), enabled = self:GetChecked() }
 		end)
 
 		listItem:SetScript("OnClick", function(self, button)
