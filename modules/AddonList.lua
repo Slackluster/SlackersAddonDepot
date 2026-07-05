@@ -534,6 +534,51 @@ function app:CreateAddonList()
 
 		listItem.Text1:SetText(data.title)
 
+		local login = {}
+		local standard = {}
+		for profileNo, profileInfo in ipairs(app.Data.Profiles) do
+			if profileInfo.addons[data.name] then
+				if profileInfo.type == "Login" then
+					table.insert(login, profileInfo.name)
+				elseif profileInfo.type == "Standard" then
+					table.insert(standard, profileInfo.name)
+				end
+			end
+		end
+
+		listItem.ProfileButton:Hide()
+		if #login > 0 then
+			listItem.ProfileButton:SetNormalTexture(6031079)
+			listItem.ProfileButton:Show()
+		elseif #standard > 0 then
+			listItem.ProfileButton:SetNormalTexture(6031077)
+			listItem.ProfileButton:Show()
+		end
+
+		local tooltipText = ""
+		if #login > 0 then
+			tooltipText = tooltipText .. L.LOGIN_PROFILES
+			for _, profile in ipairs(login) do
+				tooltipText = tooltipText .. "\n|cffFFFFFF" .. profile .. "|R"
+			end
+		end
+		if #standard > 0 then
+			if #login > 0 then tooltipText = tooltipText .. "\n\n" end
+			tooltipText = tooltipText .. L.STANDARD_PROFILES
+			for _, profile in ipairs(standard) do
+				tooltipText = tooltipText .. "\n|cffFFFFFF" .. profile .. "|R"
+			end
+		end
+		listItem.ProfileButton:SetScript("OnEnter", function()
+			GameTooltip:ClearLines()
+			GameTooltip:SetOwner(listItem.ProfileButton, "ANCHOR_LEFT")
+			GameTooltip:AddLine(tooltipText)
+			GameTooltip:Show()
+		end)
+		listItem.ProfileButton:SetScript("OnLeave", function()
+			GameTooltip:Hide()
+		end)
+
 		local _, _, _, interfaceVersion = GetBuildInfo()
 		local dependencyData = app.AddonList:FindElementDataByPredicate(function(elementData)
 			return elementData.data and elementData.data.name == data.dependencies

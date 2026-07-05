@@ -62,7 +62,7 @@
 				</FontString>
 				<FontString parentKey="Text2" inherits="GameFontNormal" justifyH="RIGHT">
 					<Anchors>
-						<Anchor point="RIGHT" x="-5" />
+						<Anchor point="RIGHT" x="-30" />
 					</Anchors>
 					<Size x="400" y="24" />
 				</FontString>
@@ -78,6 +78,13 @@
 					<AbsInset left="0" right="0" top="0" bottom="8"/>
 				</HitRectInsets>
 			</CheckButton>
+			<Button parentKey="ProfileButton" inherits="UIPanelButtonTemplate">
+				<Size x="22" y="22"/>
+				<HighlightTexture file="Interface\Buttons\ButtonHilight-Square" alphaMode="ADD" />
+				<Anchors>
+					<Anchor point="RIGHT" x="-5" />
+				</Anchors>
+			</Button>
 		</Frames>
 	</Button>
 
@@ -101,7 +108,7 @@
 				</FontString>
 				<FontString parentKey="Text2" inherits="GameFontNormal" justifyH="RIGHT">
 					<Anchors>
-						<Anchor point="RIGHT" x="-5" />
+						<Anchor point="RIGHT" x="-30" />
 					</Anchors>
 					<Size x="400" y="24" />
 				</FontString>
@@ -117,6 +124,13 @@
 					<AbsInset left="0" right="0" top="0" bottom="8"/>
 				</HitRectInsets>
 			</CheckButton>
+			<Button parentKey="ProfileButton" inherits="UIPanelButtonTemplate">
+				<Size x="22" y="22"/>
+				<HighlightTexture file="Interface\Buttons\ButtonHilight-Square" alphaMode="ADD" />
+				<Anchors>
+					<Anchor point="RIGHT" x="-5" />
+				</Anchors>
+			</Button>
 		</Frames>
 	</Button>
 
