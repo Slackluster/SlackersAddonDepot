@@ -31,11 +31,11 @@ local L = app.locales
 -- L.SETTINGS_MINIMAP_DESC =                "Show the minimap icon. If you disable this, " .. app.NameShort .. " is still available from the Addon Compartment."
 -- L.SETTINGS_REPLACE_MENU_BUTTON =         "Replace AddOns Button"
 -- L.SETTINGS_REPLACE_MENU_BUTTON_DESC =    "Make the main menu's AddOns button open " .. app.NameLong .. "."
--- L.SETTINGS_LOAD_OUT_OF_DATE =            "Load out of date addons"
--- L.SETTINGS_LOAD_OUT_OF_DATE_DESC =       "This may cause errors from incompatible addons."
 
 -- L.ADDON_LIST =                           "Addon List"
 
+-- L.SETTINGS_LOAD_OUT_OF_DATE =            "Load Out of Date Addons"
+-- L.SETTINGS_LOAD_OUT_OF_DATE_DESC =       "This may cause errors from incompatible addons."
 -- L.SETTINGS_REMEMBER_UNINSTALLED =        "Remember uninstalled addons"
 -- L.SETTINGS_REMEMBER_UNINSTALLED_DESC =   "Keep uninstalled addons in profiles and remember their enable state."
 -- L.SETTINGS_CHARLIST_REALMS =             "Character List Realms"
