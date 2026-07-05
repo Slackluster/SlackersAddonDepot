@@ -238,7 +238,7 @@ function app:CreateAddonList()
 					label = "|c" .. app.Data.Characters[app.Flag.SelectedCharacter].classColor .. app.Data.Characters[app.Flag.SelectedCharacter].name .. "-" .. app.Data.Characters[app.Flag.SelectedCharacter].realmNorm
 				end
 				profile:CreateButton(string.format(L.APPLY_PROFILE, label), function()
-					for i, addon in pairs(app.Info.AddonList) do
+					for i, addon in ipairs(app.Info.AddonList) do
 						if profileInfo.addons[addon.name] and addon.enabled ~= 2 then
 							app.Flag.Changed[i] = true
 						elseif not profileInfo.addons[addon.name] and addon.enabled ~= 0 then
