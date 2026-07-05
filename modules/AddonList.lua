@@ -98,6 +98,27 @@ function app:CreateAddonList()
 	app.AddonListFrame.List.Background:SetAllPoints()
 	app.AddonListFrame.List.Background:SetAtlas("CreditsScreen-Background-2")
 
+	app.AddonListFrame.DeleteCharButton = CreateFrame("Button", nil, app.AddonListFrame, "UIPanelCloseButton")
+	app.AddonListFrame.DeleteCharButton:SetPoint("TOPLEFT", 11, -26)
+	app.AddonListFrame.DeleteCharButton:SetNormalTexture("Interface\\AddOns\\SlackersAddonDepot\\assets\\buttons.blp")
+	app.AddonListFrame.DeleteCharButton:GetNormalTexture():SetTexCoord(1/256, 37/256, 1/128, 39/128)
+	app.AddonListFrame.DeleteCharButton:SetDisabledTexture("Interface\\AddOns\\SlackersAddonDepot\\assets\\buttons.blp")
+	app.AddonListFrame.DeleteCharButton:GetDisabledTexture():SetTexCoord(1/256, 37/256, 41/128, 79/128)
+	app.AddonListFrame.DeleteCharButton:SetPushedTexture("Interface\\AddOns\\SlackersAddonDepot\\assets\\buttons.blp")
+	app.AddonListFrame.DeleteCharButton:GetPushedTexture():SetTexCoord(1/256, 37/256, 81/128, 119/128)
+	app.AddonListFrame.DeleteCharButton:SetScript("OnClick", function()
+		StaticPopup_Show("SLACKERSADDONDEPOT_DELETECHARACTER")
+	end)
+	app.AddonListFrame.DeleteCharButton:SetScript("OnEnter", function(self)
+		GameTooltip:ClearLines()
+		GameTooltip:SetOwner(self)
+		GameTooltip:AddLine(L.DELETE_CHARACTER)
+		GameTooltip:Show()
+	end)
+	app.AddonListFrame.DeleteCharButton:SetScript("OnLeave", function()
+		GameTooltip:Hide()
+	end)
+
 	function charListGenerator(owner, rootDescription)
 		local classSortOrder = {
 			["MAGE"] = 1,
@@ -196,7 +217,7 @@ function app:CreateAddonList()
 	end
 	app.AddonListFrame.CharListDropdown = CreateFrame("DropdownButton", nil, app.AddonListFrame, "WowStyle1DropdownTemplate")
 	app.AddonListFrame.CharListDropdown:SetWidth(200)
-	app.AddonListFrame.CharListDropdown:SetPoint("TOPLEFT", 11, -26)
+	app.AddonListFrame.CharListDropdown:SetPoint("LEFT", app.AddonListFrame.DeleteCharButton, "RIGHT", 4, 0)
 
 	local function isSelected(index)
 		return app.Settings["headerStyle"] == index
@@ -600,6 +621,28 @@ function app:CreateAddonList()
 	end)
 
 	app.AddonListFrame:SetFlattensRenderLayers(true)
+
+	StaticPopupDialogs["SLACKERSADDONDEPOT_DELETECHARACTER"] = {
+		text = "",
+		button1 = YES,
+		button2 = NO,
+		whileDead = true,
+		hasEditBox = false,
+		OnShow = function(dialog, data)
+			dialog:ClearAllPoints()
+			dialog:SetPoint("CENTER", UIParent)
+
+			local char = app.Data.Characters[app.Flag.SelectedCharacter]
+			StaticPopup1Text:SetText(string.format(L.DELETE_NAME_Q, "|c" .. char.classColor .. char.name .. "-" .. char.realmNorm))
+		end,
+		OnAccept = function(dialog, data)
+			app.Data.Characters[app.Flag.SelectedCharacter] = nil
+			app.Flag.SelectedCharacter = app.Info.GUID
+			local char = app.Data.Characters[app.Flag.SelectedCharacter]
+			app.AddonListFrame.CharListDropdown:OverrideText("|c" .. char.classColor .. char.name .. "-" .. char.realmNorm)
+			app:UpdateAddonList()
+		end,
+	}
 end
 
 function app:UpdateAddonList()
@@ -634,8 +677,10 @@ function app:UpdateAddonList()
 
 	if app.Flag.SelectedCharacter == app.Info.GUID or app.Flag.SelectedCharacter == "All" then
 		app:UpdateButton(app.AddonListFrame.ApplyButton, L.RELOADUI)
+		app.AddonListFrame.DeleteCharButton:Disable()
 	else
 		app:UpdateButton(app.AddonListFrame.ApplyButton, L.APPLY_CHANGES)
+		app.AddonListFrame.DeleteCharButton:Enable()
 	end
 
 	app.Flag.SelectedNo = 0

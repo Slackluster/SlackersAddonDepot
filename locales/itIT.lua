@@ -77,6 +77,7 @@ local L = app.locales
 -- L.UNCATEGORIZED =                        STABLE_PET_UNCATEGORIZED -- "Uncategorized"
 -- L.ALL =                                  ALL -- "All"
 -- L.NOT_APPLICABLE =                       NOT_APPLICABLE -- "N/A"
+-- L.DELETE_CHARACTER =                     "Delete the selected character"
 
 -- Profiles
 -- L.PROFILES =                             "Profiles"
@@ -95,7 +96,7 @@ local L = app.locales
 -- L.DELETE_PROFILE =                       "Delete profile"
 -- L.PROFILE_NAME_NEW =                     "New profile name:"
 -- L.PROFILE_NAME_EXISTS =                  "A profile with that name already exists."
--- L.DELETE_PROFILE_Q =                     "Delete %s?" -- %s becomes a profile name
+-- L.DELETE_NAME_Q =                        "Delete %s?" -- %s becomes a name
 
 -- L.CONDITION = {}
 -- L.CONDITION[1] =                         CHARACTER -- "Character"
