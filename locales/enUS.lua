@@ -36,6 +36,8 @@ L.SETTINGS_LOAD_OUT_OF_DATE_DESC =       "This may cause errors from incompatibl
 
 L.ADDON_LIST =                           "Addon List"
 
+L.SETTINGS_REMEMBER_UNINSTALLED =        "Remember Uninstalled Addons"
+L.SETTINGS_REMEMBER_UNINSTALLED_DESC =   "Keep uninstalled addons in profiles and remember their enable state."
 L.SETTINGS_CHARLIST_REALMS =             "Character List Realms"
 L.SETTINGS_CHARLIST_REALMS_DESC =        "Categorize characters by realm."
 L.SETTINGS_CHARLIST_SORT =               "Character List Sort"

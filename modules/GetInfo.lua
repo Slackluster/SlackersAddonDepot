@@ -12,6 +12,8 @@ local L = app.locales
 
 app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 	if addOnName == appName then
+		app.Data.AddonHistory = app.Data.AddonHistory or {}
+
 		app:GetAddonInfo()
 		app:GetCharacterInfo()
 	end
@@ -33,6 +35,30 @@ function app:GetAddonInfo()
 		end
 
 		table.insert(app.Info.AddonList, { id = i, iconTexture = C_AddOns.GetAddOnMetadata(i, "IconTexture"), iconAtlas = C_AddOns.GetAddOnMetadata(i, "IconAtlas"), name = name, title = title, notes = notes, version = C_AddOns.GetAddOnMetadata(i, "Version"), interface = C_AddOns.GetAddOnInterfaceVersion(i), author = C_AddOns.GetAddOnMetadata(i, "Author") or " ", category = C_AddOns.GetAddOnMetadata(i, "Category"), dependencies = dependencies })
+		app.Data.AddonHistory[name] = true
+	end
+
+	for addonName1, exists in pairs(app.Data.AddonHistory) do
+		if exists then
+			local _, addonTitle = C_AddOns.GetAddOnInfo(addonName1)
+			if not addonTitle then
+				app.Data.AddonHistory[addonName1] = false
+			end
+		end
+	end
+
+	for addonName1, exists in pairs(app.Data.AddonHistory) do
+		if not exists and not app.Settings["rememberUninstalled"] then
+			C_AddOns.DisableAddOn(addonName1, nil)
+			for _, profile in ipairs(app.Data.Profiles) do
+				for addonName2, _ in pairs(profile.addons) do
+					if addonName1 == addonName2 then
+						profile.addons[addonName2] = nil
+						break
+					end
+				end
+			end
+		end
 	end
 end
 

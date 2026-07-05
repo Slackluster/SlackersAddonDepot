@@ -36,6 +36,8 @@ local L = app.locales
 
 -- L.ADDON_LIST =                           "Addon List"
 
+-- L.SETTINGS_REMEMBER_UNINSTALLED =        "Remember uninstalled addons"
+-- L.SETTINGS_REMEMBER_UNINSTALLED_DESC =   "Keep uninstalled addons in profiles and remember their enable state."
 -- L.SETTINGS_CHARLIST_REALMS =             "Character List Realms"
 -- L.SETTINGS_CHARLIST_REALMS_DESC =        "Categorize characters by realm."
 -- L.SETTINGS_CHARLIST_SORT =               "Character List Sort"

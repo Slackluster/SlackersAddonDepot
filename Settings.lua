@@ -302,6 +302,8 @@ function app:CreateSettings()
 		app:UpdateAddonList()
 	end)
 
+	checkbox("rememberUninstalled", L.SETTINGS_REMEMBER_UNINSTALLED, L.SETTINGS_REMEMBER_UNINSTALLED_DESC, true)
+
 	checkbox("charListRealm", L.SETTINGS_CHARLIST_REALMS, L.SETTINGS_CHARLIST_REALMS_DESC, true)
 
 	dropdown("charListSort", L.SETTINGS_CHARLIST_SORT, L.SETTINGS_CHARLIST_SORT_DESC, 2, {

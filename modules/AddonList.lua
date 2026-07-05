@@ -245,8 +245,10 @@ function app:CreateAddonList()
 			end
 			profile:CreateDivider()
 			local addonCount = 0
-			for _, _ in pairs(profileInfo.addons) do
-				addonCount = addonCount + 1
+			for name, _ in pairs(profileInfo.addons) do
+				if app.Data.AddonHistory[name] then
+					addonCount = addonCount + 1
+				end
 			end
 			local addons = profile:CreateButton(L.ADDONS .. " (" .. addonCount .. ")")
 			profile:CreateButton(string.format(L.SAVE_ADDONS, app.Flag.SelectedNo), function()
@@ -271,7 +273,9 @@ function app:CreateAddonList()
 
 			local addonsList = {}
 			for name, addon in pairs(profileInfo.addons) do
-				table.insert(addonsList, { name = name, title = addon.title })
+				if app.Data.AddonHistory[name] then
+					table.insert(addonsList, { name = name, title = addon.title })
+				end
 			end
 			table.sort(addonsList, function(a, b) return a.title:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "") < b.title:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "") end) -- Strip colour codes before sorting
 			for _, addon in ipairs(addonsList) do
