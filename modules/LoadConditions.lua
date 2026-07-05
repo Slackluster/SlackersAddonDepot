@@ -26,7 +26,8 @@ end)
 
 function app:ShouldApplyLoadConditions()
 	for _, profile in ipairs(app.Data.Profiles) do
-		if profile.type == "Login" then
+		local next = next
+		if profile.type == "Login" and next(profile.addons) ~= nil then
 			for i, loadCondition in ipairs(profile.loadConditions) do
 				if loadCondition.valid then
 					return true
