@@ -90,8 +90,8 @@ L.SAVE_ADDONS =                          "Save %d addons" -- %d becomes a number
 L.NEW_PROFILE =                          "New profile"
 L.RENAME_PROFILE =                       "Rename profile"
 L.DELETE_PROFILE =                       "Delete profile"
-L.PROFILE_NAME =                         "Profile name"
 L.PROFILE_NAME_NEW =                     "New profile name:"
+L.PROFILE_NAME_EXISTS =                  "A profile with that name already exists."
 L.DELETE_PROFILE_Q =                     "Delete %s?" -- %s becomes a profile name
 
 L.CONDITION = {}

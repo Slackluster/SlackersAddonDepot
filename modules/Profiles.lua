@@ -41,24 +41,54 @@ function app:CreateNewProfilePanel()
 		app.NewProfilePanel:Hide()
 	end)
 
+	app.NewProfilePanel.NewProfileText = app.NewProfilePanel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+	app.NewProfilePanel.NewProfileText:SetPoint("TOP", 0, -30)
+	app.NewProfilePanel.NewProfileText:SetText(L.PROFILE_NAME_NEW)
+
 	app.NewProfilePanel.ProfileNameEditbox = CreateFrame("EditBox", nil, app.NewProfilePanel, "InputBoxTemplate")
 	app.NewProfilePanel.ProfileNameEditbox:SetSize(160, 20)
-	app.NewProfilePanel.ProfileNameEditbox:SetPoint("TOP", 0, -40)
+	app.NewProfilePanel.ProfileNameEditbox:SetPoint("TOP", app.NewProfilePanel.NewProfileText, "BOTTOM", 0, -10)
 	app.NewProfilePanel.ProfileNameEditbox:SetAutoFocus(false)
 	app.NewProfilePanel.ProfileNameEditbox:SetCursorPosition(0)
-	app.NewProfilePanel.ProfileNameEditbox:SetText(L.PROFILE_NAME)
 	app.NewProfilePanel.ProfileNameEditbox:SetScript("OnEnterPressed", function(self)
 		self:ClearFocus()
 	end)
 	app.NewProfilePanel.ProfileNameEditbox:SetScript("OnEscapePressed", function(self)
 		self:ClearFocus()
 	end)
-	app:SetBorder(app.NewProfilePanel.ProfileNameEditbox, -7, 1, 2, -2)
+	app.NewProfilePanel.ProfileNameEditbox:SetScript("OnTextChanged", function(self)
+		local newName = self:GetText():match("^%s*(.-)%s*$")
+		local exists = false
+		local invalid = false
+		if newName == "" then
+			invalid = true
+		end
+		if not invalid then
+			for _, profile in ipairs(app.Data.Profiles) do
+				if profile.name == newName then
+					exists = true
+					break
+				end
+			end
+		end
+		if invalid then
+			app.NewProfilePanel.NewLoginProfileButton:Disable()
+			app.NewProfilePanel.NewStandardProfileButton:Disable()
+		elseif exists then
+			app.NewProfilePanel.NewProfileText:SetText("|cffFF0000" .. L.PROFILE_NAME_EXISTS)
+			app.NewProfilePanel.NewLoginProfileButton:Disable()
+			app.NewProfilePanel.NewStandardProfileButton:Disable()
+		else
+			app.NewProfilePanel.NewProfileText:SetText(L.PROFILE_NAME_NEW)
+			app.NewProfilePanel.NewLoginProfileButton:Enable()
+			app.NewProfilePanel.NewStandardProfileButton:Enable()
+		end
+	end)
 
 	app.NewProfilePanel.NewLoginProfileButton = app:MakeButton(app.NewProfilePanel, L.LOGIN_PROFILE)
-	app.NewProfilePanel.NewLoginProfileButton:SetPoint("TOP", app.NewProfilePanel, -((app.NewProfilePanel:GetWidth()-20)/4), -70)
+	app.NewProfilePanel.NewLoginProfileButton:SetPoint("TOP", app.NewProfilePanel, -((app.NewProfilePanel:GetWidth()-20)/4), -85)
 	app.NewProfilePanel.NewLoginProfileButton:SetScript("OnClick", function()
-		table.insert(app.Data.Profiles, { name = app.NewProfilePanel.ProfileNameEditbox:GetText(), type = "Login", addons = {}, loadConditions = { primary = app.Enum.ConditionState.Any, {} } })
+		table.insert(app.Data.Profiles, { name = app.NewProfilePanel.ProfileNameEditbox:GetText():match("^%s*(.-)%s*$"), type = "Login", addons = {}, loadConditions = { primary = app.Enum.ConditionState.Any, {} } })
 		table.sort(app.Data.Profiles, function(a, b)
 			return a.name < b.name
 		end)
@@ -72,9 +102,9 @@ function app:CreateNewProfilePanel()
 	app.NewProfilePanel.NewLoginProfileText:SetWidth(250)
 
 	app.NewProfilePanel.NewStandardProfileButton = app:MakeButton(app.NewProfilePanel, L.STANDARD_PROFILE)
-	app.NewProfilePanel.NewStandardProfileButton:SetPoint("TOP", app.NewProfilePanel, (app.NewProfilePanel:GetWidth()-20)/4, -70)
+	app.NewProfilePanel.NewStandardProfileButton:SetPoint("TOP", app.NewProfilePanel, (app.NewProfilePanel:GetWidth()-20)/4, -85)
 	app.NewProfilePanel.NewStandardProfileButton:SetScript("OnClick", function()
-		table.insert(app.Data.Profiles, { name = app.NewProfilePanel.ProfileNameEditbox:GetText(), type = "Standard", addons = {} })
+		table.insert(app.Data.Profiles, { name = app.NewProfilePanel.ProfileNameEditbox:GetText():match("^%s*(.-)%s*$"), type = "Standard", addons = {} })
 		table.sort(app.Data.Profiles, function(a, b)
 			return a.name < b.name
 		end)
@@ -114,10 +144,37 @@ function app:CreateNewProfilePanel()
 			editBox:SetScript("OnEscapePressed", function()
 				dialog:Hide()
 			end)
+			editBox:SetScript("OnTextChanged", function(self)
+				local newName = self:GetText():match("^%s*(.-)%s*$")
+				local exists = false
+				local invalid = false
+				if newName == "" then
+					invalid = true
+				end
+				if not invalid then
+					for i, profile in ipairs(app.Data.Profiles) do
+						if i ~= data then
+							if profile.name == newName then
+								exists = true
+								break
+							end
+						end
+					end
+				end
+				if invalid then
+					StaticPopup1Button1:Disable()
+				elseif exists then
+					StaticPopup1Text:SetText("|cffFF0000" .. L.PROFILE_NAME_EXISTS)
+					StaticPopup1Button1:Disable()
+				else
+					StaticPopup1Text:SetText(L.PROFILE_NAME_NEW)
+					StaticPopup1Button1:Enable()
+				end
+			end)
 		end,
 		OnAccept = function(dialog, data)
 			local editBox = dialog.GetEditBox and dialog:GetEditBox() or dialog.editBox
-			app.Data.Profiles[data].name = editBox:GetText()
+			app.Data.Profiles[data].name = editBox:GetText():match("^%s*(.-)%s*$")
 			table.sort(app.Data.Profiles, function(a, b)
 				return a.name < b.name
 			end)
