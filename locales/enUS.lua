@@ -98,6 +98,7 @@ L.DELETE_PROFILE =                       "Delete profile"
 L.PROFILE_NAME_NEW =                     "New profile name:"
 L.PROFILE_NAME_EXISTS =                  "A profile with that name already exists."
 L.DELETE_NAME_Q =                        "Delete %s?" -- %s becomes a name
+L.RELOAD_AND_ENABLE =                    "Reload and enable %s?" -- %s becomes a name
 
 L.CONDITION = {}
 L.CONDITION[1] =                         CHARACTER -- "Character"

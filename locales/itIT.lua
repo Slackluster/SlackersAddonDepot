@@ -36,7 +36,7 @@ local L = app.locales
 
 -- L.SETTINGS_LOAD_OUT_OF_DATE =            "Load Out of Date Addons"
 -- L.SETTINGS_LOAD_OUT_OF_DATE_DESC =       "This may cause errors from incompatible addons."
--- L.SETTINGS_REMEMBER_UNINSTALLED =        "Remember uninstalled addons"
+-- L.SETTINGS_REMEMBER_UNINSTALLED =        "Remember Uninstalled Addons"
 -- L.SETTINGS_REMEMBER_UNINSTALLED_DESC =   "Keep uninstalled addons in profiles and remember their enable state."
 -- L.SETTINGS_CHARLIST_REALMS =             "Character List Realms"
 -- L.SETTINGS_CHARLIST_REALMS_DESC =        "Categorize characters by realm."
@@ -51,6 +51,7 @@ local L = app.locales
 --                                          app.IconLMB .. ": " .. L.SLASH_OPEN_LIST .. "\n" ..
 --                                          app.IconRMB .. ": " .. L.SLASH_OPEN_SETTINGS
 
+-- L.INVALID_COMMAND =                      "Invalid command."
 -- L.DEBUG_ENABLED =                        "Debug mode enabled."
 -- L.DEBUG_DISABLED =                       "Debug mode disabled."
 
@@ -97,6 +98,7 @@ local L = app.locales
 -- L.PROFILE_NAME_NEW =                     "New profile name:"
 -- L.PROFILE_NAME_EXISTS =                  "A profile with that name already exists."
 -- L.DELETE_NAME_Q =                        "Delete %s?" -- %s becomes a name
+-- L.RELOAD_AND_ENABLE =                    "Reload and enable %s?" -- %s becomes a name
 
 -- L.CONDITION = {}
 -- L.CONDITION[1] =                         CHARACTER -- "Character"
@@ -118,6 +120,7 @@ local L = app.locales
 -- L.CONDITIONSTATE[10] =                   "ends with"
 -- L.CONDITIONSTATE[11] =                   "contains"
 -- L.CONDITIONSTATE[12] =                   "does not contain"
+
 -- L.LOADCONDITION_WARNING1 =               "WARNING:" -- Uppercase
 -- L.LOADCONDITION_WARNING2 =               "Addons that are not in any matching Login Profiles will be disabled on login."
 -- L.LOADCONDITION_MATCH1 =                 "Match" -- followed by an any/all dropdown
