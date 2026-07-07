@@ -171,6 +171,10 @@ function app:ApplyLoadConditions(excludeCurrent)
 	if not app:ShouldApplyLoadConditions() then return end
 
 	local function applyProfiles(targetGuid)
+		for i = 1, C_AddOns.GetNumAddOns() do
+			C_AddOns.DisableAddOn(i, targetGuid)
+		end
+		C_AddOns.EnableAddOn("SlackersAddonDepot", targetGuid)
 		for profileNo, profile in ipairs(app.Data.Profiles) do
 			if profile.type == "Login" then
 				if app:CharacterMatchesProfile(profileNo, targetGuid) then
@@ -183,20 +187,11 @@ function app:ApplyLoadConditions(excludeCurrent)
 	if excludeCurrent then
 		for guid, _ in pairs(app.Data.Characters) do
 			if guid ~= app.Info.GUID then
-				for i = 1, C_AddOns.GetNumAddOns() do
-					C_AddOns.DisableAddOn(i, guid)
-				end
-				C_AddOns.EnableAddOn("SlackersAddonDepot", guid)
 				applyProfiles(guid)
 			end
 		end
 	elseif not app.Flag.ApplyingOnLogout then
 		app.Flag.ApplyingOnLogout = true
-		for i = 1, C_AddOns.GetNumAddOns() do
-			C_AddOns.DisableAddOn(i, nil)
-		end
-		C_AddOns.EnableAddOn("SlackersAddonDepot", nil)
-
 		for guid, _ in pairs(app.Data.Characters) do
 			applyProfiles(guid)
 		end
