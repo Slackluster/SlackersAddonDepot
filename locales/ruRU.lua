@@ -48,8 +48,8 @@ L.CLASS =                                CLASS -- "Class"
 -- General
 L.NEW_VERSION_AVAILABLE =                "Доступна более новая версия " .. app.NameLong .. ":"
 L.SETTINGS_TOOLTIP =                     app.NameLong .. "\n|cffFFFFFF" ..
---                                          app.IconLMB .. ": " .. L.SLASH_OPEN_LIST .. "\n" ..
---                                          app.IconRMB .. ": " .. L.SLASH_OPEN_SETTINGS
+                                         app.IconLMB .. ": " .. L.SLASH_OPEN_LIST .. "\n" ..
+                                         app.IconRMB .. ": " .. L.SLASH_OPEN_SETTINGS
 
 L.INVALID_COMMAND =                      "Неверная команда."
 L.DEBUG_ENABLED =                        "Режим отладки включен."
