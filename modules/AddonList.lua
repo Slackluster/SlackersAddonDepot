@@ -748,8 +748,10 @@ function app:UpdateAddonList()
 
 	-- Check for uninstalled or filtered dependencies
 	app.Info.InstalledAddonsByName = {}
+	app.Info.EnableStateForAddonsByName = {}
 	for i, addon in ipairs(app.Info.AddonList) do
 		app.Info.InstalledAddonsByName[addon.name] = addonSearch(addon, app.Flag.Search)
+		app.Info.EnableStateForAddonsByName[addon.name] = addon.enabled
 	end
 
 	local addonList = {}
@@ -933,7 +935,7 @@ function app:UpdateAddonList()
 		table.insert(addonList, { category = L.DISABLED, children = {} })
 
 		for _, addon in ipairs(app.Info.AddonList) do
-			if (not addon.dependencies or not app.Info.InstalledAddonsByName[addon.dependencies]) and addonSearch(addon, app.Flag.Search) then
+			if (not addon.dependencies or not app.Info.InstalledAddonsByName[addon.dependencies] or (addon.dependencies and addon.enabled ~= app.Info.EnableStateForAddonsByName[addon.dependencies])) and addonSearch(addon, app.Flag.Search) then
 				if addon.enabled == 0 then
 					table.insert(addonList[2].children, { addon = addon, children = {} })
 				else
