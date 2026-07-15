@@ -766,7 +766,19 @@ function app:UpdateAddonList()
 			if addon.dependencies and addonSearch(addon, app.Flag.Search) then
 				for _, child in ipairs(addonList) do
 					if addon.dependencies == child.addon.name then
-						table.insert(child.children, { addon = addon })
+						table.insert(child.children, { addon = addon, children = {} })
+					end
+				end
+			end
+		end
+
+		for i, addon in ipairs(app.Info.AddonList) do
+			if addon.dependencies and addonSearch(addon, app.Flag.Search) then
+				for _, child in ipairs(addonList) do
+					for _, child2 in ipairs(child.children) do
+						if addon.dependencies == child2.addon.name then
+							table.insert(child2.children, { addon = addon })
+						end
 					end
 				end
 			end
@@ -777,7 +789,11 @@ function app:UpdateAddonList()
 			local row1 = DataProvider:Insert({ id = addon.id, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
 			for _, addon2 in ipairs(addon1.children) do
 				local addon = addon2.addon
-				row1:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+				local row2 = row1:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+				for _, addon3 in ipairs(addon2.children) do
+					local addon = addon3.addon
+					row2:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+				end
 			end
 		end
 	elseif app.Settings["headerStyle"] == 2 then -- Categories
@@ -807,7 +823,21 @@ function app:UpdateAddonList()
 				for _, header in ipairs(addonList) do
 					for _, child in ipairs(header.children) do
 						if addon.dependencies == child.addon.name then
-							table.insert(child.children, { addon = addon })
+							table.insert(child.children, { addon = addon, children = {} })
+						end
+					end
+				end
+			end
+		end
+
+		for _, addon in ipairs(app.Info.AddonList) do
+			if addon.dependencies and addonSearch(addon, app.Flag.Search) then
+				for _, header in ipairs(addonList) do
+					for _, child in ipairs(header.children) do
+						for _, child2 in ipairs(child.children) do
+							if addon.dependencies == child2.addon.name then
+								table.insert(child2.children, { addon = addon })
+							end
 						end
 					end
 				end
@@ -823,7 +853,11 @@ function app:UpdateAddonList()
 					local row2 = row1:Insert({ id = addon.id, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
 					for _, addon2 in ipairs(addon1.children) do
 						local addon = addon2.addon
-						row2:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+						local row3 = row2:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+						for _, addon3 in ipairs(addon2.children) do
+							local addon = addon3.addon
+							row3:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+						end
 					end
 				end
 			end
@@ -855,7 +889,21 @@ function app:UpdateAddonList()
 				for _, header in ipairs(addonList) do
 					for _, child in ipairs(header.children) do
 						if addon.dependencies == child.addon.name then
-							table.insert(child.children, { addon = addon })
+							table.insert(child.children, { addon = addon, children = {} })
+						end
+					end
+				end
+			end
+		end
+
+		for _, addon in ipairs(app.Info.AddonList) do
+			if addon.dependencies and addonSearch(addon, app.Flag.Search) then
+				for _, header in ipairs(addonList) do
+					for _, child in ipairs(header.children) do
+						for _, child2 in ipairs(child.children) do
+							if addon.dependencies == child2.addon.name then
+								table.insert(child2.children, { addon = addon })
+							end
 						end
 					end
 				end
@@ -871,7 +919,11 @@ function app:UpdateAddonList()
 					local row2 = row1:Insert({ id = addon.id, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
 					for _, addon2 in ipairs(addon1.children) do
 						local addon = addon2.addon
-						row2:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+						local row3 = row2:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+						for _, addon3 in ipairs(addon2.children) do
+							local addon = addon3.addon
+							row3:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+						end
 					end
 				end
 			end
@@ -895,7 +947,21 @@ function app:UpdateAddonList()
 				for _, header in ipairs(addonList) do
 					for _, child in ipairs(header.children) do
 						if addon.dependencies == child.addon.name and ((header.category == L.ENABLED and addon.enabled ~= 0) or (header.category == L.DISABLED and addon.enabled == 0)) then
-							table.insert(child.children, { addon = addon })
+							table.insert(child.children, { addon = addon, children = {} })
+						end
+					end
+				end
+			end
+		end
+
+		for i, addon in ipairs(app.Info.AddonList) do
+			if addon.dependencies and addonSearch(addon, app.Flag.Search) then
+				for _, header in ipairs(addonList) do
+					for _, child in ipairs(header.children) do
+						for _, child2 in ipairs(child.children) do
+							if addon.dependencies == child2.addon.name and ((header.category == L.ENABLED and addon.enabled ~= 0) or (header.category == L.DISABLED and addon.enabled == 0)) then
+								table.insert(child2.children, { addon = addon })
+							end
 						end
 					end
 				end
@@ -911,7 +977,11 @@ function app:UpdateAddonList()
 					local row2 = row1:Insert({ id = addon.id, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
 					for _, addon2 in ipairs(addon1.children) do
 						local addon = addon2.addon
-						row2:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+						local row3 = row2:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+						for _, addon3 in ipairs(addon2.children) do
+							local addon = addon3.addon
+							row3:Insert({ id = addon.id, nodeType = "dependency", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
+						end
 					end
 				end
 			end
