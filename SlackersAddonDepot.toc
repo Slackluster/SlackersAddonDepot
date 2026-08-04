@@ -1,4 +1,4 @@
-## Interface: 120007
+## Interface: 120007, 120100
 ## Title: |cff3FC7EBSlacker's Addon Depot|r
 ## Author: Slackluster
 ## Notes: Enable addons automatically through load conditions
