@@ -994,7 +994,7 @@ function app:UpdateAddonList()
 end
 
 function api:ToggleAddonList()
-	if app.AddonListFrame:IsShown() then
+	if app.AddonListFrame:IsVisible() then
 		app.AddonListFrame:Hide()
 	else
 		app.AddonListFrame:Show()
