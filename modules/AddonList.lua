@@ -434,13 +434,17 @@ function app:CreateAddonList()
 		listItem:SetScript("OnDragStop", function() app.AddonListFrame:StopMovingOrSizing() end)
 
 		local data = node:GetData()
-
 		local function updateToggleButton()
 			if node:IsCollapsed() then
+				app.Info.CollapsedHeaders[data.title] = true
 				listItem.toggleButton.texture:SetTexture("Interface\\AddOns\\SlackersAddonDepot\\assets\\button-right.png")
 			else
+				app.Info.CollapsedHeaders[data.title] = nil
 				listItem.toggleButton.texture:SetTexture("Interface\\AddOns\\SlackersAddonDepot\\assets\\button-down.png")
 			end
+		end
+		if app.Info.CollapsedHeaders[data.title] then
+			node:ToggleCollapsed()
 		end
 
 		if not listItem.toggleButton then
@@ -753,6 +757,8 @@ function app:UpdateAddonList()
 		app.Info.InstalledAddonsByName[addon.name] = addonSearch(addon, app.Flag.Search)
 		app.Info.EnableStateForAddonsByName[addon.name] = addon.enabled
 	end
+
+	app.Info.CollapsedHeaders = app.Info.CollapsedHeaders or {}
 
 	local addonList = {}
 	local DataProvider = CreateTreeDataProvider()
