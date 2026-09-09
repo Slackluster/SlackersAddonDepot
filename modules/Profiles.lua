@@ -88,7 +88,7 @@ function app:CreateNewProfilePanel()
 	app.NewProfilePanel.NewLoginProfileButton = app:MakeButton(app.NewProfilePanel, L.LOGIN_PROFILE)
 	app.NewProfilePanel.NewLoginProfileButton:SetPoint("TOP", app.NewProfilePanel, -((app.NewProfilePanel:GetWidth()-20)/4), -85)
 	app.NewProfilePanel.NewLoginProfileButton:SetScript("OnClick", function()
-		table.insert(app.Data.Profiles, { name = app.NewProfilePanel.ProfileNameEditbox:GetText():match("^%s*(.-)%s*$"), type = "Login", addons = {}, loadConditions = { primary = app.Enum.ConditionState.Any, {} } }) -- Trim trailing whitespaces
+		table.insert(app.Data.Profiles, { name = app.NewProfilePanel.ProfileNameEditbox:GetText():match("^%s*(.-)%s*$"), type = "Login", enabled = true, addons = {}, loadConditions = { primary = app.Enum.ConditionState.Any, {} } }) -- Trim trailing whitespaces
 		table.sort(app.Data.Profiles, function(a, b)
 			return a.name < b.name
 		end)
@@ -104,7 +104,7 @@ function app:CreateNewProfilePanel()
 	app.NewProfilePanel.NewStandardProfileButton = app:MakeButton(app.NewProfilePanel, L.STANDARD_PROFILE)
 	app.NewProfilePanel.NewStandardProfileButton:SetPoint("TOP", app.NewProfilePanel, (app.NewProfilePanel:GetWidth()-20)/4, -85)
 	app.NewProfilePanel.NewStandardProfileButton:SetScript("OnClick", function()
-		table.insert(app.Data.Profiles, { name = app.NewProfilePanel.ProfileNameEditbox:GetText():match("^%s*(.-)%s*$"), type = "Standard", addons = {} }) -- Trim trailing whitespaces
+		table.insert(app.Data.Profiles, { name = app.NewProfilePanel.ProfileNameEditbox:GetText():match("^%s*(.-)%s*$"), type = "Standard", enabled = true, addons = {} }) -- Trim trailing whitespaces
 		table.sort(app.Data.Profiles, function(a, b)
 			return a.name < b.name
 		end)

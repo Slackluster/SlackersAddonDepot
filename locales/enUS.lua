@@ -93,6 +93,7 @@ L.APPLY_PROFILE =                        "Apply profile to %s" -- %s becomes a c
 L.ADDONS =                               "Addons"
 L.SAVE_ADDONS =                          "Save %d addons" -- %d becomes a number
 L.NEW_PROFILE =                          "New profile"
+L.ENABLE_PROFILE =                       "Enable profile"
 L.RENAME_PROFILE =                       "Rename profile"
 L.DELETE_PROFILE =                       "Delete profile"
 L.PROFILE_NAME_NEW =                     "New profile name:"

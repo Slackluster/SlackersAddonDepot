@@ -224,7 +224,9 @@ function app:CreateAddonList()
 
 	local function profilesGenerator(owner, rootDescription)
 		local function makeProfileEntry(profileNo, profileInfo)
-			local profile = rootDescription:CreateButton(profileInfo.name)
+			local profileColor = ""
+			if profileInfo.enabled == false then profileColor = "|cff9d9d9d" end
+			local profile = rootDescription:CreateButton(profileColor .. profileInfo.name)
 			if profileInfo.type == "Login" then
 				profile:CreateButton("Set load conditions", function()
 					app.Flag.SelectedProfile = profileNo
@@ -275,6 +277,21 @@ function app:CreateAddonList()
 				app:UpdateAddonList()
 			end)
 			profile:CreateDivider()
+			if profileInfo.type == "Login" then
+				local function isSelected(index)
+					if app.Data.Profiles[index].enabled == nil then app.Data.Profiles[index].enabled = true end
+					return app.Data.Profiles[index].enabled
+				end
+				local function setSelected(index)
+					if not app.Data.Profiles[index].enabled then
+						app.Data.Profiles[index].enabled = true
+					else
+						app.Data.Profiles[index].enabled = false
+					end
+					app:ApplyLoadConditions(true)
+				end
+				profile:CreateCheckbox(L.ENABLE_PROFILE, isSelected, setSelected, profileNo)
+			end
 			profile:CreateButton(L.RENAME_PROFILE, function() StaticPopup_Show("SLACKERSADDONDEPOT_RENAMEPROFILE", nil, nil, profileNo) end)
 			profile:CreateButton(L.DELETE_PROFILE, function() StaticPopup_Show("SLACKERSADDONDEPOT_DELETEPROFILE", nil, nil, profileNo) end)
 

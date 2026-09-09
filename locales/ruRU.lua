@@ -93,6 +93,7 @@ L.APPLY_PROFILE =                        "Применить профиль к %
 L.ADDONS =                               "Аддоны"
 L.SAVE_ADDONS =                          "Сохранить %d аддонов" -- %d becomes a number
 L.NEW_PROFILE =                          "Новый профиль"
+-- L.ENABLE_PROFILE =                       "Enable profile"
 L.RENAME_PROFILE =                       "Переименовать профиль"
 L.DELETE_PROFILE =                       "Удалить профиль"
 L.PROFILE_NAME_NEW =                     "Новое имя профиля:"
