@@ -723,6 +723,12 @@ function app:UpdateAddonList()
 		return not not (addon.title:lower():find(search, 1, true) or addon.name:lower():find(search, 1, true) or addon.author:lower():find(search, 1, true))
 	end
 
+	if app.Data.Characters[app.Flag.SelectedCharacter] then
+		app.AddonListFrame.CharListDropdown:SetDefaultText("|c" .. app.Data.Characters[app.Flag.SelectedCharacter].classColor .. app.Data.Characters[app.Flag.SelectedCharacter].name .. "-" .. app.Data.Characters[app.Flag.SelectedCharacter].realmNorm)
+	else
+		app.AddonListFrame.CharListDropdown:SetDefaultText(L.ALL)
+	end
+
 	if app.Settings["headerStyle"] == 1 then
 		app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.ALPHABETICAL)
 	elseif app.Settings["headerStyle"] == 2 then
