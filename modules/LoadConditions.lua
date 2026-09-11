@@ -142,6 +142,9 @@ function app:CharacterMatchesLoadCondition(loadCondition, guid)
 end
 
 function app:CharacterMatchesProfile(profileNo, guid)
+	local next = next
+	if app.Data.Profiles[profileNo].enabled == false or next(app.Data.Profiles[profileNo].addons) == nil then return false end
+
 	if app.Data.Profiles[profileNo].loadConditions.primary == app.Enum.ConditionState.Any then
 		for _, loadCondition in ipairs(app.Data.Profiles[profileNo].loadConditions) do
 			if loadCondition.valid then
