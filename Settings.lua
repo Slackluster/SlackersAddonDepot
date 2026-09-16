@@ -14,6 +14,7 @@ app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 	if addOnName == appName then
 		SlackersAddonDepot_Settings = SlackersAddonDepot_Settings or {}
 		app.Settings = SlackersAddonDepot_Settings
+		app.Settings.seenNew = app.Settings.seenNew or {}
 		SlackersAddonDepot_Data = SlackersAddonDepot_Data or {}
 		app.Data = SlackersAddonDepot_Data
 		app.Data.Profiles = app.Data.Profiles or {}
