@@ -645,7 +645,7 @@ function app:CreateAddonList()
 				GameTooltip:AddLine(" ")
 			end
 			if data.dependencies then
-				GameTooltip:AddLine(L.DEPENDENCIES .. data.dependencies)
+				GameTooltip:AddLine(L.DEPENDENCIES .. " " .. data.dependencies)
 			end
 			GameTooltip:AddLine(data.notes, 1, 1, 1, true)
 			if app.AddonListFrame:GetCenter() < GetScreenWidth() / 2 then
