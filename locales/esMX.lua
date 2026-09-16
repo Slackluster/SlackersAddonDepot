@@ -4,7 +4,6 @@
 -- Spanish (Mexico) localisation
 -- Translator(s):
 
-if GetLocale() ~= "esMX" then return end
 local appName, app = ...
 local L = app.locales
 

@@ -4,7 +4,6 @@
 -- Russian (Russia) localisation
 -- Translator(s): ZamestoTV
 
-if GetLocale() ~= "ruRU" then return end
 local appName, app = ...
 local L = app.locales
 
