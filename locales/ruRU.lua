@@ -8,7 +8,7 @@ local appName, app = ...
 local L = app.locales
 
 -- Settings
-L.SETTINGS_VERSION =                     "Версия:"
+L.SETTINGS_VERSION =                     GAME_VERSION_LABEL .. ":" -- "Version"
 L.SETTINGS_SUPPORT_TEXTLONG =            "Разработка этого аддона требует значительного количества времени и усилий.\nПожалуйста, рассмотрите возможность финансовой поддержки разработчика."
 L.SETTINGS_SUPPORT_TEXT =                "Поддержка"
 L.SETTINGS_SUPPORT_BUTTON =              "Buy Me a Coffee" -- Brand name, if there isn't a localised version, keep it the way it is
@@ -19,12 +19,12 @@ L.SETTINGS_HELP_DESC =                   "Присоединяйтесь к Disc
 L.SETTINGS_URL_COPY =                    "Нажмите Ctrl+C, чтобы скопировать:"
 L.SETTINGS_URL_COPIED =                  "Ссылка скопирована в буфер обмена"
 
-L.SETTINGS_KEYSLASH_TITLE =              "Назначение клавиш и слэш-команды"
+L.SETTINGS_KEYSLASH_TITLE =              SETTINGS_KEYBINDINGS_LABEL .. " и слэш-команды" -- "Keybindings"
 _G["BINDING_NAME_SAD_TOGGLELIST"] =      app.NameShort .. ": Открыть/закрыть список аддона"
 L.SLASH_OPEN_LIST =                      "Открыть/закрыть список аддона"
 L.SLASH_OPEN_SETTINGS =                  "Открыть настройки"
 
-L.GENERAL =                              "Общий"
+L.GENERAL =                              GENERAL -- "General"
 
 L.SETTINGS_MINIMAP_TITLE =               "Показывать иконку у миникарты"
 L.SETTINGS_MINIMAP_DESC =                "Показывать иконку у миникарты. Если вы отключите её, " .. app.NameShort .. " всё равно будет доступен в меню аддонов (Addon Compartment)."
@@ -41,8 +41,8 @@ L.SETTINGS_CHARLIST_REALMS =             "Игровые миры в списк�
 L.SETTINGS_CHARLIST_REALMS_DESC =        "Группировать персонажей по игровым мирам."
 L.SETTINGS_CHARLIST_SORT =               "Сортировка списка персонажей"
 L.SETTINGS_CHARLIST_SORT_DESC =          "Выбрать способ сортировки для списка персонажей."
-L.ALPHABETICAL =                         "По алфавиту"
-L.CLASS =                                "Класс"
+L.ALPHABETICAL =                         HOUSING_CHEST_SORT_TYPE_ALPHABETICAL -- "Alphabetical"
+L.CLASS =                                CLASS -- "Class"
 
 -- General
 L.NEW_VERSION_AVAILABLE =                "Доступна более новая версия " .. app.NameLong .. ":"
@@ -56,27 +56,27 @@ L.DEBUG_DISABLED =                       "Режим отладки выключ
 
 -- Addon List
 L.INSTALLED =                            "Установлено"
-L.CATEGORIES =                           "Категории"
+L.CATEGORIES =                           CATEGORIES -- "Categories"
 L.CATEGORIES_WIKI =                      L.CATEGORIES .. " (Вики)"
 L.ENABLESTATE =                          "Состояние активности"
-L.ENABLED =                              "Включен"
-L.DISABLED =                             "Отключено"
-L.CANCEL =                               "Отмена"
-L.APPLY_CHANGES =                        "Применить изменения"
-L.RELOADUI =                             "Перезагрузка"
-L.ENABLE_ALL =                           "Включить все"
-L.DISABLE_ALL =                          "Отключить все"
-L.REVERT =                               "Сбросить"
-L.OUT_OF_DATE =                          "Устарело"
-L.INCOMPATIBLE =                         "Несовместимо"
-L.REQUIRES_RELOAD =                      "Перезагрузите интерф"
-L.DEPENDENCY_DISABLED =                  "Зависимость отключена"
-L.DEPENDENCY_MISSING =                   "Зависимость отсутствует"
+L.ENABLED =                              PVP_WAR_MODE_ENABLED -- "Enabled"
+L.DISABLED =                             ADDON_DISABLED -- "Disabled"
+L.CANCEL =                               CANCEL -- "Cancel"
+L.APPLY_CHANGES =                        TRANSMOG_SITUATIONS_APPLY -- "Apply Changes"
+L.RELOADUI =                             RELOADUI -- "Reload UI"
+L.ENABLE_ALL =                           ENABLE_ALL_ADDONS -- "Enable All"
+L.DISABLE_ALL =                          DISABLE_ALL_ADDONS -- "Disable All"
+L.REVERT =                               COOLDOWN_VIEWER_SETTINGS_BUTTON_REVERT_CHANGES -- "Revert"
+L.OUT_OF_DATE =                          ADDON_INTERFACE_VERSION -- "Out of date"
+L.INCOMPATIBLE =                         ADDON_INCOMPATIBLE -- "Incompatible"
+L.REQUIRES_RELOAD =                      REQUIRES_RELOAD -- "Requires Reload"
+L.DEPENDENCY_DISABLED =                  ADDON_DEP_DISABLED -- "Dependency disabled"
+L.DEPENDENCY_MISSING =                   ADDON_DEP_MISSING -- "Dependency missing"
 L.CHANGE_PENDING =                       "Ожидает изменений"
-L.DEPENDENCIES =                         "Зависимые ресурсы:"
-L.UNCATEGORIZED =                        "Без категории"
-L.ALL =                                  "Все"
-L.NOT_APPLICABLE =                       "НЕТ"
+L.DEPENDENCIES =                         ADDON_DEPENDENCIES -- "Dependencies: " (note the included trailing space)
+L.UNCATEGORIZED =                        STABLE_PET_UNCATEGORIZED -- "Uncategorized"
+L.ALL =                                  ALL -- "All"
+L.NOT_APPLICABLE =                       NOT_APPLICABLE -- "N/A"
 L.DELETE_CHARACTER =                     "Удалить выбранного персонажа"
 
 -- Profiles
@@ -101,12 +101,12 @@ L.DELETE_NAME_Q =                        "Удалить %s?" -- %s becomes a na
 L.RELOAD_AND_ENABLE =                    "Перезагрузить интерфейс и включить %s?" -- %s becomes a name
 
 L.CONDITION = {}
-L.CONDITION[1] =                         "Персонаж"
-L.CONDITION[2] =                         "Имя"
-L.CONDITION[3] =                         "Уровень"
+L.CONDITION[1] =                         CHARACTER -- "Character"
+L.CONDITION[2] =                         NAME -- "Name"
+L.CONDITION[3] =                         LEVEL -- "Level"
 L.CONDITION[4] =                         "Игровой мир"
-L.CONDITION[5] =                         "Профессия"
-L.CONDITION[6] =                         "Класс"
+L.CONDITION[5] =                         TRANSMOG_SOURCE_6 -- "Profession"
+L.CONDITION[6] =                         CLASS -- "Class"
 L.CONDITIONSTATE = {}
 L.CONDITIONSTATE[1] =                    "любой"
 L.CONDITIONSTATE[2] =                    "все"
