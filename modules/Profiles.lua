@@ -395,21 +395,10 @@ function app:CreateLoadConditionsPanel()
 			local function tertiaryConditionGenerator(owner, rootDescription)
 				if app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition then
 					if app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Character then
-						local classSortOrder = {
-							["MAGE"] = 1,
-							["PRIEST"] = 2,
-							["WARLOCK"] = 3,
-							["DEMONHUNTER"] = 4,
-							["DRUID"] = 5,
-							["MONK"] = 6,
-							["ROGUE"] = 7,
-							["EVOKER"] = 8,
-							["HUNTER"] = 9,
-							["SHAMAN"] = 10,
-							["DEATHKNIGHT"] = 11,
-							["PALADIN"] = 12,
-							["WARRIOR"] = 13,
-						}
+						local classSort = {}
+						for i, class in ipairs(app.Classes) do
+							classSort[class.classFile] = i
+						end
 
 						local function sortChars(tableName)
 							if app.Settings["charListSort"] == 1 then
@@ -421,8 +410,8 @@ function app:CreateLoadConditionsPanel()
 								end)
 							elseif app.Settings["charListSort"] == 2 then
 								table.sort(tableName, function(a, b)
-									local class1 = classSortOrder[a.class] or 999
-									local class2 = classSortOrder[b.class] or 999
+									local class1 = classSort[a.class] or 999
+									local class2 = classSort[b.class] or 999
 									if class1 ~= class2 then
 										return class1 < class2
 									end
@@ -485,25 +474,12 @@ function app:CreateLoadConditionsPanel()
 							end
 						end
 					elseif app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Class then
-						local classes = {
-							{ classFile = "MAGE", id = 8 },
-							{ classFile = "PRIEST", id = 5 },
-							{ classFile = "WARLOCK", id = 9 },
-							{ classFile = "DEMONHUNTER", id = 12 },
-							{ classFile = "DRUID", id = 11 },
-							{ classFile = "MONK", id = 10 },
-							{ classFile = "ROGUE", id = 4 },
-							{ classFile = "EVOKER", id = 13 },
-							{ classFile = "HUNTER", id = 3 },
-							{ classFile = "SHAMAN", id = 7 },
-							{ classFile = "DEATHKNIGHT", id = 6 },
-							{ classFile = "PALADIN", id = 2 },
-							{ classFile = "WARRIOR", id = 1 },
-						}
-						for _, class in ipairs(classes) do
-							local className, classFile = GetClassInfo(class.id)
-							local _, _, _, classColor = GetClassColor(classFile)
-							rootDescription:CreateCheckbox("|c" .. classColor .. className, isSelected, setSelected, classFile)
+						for _, class in ipairs(app.Classes) do
+							if app.Retail or (app.Forever and not class.retailOnly) then
+								local className, classFile = GetClassInfo(class.id)
+								local _, _, _, classColor = GetClassColor(classFile)
+								rootDescription:CreateCheckbox("|c" .. classColor .. className, isSelected, setSelected, classFile)
+							end
 						end
 					end
 				end

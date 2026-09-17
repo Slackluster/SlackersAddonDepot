@@ -20,6 +20,22 @@ app.IconLMB = CreateAtlasMarkup("housing-hotkey-icon-leftclick")
 app.IconRMB = CreateAtlasMarkup("housing-hotkey-icon-rightclick")
 app.IconNone = "Interface\\Icons\\inv_misc_questionmark"
 
+app.Classes = {
+	{ classFile = "MAGE", id = 8 },
+	{ classFile = "PRIEST", id = 5 },
+	{ classFile = "WARLOCK", id = 9 },
+	{ classFile = "DEMONHUNTER", id = 12, retailOnly = true },
+	{ classFile = "DRUID", id = 11 },
+	{ classFile = "MONK", id = 10, retailOnly = true },
+	{ classFile = "ROGUE", id = 4 },
+	{ classFile = "EVOKER", id = 13, retailOnly = true },
+	{ classFile = "HUNTER", id = 3 },
+	{ classFile = "SHAMAN", id = 7 },
+	{ classFile = "DEATHKNIGHT", id = 6, retailOnly = true },
+	{ classFile = "PALADIN", id = 2 },
+	{ classFile = "WARRIOR", id = 1 },
+}
+
 app.Professions = {
 	{ tradeSkillLineID = 171, icon = CreateSimpleTextureMarkup("Interface\\Icons\\ui_profession_alchemy") },
 	{ tradeSkillLineID = 164, icon = CreateSimpleTextureMarkup("Interface\\Icons\\ui_profession_blacksmithing") },
