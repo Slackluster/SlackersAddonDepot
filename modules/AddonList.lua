@@ -48,12 +48,7 @@ function app:CreateAddonList()
 	end)
 
 	app.AddonListFrame.TitleContainer.TitleText:SetText(app.NameLong)
-
-	app.AddonListFrame.CloseButton = CreateFrame("Button", nil, app.AddonListFrame, "UIPanelCloseButton")
-	app.AddonListFrame.CloseButton:SetPoint("TOPRIGHT", app.AddonListFrame)
-	app.AddonListFrame.CloseButton:SetScript("OnClick", function()
-		app.AddonListFrame:Hide()
-	end)
+	app.AddonListFrame.CloseButton = CreateFrame("Button", nil, app.AddonListFrame, "UIPanelCloseButtonDefaultAnchors")
 
 	app.AddonListFrame.SettingsButton = CreateFrame("Button", nil, app.AddonListFrame, "UIPanelCloseButton")
 	app.AddonListFrame.SettingsButton:SetPoint("TOPRIGHT", app.AddonListFrame.CloseButton, "TOPLEFT", -2, 0)

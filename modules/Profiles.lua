@@ -34,12 +34,7 @@ function app:CreateNewProfilePanel()
 	end)
 
 	app.NewProfilePanel.TitleContainer.TitleText:SetText(app:Colour(L.NEW_PROFILE))
-
-	app.NewProfilePanel.CloseButton = CreateFrame("Button", nil, app.NewProfilePanel, "UIPanelCloseButton")
-	app.NewProfilePanel.CloseButton:SetPoint("TOPRIGHT", app.NewProfilePanel)
-	app.NewProfilePanel.CloseButton:SetScript("OnClick", function()
-		app.NewProfilePanel:Hide()
-	end)
+	app.NewProfilePanel.CloseButton = CreateFrame("Button", nil, app.NewProfilePanel, "UIPanelCloseButtonDefaultAnchors")
 
 	app.NewProfilePanel.NewProfileText = app.NewProfilePanel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 	app.NewProfilePanel.NewProfileText:SetPoint("TOP", 0, -30)
