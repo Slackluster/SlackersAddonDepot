@@ -70,6 +70,9 @@ function app:GetCharacterInfo()
 	app.Info.GUID = UnitGUID("player")
 	local _, englishClass, _, _, _, name = GetPlayerInfoByGUID(app.Info.GUID)
 	local _, _, _, classColor = GetClassColor(englishClass)
+	if app.Forever then
+		name = UnitName("player")
+	end
 
 	local profs = {}
 	profs[1], profs[2], profs[3], profs[4], profs[5] = GetProfessions()
