@@ -1,4 +1,4 @@
-## Interface: 120100
+## Interface: 16001, 120100
 ## Title: |cff3FC7EBSlacker's Addon Depot|r
 ## Author: Slackluster
 ## Notes: Enable addons automatically through load conditions
@@ -30,6 +30,7 @@ libs\ChatThrottleLib\ChatThrottleLib.xml
 libs\LibDBIcon-1.0\embeds.xml
 libs\LibDBIcon-1.0\LibDBIcon-1.0\LibDBIcon-1.0.lua
 Core.lua
+_[Game].lua
 Database.lua
 Settings.lua
 FrameTemplates.xml

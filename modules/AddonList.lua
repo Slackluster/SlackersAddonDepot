@@ -611,7 +611,7 @@ function app:CreateAddonList()
 			dependencyEnabled = dependencyData.data.enabled
 		end
 
-		if data.interface < 119999 or data.interface > interfaceVersion then
+		if (app.Retail and data.interface < 119999) or data.interface > interfaceVersion then
 			listItem.Text2:SetText("|cffFF0000" .. L.INCOMPATIBLE)
 		elseif data.dependencies and app.Info.InstalledAddonsByName[data.dependencies] == nil then
 			listItem.Text2:SetText("|cffFF0000" .. L.DEPENDENCY_MISSING)
