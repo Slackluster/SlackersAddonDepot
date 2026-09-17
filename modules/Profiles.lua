@@ -224,6 +224,7 @@ function app:CreateLoadConditionsPanel()
 	end)
 
 	app.LoadConditionsPanel.TitleContainer.TitleText:SetText(app.NameLong)
+	app.LoadConditionsPanel.CloseButton = CreateFrame("Button", nil, app.LoadConditionsPanel, "UIPanelCloseButtonDefaultAnchors")
 
 	app.LoadConditionsPanel.TopText1 = app.LoadConditionsPanel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 	app.LoadConditionsPanel.TopText1:SetPoint("TOPLEFT", 14, -36)
