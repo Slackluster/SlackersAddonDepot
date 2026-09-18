@@ -4,6 +4,7 @@
 -- German (Germany) localisation
 -- Translator(s):
 
+if GetLocale() ~= "deDE" then return end
 local appName, app = ...
 local L = app.locales
 

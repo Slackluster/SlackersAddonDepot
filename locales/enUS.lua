@@ -4,6 +4,7 @@
 -- English (United States) localisation
 -- Translator(s): N/A
 
+-- if GetLocale() ~= "enUS" then return end
 local appName, app = ...
 local L = app.locales
 

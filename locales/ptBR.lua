@@ -4,6 +4,7 @@
 -- Portuguese (Brazil) localisation
 -- Translator(s):
 
+if GetLocale() ~= "ptBR" then return end
 local appName, app = ...
 local L = app.locales
 

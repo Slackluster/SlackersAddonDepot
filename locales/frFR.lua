@@ -4,6 +4,7 @@
 -- French (France) localisation
 -- Translator(s):
 
+if GetLocale() ~= "frFR" then return end
 local appName, app = ...
 local L = app.locales
 

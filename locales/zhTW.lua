@@ -4,6 +4,7 @@
 -- Chinese (Traditional, Taiwan) localisation
 -- Translator(s):
 
+if GetLocale() ~= "zhTW" then return end
 local appName, app = ...
 local L = app.locales
 

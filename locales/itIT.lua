@@ -4,6 +4,7 @@
 -- Italian (Italy) localisation
 -- Translator(s):
 
+if GetLocale() ~= "itIT" then return end
 local appName, app = ...
 local L = app.locales
 
