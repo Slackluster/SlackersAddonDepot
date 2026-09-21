@@ -12,19 +12,14 @@ local L = app.locales
 
 app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 	if addOnName == appName then
-		SlackersAddonDepot_Settings = SlackersAddonDepot_Settings or {}
-		app.Settings = SlackersAddonDepot_Settings
-		app.Settings.seen = app.Settings.seen or {}
-		SlackersAddonDepot_Data = SlackersAddonDepot_Data or {}
-		app.Data = SlackersAddonDepot_Data
 		app.Data.Profiles = app.Data.Profiles or {}
-
-		if not app.Settings["headerStyle"] then app.Settings["headerStyle"] = 2 end
+		app.Settings.seen = app.Settings.seen or {}
+		app.Settings.headerStyle = app.Settings.headerStyle or 2
 
 		app:CreateMinimapButton()
 		app:CreateSettings()
 
-		C_AddOns.SetAddonVersionCheck(not app.Settings["loadOutOfDate"])
+		C_AddOns.SetAddonVersionCheck(not app.Settings.loadOutOfDate)
 	end
 end)
 
@@ -34,7 +29,7 @@ end)
 
 function app:OpenSettings()
 	if InCombatLockdown() then
-		app:Print(ERR_AFFECTING_COMBAT..".")
+		app:Print(ERR_AFFECTING_COMBAT .. ".")
 	else
 		Settings.OpenToCategory(app.SettingsCategory:GetID())
 	end
@@ -119,11 +114,11 @@ function app:CreateMinimapButton()
 	app.MinimapIcon:Register(appName, miniButton, app.Settings)
 
 	function app:ToggleMinimapIcon()
-		if app.Settings["minimapIcon"] then
-			app.Settings["hide"] = false
+		if app.Settings.minimapIcon then
+			app.Settings.hide = false
 			app.MinimapIcon:Show(appName)
 		else
-			app.Settings["hide"] = true
+			app.Settings.hide = true
 			app.MinimapIcon:Hide(appName)
 		end
 	end
@@ -402,7 +397,7 @@ function app:CreateSettings()
 	header(L.ADDON_LIST)
 
 	checkbox("loadOutOfDate", L.SETTINGS_LOAD_OUT_OF_DATE, L.SETTINGS_LOAD_OUT_OF_DATE_DESC, true, function()
-		C_AddOns.SetAddonVersionCheck(not app.Settings["loadOutOfDate"])
+		C_AddOns.SetAddonVersionCheck(not app.Settings.loadOutOfDate)
 		app:UpdateAddonList()
 	end)
 

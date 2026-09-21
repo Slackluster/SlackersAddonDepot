@@ -38,8 +38,13 @@ end)
 
 app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 	if addOnName == appName then
-		app.Flag = {}
+		SlackersAddonDepot_Data = SlackersAddonDepot_Data or {}
+		SlackersAddonDepot_Settings = SlackersAddonDepot_Settings or {}
+
+		app.Data = SlackersAddonDepot_Data
+		app.Settings = SlackersAddonDepot_Settings
 		app.Version = C_AddOns.GetAddOnMetadata(appName, "Version")
+		app.Flag = {}
 
 		C_ChatInfo.RegisterAddonMessagePrefix(app.NamePrefix)
 		app:CreateSlashCommands()
@@ -116,11 +121,11 @@ function app:CreateSlashCommands()
 		if command == "settings" then
 			app:OpenSettings()
 		elseif command == "debug" then
-			if app.Settings["debug"] then
-				app.Settings["debug"] = false
+			if app.Settings.debug then
+				app.Settings.debug = false
 				app:Print(L.DEBUG_DISABLED)
 			else
-				app.Settings["debug"] = true
+				app.Settings.debug = true
 				app:Print(L.DEBUG_ENABLED)
 			end
 		elseif command == "" then
@@ -163,7 +168,7 @@ function app:Colour(string)
 end
 
 function app:Debug(...)
-	if app.Settings["debug"] then
+	if app.Settings.debug then
 		print(app.NameShort .. app:Colour(" Debug") .. ":", ...)
 	end
 end

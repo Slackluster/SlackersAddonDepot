@@ -402,14 +402,14 @@ function app:CreateLoadConditionsPanel()
 						end
 
 						local function sortChars(tableName)
-							if app.Settings["charListSort"] == 1 then
+							if app.Settings.charListSort == 1 then
 								table.sort(tableName, function(a, b)
 									if a.name == b.name then
 										return (a.realmNorm) < (b.realmNorm)
 									end
 									return a.name < b.name
 								end)
-							elseif app.Settings["charListSort"] == 2 then
+							elseif app.Settings.charListSort == 2 then
 								table.sort(tableName, function(a, b)
 									local class1 = classSort[a.class] or 999
 									local class2 = classSort[b.class] or 999
@@ -437,7 +437,7 @@ function app:CreateLoadConditionsPanel()
 						end
 
 						rootDescription:SetGridMode(MenuConstants.VerticalGridDirection)
-						if app.Settings["charListRealm"] then
+						if app.Settings.charListRealm then
 							local realms = {}
 							local seen = {}
 							for _, char in pairs(app.Data.Characters) do

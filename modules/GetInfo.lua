@@ -48,7 +48,7 @@ function app:GetAddonInfo()
 	end
 
 	for addonName1, exists in pairs(app.Data.AddonHistory) do
-		if not exists and not app.Settings["rememberUninstalled"] then
+		if not exists and not app.Settings.rememberUninstalled then
 			C_AddOns.DisableAddOn(addonName1, nil)
 			for _, profile in ipairs(app.Data.Profiles) do
 				for addonName2, _ in pairs(profile.addons) do

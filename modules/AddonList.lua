@@ -100,34 +100,23 @@ function app:CreateAddonList()
 	end)
 
 	local function charListGenerator(owner, rootDescription)
-		local classSortOrder = {
-			["MAGE"] = 1,
-			["PRIEST"] = 2,
-			["WARLOCK"] = 3,
-			["DEMONHUNTER"] = 4,
-			["DRUID"] = 5,
-			["MONK"] = 6,
-			["ROGUE"] = 7,
-			["EVOKER"] = 8,
-			["HUNTER"] = 9,
-			["SHAMAN"] = 10,
-			["DEATHKNIGHT"] = 11,
-			["PALADIN"] = 12,
-			["WARRIOR"] = 13,
-		}
+		local classSort = {}
+		for i, class in ipairs(app.Classes) do
+			classSort[class.classFile] = i
+		end
 
 		local function sortChars(tableName)
-			if app.Settings["charListSort"] == 1 then
+			if app.Settings.charListSort == 1 then
 				table.sort(tableName, function(a, b)
 					if a.name == b.name then
 						return (a.realmNorm) < (b.realmNorm)
 					end
 					return a.name < b.name
 				end)
-			elseif app.Settings["charListSort"] == 2 then
+			elseif app.Settings.charListSort == 2 then
 				table.sort(tableName, function(a, b)
-					local class1 = classSortOrder[a.class] or 999
-					local class2 = classSortOrder[b.class] or 999
+					local class1 = classSort[a.class] or 999
+					local class2 = classSort[b.class] or 999
 					if class1 ~= class2 then
 						return class1 < class2
 					end
@@ -164,7 +153,7 @@ function app:CreateAddonList()
 			app:UpdateAddonList()
 		end)
 
-		if app.Settings["charListRealm"] then
+		if app.Settings.charListRealm then
 			local realms = {}
 			local seen = {}
 			for _, char in pairs(app.Data.Characters) do
@@ -200,10 +189,10 @@ function app:CreateAddonList()
 	app.AddonListFrame.CharListDropdown:SetPoint("LEFT", app.AddonListFrame.DeleteCharButton, "RIGHT", 4, 0)
 
 	local function isSelected(index)
-		return app.Settings["headerStyle"] == index
+		return app.Settings.headerStyle == index
 	end
 	local function setSelected(index)
-		app.Settings["headerStyle"] = index
+		app.Settings.headerStyle = index
 		app:UpdateAddonList()
 	end
 	local function listStyleGenerator(owner, rootDescription)
@@ -602,7 +591,7 @@ function app:CreateAddonList()
 			listItem.Text2:SetText("|cffFF0000" .. L.INCOMPATIBLE)
 		elseif data.dependencies and app.Info.InstalledAddonsByName[data.dependencies] == nil then
 			listItem.Text2:SetText("|cffFF0000" .. L.DEPENDENCY_MISSING)
-		elseif data.interface < interfaceVersion and not app.Settings["loadOutOfDate"] then
+		elseif data.interface < interfaceVersion and not app.Settings.loadOutOfDate then
 			listItem.Text2:SetText("|cffFF0000" .. L.OUT_OF_DATE)
 		elseif data.dependencies and app.Flag.Changed[data.id] ~= false and (data.enabled ~= 0 or app.Flag.Changed[data.id]) and ((dependencyEnabled == 0 and app.Flag.Changed[dependencyID] ~= true) or (dependencyEnabled ~= 0 and app.Flag.Changed[dependencyID] == false)) then
 			listItem.Text2:SetText("|cffFF0000" .. L.DEPENDENCY_DISABLED)
@@ -716,13 +705,13 @@ function app:UpdateAddonList()
 		app.AddonListFrame.CharListDropdown:SetDefaultText(L.ALL)
 	end
 
-	if app.Settings["headerStyle"] == 1 then
+	if app.Settings.headerStyle == 1 then
 		app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.ALPHABETICAL)
-	elseif app.Settings["headerStyle"] == 2 then
+	elseif app.Settings.headerStyle == 2 then
 		app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.CATEGORIES)
-	elseif app.Settings["headerStyle"] == 3 then
+	elseif app.Settings.headerStyle == 3 then
 		app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.CATEGORIES_WIKI)
-	elseif app.Settings["headerStyle"] == 4 then
+	elseif app.Settings.headerStyle == 4 then
 		app.AddonListFrame.ListStyleDropdown:SetDefaultText(L.ENABLESTATE)
 	end
 
@@ -773,7 +762,7 @@ function app:UpdateAddonList()
 	local addonList = {}
 	local DataProvider = CreateTreeDataProvider()
 
-	if app.Settings["headerStyle"] == 1 then -- Alphabetical
+	if app.Settings.headerStyle == 1 then -- Alphabetical
 		for i, addon in ipairs(app.Info.AddonList) do
 			if (not addon.dependencies or not app.Info.InstalledAddonsByName[addon.dependencies]) and addonSearch(addon, app.Flag.Search) then
 				table.insert(addonList, { addon = addon, children = {} })
@@ -814,7 +803,7 @@ function app:UpdateAddonList()
 				end
 			end
 		end
-	elseif app.Settings["headerStyle"] == 2 then -- Categories
+	elseif app.Settings.headerStyle == 2 then -- Categories
 		local seen = {}
 
 		for i, addon in ipairs(app.Info.AddonList) do
@@ -880,7 +869,7 @@ function app:UpdateAddonList()
 				end
 			end
 		end
-	elseif app.Settings["headerStyle"] == 3 then -- Categories (Wiki)
+	elseif app.Settings.headerStyle == 3 then -- Categories (Wiki)
 		local seen = {}
 
 		for i, addon in ipairs(app.Info.AddonList) do
@@ -946,7 +935,7 @@ function app:UpdateAddonList()
 				end
 			end
 		end
-	elseif app.Settings["headerStyle"] == 4 then -- Enable State
+	elseif app.Settings.headerStyle == 4 then -- Enable State
 		table.insert(addonList, { category = L.ENABLED, children = {} })
 		table.insert(addonList, { category = L.DISABLED, children = {} })
 
@@ -1030,7 +1019,7 @@ function app:HookGameMenu()
 					if not originalOnClick then
 						originalOnClick = button:GetScript("OnClick")
 					end
-					if app.Settings["replaceMenuButton"] then
+					if app.Settings.replaceMenuButton then
 						button:SetScript("OnClick", function()
 							HideUIPanel(GameMenuFrame)
 							app.AddonListFrame:Show()
