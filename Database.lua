@@ -61,6 +61,7 @@ app.Enum = {
 		Realm = 4,
 		Profession = 5,
 		Class = 6,
+		Ruleset = 7,
 	},
 	ConditionState = {
 		Any = 1,
@@ -76,6 +77,12 @@ app.Enum = {
 		Contains = 11,
 		DoesNotContain = 12,
 	},
+	Ruleset = {
+		Normal = 1,
+		PvP = 2,
+		Roleplay = 3,
+		Hardcore = 4,
+	}
 }
 app.ValidStates = {
 	[app.Enum.Condition.Character] = {
@@ -108,6 +115,10 @@ app.ValidStates = {
 		[app.Enum.ConditionState.IsNotAnyOf] = true,
 	},
 	[app.Enum.Condition.Class] = {
+		[app.Enum.ConditionState.IsAnyOf] = true,
+		[app.Enum.ConditionState.IsNotAnyOf] = true,
+	},
+	[app.Enum.Condition.Ruleset] = {
 		[app.Enum.ConditionState.IsAnyOf] = true,
 		[app.Enum.ConditionState.IsNotAnyOf] = true,
 	},

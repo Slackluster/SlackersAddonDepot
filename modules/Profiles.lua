@@ -319,16 +319,22 @@ function app:CreateLoadConditionsPanel()
 				app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id] = app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id] or {}
 				app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition = index
 				app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionState = nil
-				if index == app.Enum.Condition.Character or index == app.Enum.Condition.Profession or index == app.Enum.Condition.Class then
+				if index == app.Enum.Condition.Character or index == app.Enum.Condition.Profession or index == app.Enum.Condition.Class or index == app.Enum.Condition.Ruleset then
 					app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue = {}
 				elseif index == app.Enum.Condition.Name or index == app.Enum.Condition.Level or index == app.Enum.Condition.Realm then
 					app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionValue = ""
 				end
 				app:UpdateLoadConditionsList()
 			end
+
+			local sortOrder = {}
+			if app.Retail then
+				sortOrder = { 1, 2, 3, 4, 5, 6 }
+			elseif app.Forever then
+				sortOrder = { 1, 2, 3, 7, 5, 6 }
+			end
 			local function primaryConditionGenerator(owner, rootDescription)
-				for i = 1, 100 do
-					if not L.CONDITION[i] then break end
+				for _, i in ipairs(sortOrder) do
 					rootDescription:CreateRadio(L.CONDITION[i], isSelected, setSelected, i)
 				end
 			end
@@ -354,7 +360,8 @@ function app:CreateLoadConditionsPanel()
 			if app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition then
 				if app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Character
 				or app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Profession
-				or app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Class then
+				or app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Class
+				or app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Ruleset then
 					listItem.Dropdown3:Show()
 					listItem.Editbox1:Hide()
 				elseif app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Name
@@ -481,6 +488,10 @@ function app:CreateLoadConditionsPanel()
 								local _, _, _, classColor = GetClassColor(classFile)
 								rootDescription:CreateCheckbox("|c" .. classColor .. className, isSelected, setSelected, classFile)
 							end
+						end
+					elseif app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Ruleset then
+						for i = 1, 4 do
+							rootDescription:CreateCheckbox(L.RULESET[i], isSelected, setSelected, i)
 						end
 					end
 				end

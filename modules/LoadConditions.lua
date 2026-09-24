@@ -125,6 +125,16 @@ function app:CharacterMatchesLoadCondition(loadCondition, guid)
 		end
 	end
 
+	local function ruleset()
+		if loadCondition.conditionState == app.Enum.ConditionState.IsAnyOf then
+			app:Debug("Ruleset.IsAnyOf", loadCondition.conditionValue)
+			return loadCondition.conditionValue[app.Data.Characters[guid].ruleset] and true or false
+		elseif loadCondition.conditionState == app.Enum.ConditionState.IsNotAnyOf then
+			app:Debug("Ruleset.IsNotAnyOf", loadCondition.conditionValue)
+			return not loadCondition.conditionValue[app.Data.Characters[guid].ruleset] and false or true
+		end
+	end
+
 	app:Debug(loadCondition.condition, guid)
 	if loadCondition.condition == app.Enum.Condition.Character then
 		return character()
@@ -138,6 +148,8 @@ function app:CharacterMatchesLoadCondition(loadCondition, guid)
 		return profession()
 	elseif loadCondition.condition == app.Enum.Condition.Class then
 		return class()
+	elseif loadCondition.condition == app.Enum.Condition.Ruleset then
+		return ruleset()
 	end
 end
 

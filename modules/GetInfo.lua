@@ -80,6 +80,18 @@ function app:GetCharacterInfo()
 			professions[skillLine] = true
 		end
 	end
+	local ruleset
+	if app.Forever then
+		if C_GameRules.IsGameRuleActive(Enum.GameRule.HardcoreRuleset) then
+			ruleset = app.Enum.Ruleset.Hardcore
+		elseif C_GameRules.IsGameRuleActive(Enum.GameRule.RPRuleset) then
+			ruleset = app.Enum.Ruleset.Roleplay
+		elseif C_GameRules.IsGameRuleActive(Enum.GameRule.PvPRuleset) then
+			ruleset = app.Enum.Ruleset.PvP
+		else
+			ruleset = app.Enum.Ruleset.Normal
+		end
+	end
 
 	app.Data.Characters = app.Data.Characters or {}
 	if app.Info.GUID then
@@ -91,6 +103,7 @@ function app:GetCharacterInfo()
 			name = name or "",
 			realm = GetRealmName() or "",
 			realmNorm = GetNormalizedRealmName() or "",
+			ruleset = ruleset or "",
 			class = englishClass or "",
 			classColor = classColor or "",
 			level = UnitLevel("player") or 0,
