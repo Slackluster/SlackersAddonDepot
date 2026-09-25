@@ -313,6 +313,7 @@ function app:CreateLoadConditionsPanel()
 			end)
 
 			local function isSelected(index)
+				if not app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id] then return end
 				return app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == index
 			end
 			local function setSelected(index)
@@ -341,13 +342,16 @@ function app:CreateLoadConditionsPanel()
 			listItem.Dropdown1:SetupMenu(primaryConditionGenerator)
 
 			local function isSelected(index)
+				if not app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id] then return end
 				return app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionState == index
 			end
 			local function setSelected(index)
+				if not app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id] then return end
 				app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].conditionState = index
 				app:UpdateLoadConditionsList()
 			end
 			local function secondaryConditionGenerator(owner, rootDescription)
+				if not app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id] then return end
 				for i = 1, 100 do
 					if not L.CONDITIONSTATE[i] then break end
 					if app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition and app.ValidStates[app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition][i] then
