@@ -403,7 +403,11 @@ function app:CreateSettings()
 
 	checkbox("rememberUninstalled", L.SETTINGS_REMEMBER_UNINSTALLED, L.SETTINGS_REMEMBER_UNINSTALLED_DESC, true)
 
-	checkbox("charListRealm", L.SETTINGS_CHARLIST_REALMS, L.SETTINGS_CHARLIST_REALMS_DESC, true)
+	if app.Retail then
+		checkbox("charListRealm", L.SETTINGS_CHARLIST_REALMS, L.SETTINGS_CHARLIST_REALMS_DESC, true)
+	elseif app.Forever then
+		checkbox("charListRealm", L.SETTINGS_CHARLIST_RULESETS, L.SETTINGS_CHARLIST_RULESETS_DESC, true)
+	end
 
 	dropdown("charListSort", L.SETTINGS_CHARLIST_SORT, L.SETTINGS_CHARLIST_SORT_DESC, 2, {
 		{ value = 1, name = L.ALPHABETICAL, description = nil },
