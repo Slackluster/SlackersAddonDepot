@@ -31,9 +31,9 @@ L.SLASH_FORCELOAD_PROFILE =              "Directly reload and activate the addon
 L.GENERAL =                              GENERAL -- "General"
 
 L.SETTINGS_MINIMAP_TITLE =               "Show Minimap Icon"
-L.SETTINGS_MINIMAP_DESC =                "Show the minimap icon. If you disable this, " .. app.NameShort .. " is still available from the Addon Compartment."
+L.SETTINGS_MINIMAP_DESC =                "Show the minimap icon. If you disable this, %s is still available from the Addon Compartment." -- %s becomes the addon name
 L.SETTINGS_REPLACE_MENU_BUTTON =         "Replace AddOns Button"
-L.SETTINGS_REPLACE_MENU_BUTTON_DESC =    "Make the main menu's AddOns button open " .. app.NameLong .. "."
+L.SETTINGS_REPLACE_MENU_BUTTON_DESC =    "Make the main menu's AddOns button open %s." -- %s becomes the addon name
 
 L.ADDON_LIST =                           "Addon List"
 
@@ -51,7 +51,7 @@ L.ALPHABETICAL =                         HOUSING_CHEST_SORT_TYPE_ALPHABETICAL --
 L.CLASS =                                CLASS -- "Class"
 
 -- General
-L.NEW_VERSION_AVAILABLE =                "There is a newer version of " .. app.NameLong .. " available:"
+L.NEW_VERSION_AVAILABLE =                "There is a newer version of %s available:" -- %s becomes the addon name
 L.SETTINGS_TOOLTIP =                     app.NameLong .. "\n|cffFFFFFF" ..
                                          app.IconLMB .. ": " .. L.SLASH_OPEN_LIST .. "\n" ..
                                          app.IconRMB .. ": " .. L.SLASH_OPEN_SETTINGS
@@ -141,5 +141,5 @@ L.LOADCONDITION_MATCH2 =                 "of these conditions for profile %s:" -
 L.LOADCONDITION_VALID =                  "Load condition is valid."
 L.LOADCONDITION_INCOMPLETE =             "Load condition is incomplete."
 
-L.LOADCONDITION_NEWCHAR1 =               app.NameLong .. " has not seen this character before (so sad)." -- You can omit the (so sad) joke if it doesn't work in your language
+L.LOADCONDITION_NEWCHAR1 =               "%s has not seen this character before (so sad)." -- You can omit the (so sad) joke if it doesn't work in your language, %s becomes the addon name
 L.LOADCONDITION_NEWCHAR2 =               "Reload to apply Login Profiles?"

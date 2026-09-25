@@ -255,7 +255,7 @@ end
 
 function app:CreateNewCharPopup()
 	StaticPopupDialogs["SLACKERSADDONDEPOT_NEWCHAR"] = {
-		text = L.LOADCONDITION_NEWCHAR1 .. "\n\n" .. L.LOADCONDITION_NEWCHAR2,
+		text = string.format(L.LOADCONDITION_NEWCHAR1, app.NameLong) .. "\n\n" .. L.LOADCONDITION_NEWCHAR2,
 		button1 = L.RELOADUI,
 		button2 = NO,
 		whileDead = true,

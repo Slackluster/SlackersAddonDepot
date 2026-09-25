@@ -31,9 +31,9 @@ L.SLASH_OPEN_SETTINGS =                  "Открыть настройки"
 L.GENERAL =                              GENERAL -- "General"
 
 L.SETTINGS_MINIMAP_TITLE =               "Показывать иконку у миникарты"
-L.SETTINGS_MINIMAP_DESC =                "Показывать иконку у миникарты. Если вы отключите её, " .. app.NameShort .. " всё равно будет доступен в меню аддонов (Addon Compartment)."
+L.SETTINGS_MINIMAP_DESC =                "Показывать иконку у миникарты. Если вы отключите её, %s всё равно будет доступен в меню аддонов (Addon Compartment)." -- %s becomes the addon name
 L.SETTINGS_REPLACE_MENU_BUTTON =         "Заменить кнопку «Модификации»"
-L.SETTINGS_REPLACE_MENU_BUTTON_DESC =    "Сделать так, чтобы кнопка «Модификации» в главном меню открывала " .. app.NameLong .. "."
+L.SETTINGS_REPLACE_MENU_BUTTON_DESC =    "Сделать так, чтобы кнопка «Модификации» в главном меню открывала %s."-- %s becomes the addon name
 
 L.ADDON_LIST =                           "Список аддонов"
 
@@ -51,7 +51,7 @@ L.ALPHABETICAL =                         HOUSING_CHEST_SORT_TYPE_ALPHABETICAL --
 L.CLASS =                                CLASS -- "Class"
 
 -- General
-L.NEW_VERSION_AVAILABLE =                "Доступна более новая версия " .. app.NameLong .. ":"
+L.NEW_VERSION_AVAILABLE =                "Доступна более новая версия %s:" -- %s becomes the addon name
 L.SETTINGS_TOOLTIP =                     app.NameLong .. "\n|cffFFFFFF" ..
                                          app.IconLMB .. ": " .. L.SLASH_OPEN_LIST .. "\n" ..
                                          app.IconRMB .. ": " .. L.SLASH_OPEN_SETTINGS
@@ -141,5 +141,5 @@ L.LOADCONDITION_MATCH2 =                 "из этих условий для п
 L.LOADCONDITION_VALID =                  "Условие загрузки корректно."
 L.LOADCONDITION_INCOMPLETE =             "Условие загрузки заполнено не полностью."
 
-L.LOADCONDITION_NEWCHAR1 =               app.NameLong .. " видит этого персонажа впервые (какая жалость)." -- You can omit the (so sad) joke if it doesn't work in your language
+L.LOADCONDITION_NEWCHAR1 =               "%s видит этого персонажа впервые (какая жалость)." -- You can omit the (so sad) joke if it doesn't work in your language, %s becomes the addon name
 L.LOADCONDITION_NEWCHAR2 =               "Перезагрузить интерфейс, чтобы применить профили при входе?"
