@@ -553,3 +553,36 @@ function app:UpdateLoadConditionsList(onShow)
 
 	app.LoadConditionsList:SetDataProvider(DataProvider, true)
 end
+
+---------------------
+-- PROFILE LOADING --
+---------------------
+
+function api:LoadProfile(profileNameOrNo, force)
+	assert(self == api, "Call SlackersAddonDepot:LoadProfile(), not SlackersAddonDepot.LoadProfile()")
+
+	local profileNo = tonumber(profileNameOrNo)
+	if not profileNo then
+		for i, profile in ipairs(app.Data.Profiles) do
+			if string.lower(profile.name) == string.lower(profileNameOrNo) then
+				profileNo = i
+				break
+			end
+		end
+	end
+
+	if not profileNo then
+		app:Print(L.PROFILE_NOT_FOUND)
+	elseif not force then
+		StaticPopup_Show("SLACKERSADDONDEPOT_LOADPROFILE", nil, nil, profileNo)
+	else
+		for i, addon in ipairs(app.Info.AddonList) do
+			if app.Data.Profiles[profileNo].addons[addon.name] then
+				C_AddOns.EnableAddOn(i, app.Info.GUID)
+			else
+				C_AddOns.DisableAddOn(i, app.Info.GUID)
+			end
+		end
+		ReloadUI()
+	end
+end

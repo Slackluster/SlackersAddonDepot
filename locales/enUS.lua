@@ -22,8 +22,11 @@ L.SETTINGS_URL_COPIED =                  "Link copied to clipboard"
 
 L.SETTINGS_KEYSLASH_TITLE =              SETTINGS_KEYBINDINGS_LABEL .. " & Slash Commands" -- "Keybindings"
 _G["BINDING_NAME_SAD_TOGGLELIST"] =      app.NameShort .. ": Toggle Addon List"
+L.PROFILE_NAMEORNO =                     "name or number"
 L.SLASH_OPEN_LIST =                      "Toggle the addon list"
 L.SLASH_OPEN_SETTINGS =                  "Open the settings"
+L.SLASH_LOAD_PROFILE =                   "Ask to reload and activate the addon profile"
+L.SLASH_FORCELOAD_PROFILE =              "Directly reload and activate the addon profile"
 
 L.GENERAL =                              GENERAL -- "General"
 
@@ -100,6 +103,7 @@ L.RENAME_PROFILE =                       "Rename profile"
 L.DELETE_PROFILE =                       "Delete profile"
 L.PROFILE_NAME_NEW =                     "New profile name:"
 L.PROFILE_NAME_EXISTS =                  "A profile with that name already exists."
+L.PROFILE_NOT_FOUND =                    "Profile not found."
 L.DELETE_NAME_Q =                        "Delete %s?" -- %s becomes a name
 L.RELOAD_AND_ENABLE =                    "Reload and enable %s?" -- %s becomes a name
 

@@ -22,8 +22,11 @@ L.SETTINGS_URL_COPIED =                  "Ссылка скопирована в
 
 L.SETTINGS_KEYSLASH_TITLE =              SETTINGS_KEYBINDINGS_LABEL .. " и слэш-команды" -- "Keybindings"
 _G["BINDING_NAME_SAD_TOGGLELIST"] =      app.NameShort .. ": Открыть/закрыть список аддона"
+-- L.PROFILE_NAMEORNO =                     "name or number"
 L.SLASH_OPEN_LIST =                      "Открыть/закрыть список аддона"
 L.SLASH_OPEN_SETTINGS =                  "Открыть настройки"
+-- L.SLASH_LOAD_PROFILE =                   "Ask to reload and activate the addon profile"
+-- L.SLASH_FORCELOAD_PROFILE =              "Directly reload and activate the addon profile"
 
 L.GENERAL =                              GENERAL -- "General"
 
@@ -100,6 +103,7 @@ L.RENAME_PROFILE =                       "Переименовать профи�
 L.DELETE_PROFILE =                       "Удалить профиль"
 L.PROFILE_NAME_NEW =                     "Новое имя профиля:"
 L.PROFILE_NAME_EXISTS =                  "Профиль с таким именем уже существует."
+-- L.PROFILE_NOT_FOUND =                    "Profile not found."
 L.DELETE_NAME_Q =                        "Удалить %s?" -- %s becomes a name
 L.RELOAD_AND_ENABLE =                    "Перезагрузить интерфейс и включить %s?" -- %s becomes a name
 

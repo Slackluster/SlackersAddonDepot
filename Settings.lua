@@ -49,14 +49,7 @@ function app:CreateMinimapButton()
 			StaticPopup1Text:SetText(string.format(L.RELOAD_AND_ENABLE, app:Colour(app.Data.Profiles[data].name)))
 		end,
 		OnAccept = function(dialog, data)
-			for i, addon in ipairs(app.Info.AddonList) do
-				if app.Data.Profiles[data].addons[addon.name] then
-					C_AddOns.EnableAddOn(i, app.Info.GUID)
-				else
-					C_AddOns.DisableAddOn(i, app.Info.GUID)
-				end
-			end
-			ReloadUI()
+			api:LoadProfile(data, true)
 		end,
 	}
 
@@ -380,10 +373,14 @@ function app:CreateSettings()
 
 		local leftText = { "|cffFFFFFF" ..
 			"/sad",
-			"/sad settings" }
+			"/sad settings",
+			"/sad load " .. app:Colour(L.PROFILE_NAMEORNO),
+			"/sad forceload " .. app:Colour(L.PROFILE_NAMEORNO) }
 		local middleText = {
 			L.SLASH_OPEN_LIST,
-			L.SLASH_OPEN_SETTINGS }
+			L.SLASH_OPEN_SETTINGS,
+			L.SLASH_LOAD_PROFILE,
+			L.SLASH_FORCELOAD_PROFILE }
 		leftText = table.concat(leftText, "\n\n")
 		middleText = table.concat(middleText, "\n\n")
 		text(leftText, middleText, nil, nil, isExpanded)

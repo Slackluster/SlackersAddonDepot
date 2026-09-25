@@ -128,6 +128,10 @@ function app:CreateSlashCommands()
 				app.Settings.debug = true
 				app:Print(L.DEBUG_ENABLED)
 			end
+		elseif command == "load" then
+			api:LoadProfile(rest, false)
+		elseif command == "forceload" then
+			api:LoadProfile(rest, true)
 		elseif command == "" then
 			api:ToggleAddonList()
 		else
