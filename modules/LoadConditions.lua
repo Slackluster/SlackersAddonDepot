@@ -42,10 +42,10 @@ function app:CharacterMatchesLoadCondition(loadCondition, guid)
 	local function character()
 		if loadCondition.conditionState == app.Enum.ConditionState.IsAnyOf then
 			app:Debug("Character.IsAnyOf", loadCondition.conditionValue[guid])
-			return loadCondition.conditionValue[guid] and true or false
+			return loadCondition.conditionValue[guid] == true
 		elseif loadCondition.conditionState == app.Enum.ConditionState.IsNotAnyOf then
 			app:Debug("Character.IsNotAnyOf", loadCondition.conditionValue[guid])
-			return loadCondition.conditionValue[guid] and false or true
+			return loadCondition.conditionValue[guid] ~= true
 		end
 	end
 
@@ -73,7 +73,7 @@ function app:CharacterMatchesLoadCondition(loadCondition, guid)
 			return charValue:sub(-#conditionValue) == conditionValue
 		elseif loadCondition.conditionState == app.Enum.ConditionState.Contains then
 			app:Debug("NameOrRealm.Contains", conditionValue)
-			return charValue:find(conditionValue, 1, true)
+			return charValue:find(conditionValue, 1, true) ~= nil
 		elseif loadCondition.conditionState == app.Enum.ConditionState.DoesNotContain then
 			app:Debug("NameOrRealm.DoesNotContain", conditionValue)
 			return charValue:find(conditionValue, 1, true) == nil
@@ -118,20 +118,20 @@ function app:CharacterMatchesLoadCondition(loadCondition, guid)
 	local function class()
 		if loadCondition.conditionState == app.Enum.ConditionState.IsAnyOf then
 			app:Debug("Class.IsAnyOf", loadCondition.conditionValue)
-			return loadCondition.conditionValue[app.Data.Characters[guid].class] and true or false
+			return loadCondition.conditionValue[app.Data.Characters[guid].class] == true
 		elseif loadCondition.conditionState == app.Enum.ConditionState.IsNotAnyOf then
 			app:Debug("Class.IsNotAnyOf", loadCondition.conditionValue)
-			return not loadCondition.conditionValue[app.Data.Characters[guid].class] and false or true
+			return loadCondition.conditionValue[app.Data.Characters[guid].class] ~= true
 		end
 	end
 
 	local function ruleset()
 		if loadCondition.conditionState == app.Enum.ConditionState.IsAnyOf then
 			app:Debug("Ruleset.IsAnyOf", loadCondition.conditionValue)
-			return loadCondition.conditionValue[app.Data.Characters[guid].ruleset] and true or false
+			return loadCondition.conditionValue[app.Data.Characters[guid].ruleset] == true
 		elseif loadCondition.conditionState == app.Enum.ConditionState.IsNotAnyOf then
 			app:Debug("Ruleset.IsNotAnyOf", loadCondition.conditionValue)
-			return not loadCondition.conditionValue[app.Data.Characters[guid].ruleset] and false or true
+			return loadCondition.conditionValue[app.Data.Characters[guid].ruleset] ~= true
 		end
 	end
 
