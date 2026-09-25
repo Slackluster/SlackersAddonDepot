@@ -66,11 +66,7 @@ end
 -- CHARACTER INFO --
 --------------------
 
-function app:GetCharacterInfo()
-	app.Info.GUID = UnitGUID("player")
-	local _, englishClass, _, _, _, name = GetPlayerInfoByGUID(app.Info.GUID)
-	local _, _, _, classColor = GetClassColor(englishClass)
-
+local function getProfessions()
 	local profs = {}
 	profs[1], profs[2], profs[3], profs[4], profs[5] = GetProfessions()
 	local professions = {}
@@ -80,6 +76,14 @@ function app:GetCharacterInfo()
 			professions[skillLine] = true
 		end
 	end
+	return professions
+end
+
+function app:GetCharacterInfo()
+	app.Info.GUID = UnitGUID("player")
+	local _, englishClass, _, _, _, name = GetPlayerInfoByGUID(app.Info.GUID)
+	local _, _, _, classColor = GetClassColor(englishClass)
+
 	local ruleset
 	if app.Forever then
 		if C_GameRules.IsGameRuleActive(Enum.GameRule.HardcoreRuleset) then
@@ -107,7 +111,7 @@ function app:GetCharacterInfo()
 			class = englishClass or "",
 			classColor = classColor or "",
 			level = UnitLevel("player") or 0,
-			professions = professions
+			professions = getProfessions()
 		}
 	end
 end
@@ -123,6 +127,5 @@ app.Event:Register("PLAYER_LEVEL_UP", function(level, healthDelta, powerDelta, n
 end)
 
 app.Event:Register("SKILL_LINES_CHANGED", function()
-	local prof1, prof2, archaeology, fishing, cooking = GetProfessions()
-	app.Data.Characters[app.Info.GUID].professions = { prof1 = prof1, prof2 = prof2, cooking = cooking, fishing = fishing, archaeology = archaeology }
+	app.Data.Characters[app.Info.GUID].professions = getProfessions()
 end)
