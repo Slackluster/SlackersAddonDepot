@@ -264,7 +264,6 @@ function app:CreateAddonList()
 					addonCount = addonCount + 1
 				end
 			end
-			local addons = profile:CreateButton(L.ADDONS .. " (" .. addonCount .. ")")
 			profile:CreateButton(string.format(L.SAVE_ADDONS, app.Flag.SelectedNo), function()
 				profileInfo.addons = {}
 				for i, state in pairs(app.Flag.Changed) do
@@ -282,6 +281,7 @@ function app:CreateAddonList()
 				end
 				app:UpdateAddonList()
 			end)
+			local addons = profile:CreateButton(L.ADDONS .. " (" .. addonCount .. ")")
 			profile:CreateDivider()
 			if profileInfo.type == "Login" then
 				local function isSelected(index)
