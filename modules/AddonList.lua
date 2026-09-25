@@ -166,7 +166,6 @@ function app:CreateAddonList()
 						table.insert(realm.characters, char)
 					end
 				end
-
 			end
 			table.sort(realms, function(a, b) return a.realm < b.realm end)
 

@@ -448,7 +448,7 @@ function app:CreateLoadConditionsPanel()
 						end
 
 						rootDescription:SetGridMode(MenuConstants.VerticalGridDirection)
-						if app.Settings.charListRealm then
+						if app.Settings.charListRealm and app.Retail then
 							local realms = {}
 							local seen = {}
 							for _, char in pairs(app.Data.Characters) do
@@ -461,7 +461,6 @@ function app:CreateLoadConditionsPanel()
 										table.insert(realm.characters, char)
 									end
 								end
-
 							end
 							table.sort(realms, function(a, b) return a.realm < b.realm end)
 
@@ -470,13 +469,35 @@ function app:CreateLoadConditionsPanel()
 								rootDescription:CreateTitle(realm.realm)
 								addChars(realm.characters)
 							end
+						elseif app.Settings.charListRealm and app.Forever then
+							local rulesets = {}
+							local seen = {}
+							for _, char in pairs(app.Data.Characters) do
+								if not seen[char.ruleset] then
+									table.insert(rulesets, { ruleset = char.ruleset, characters = {} })
+									seen[char.ruleset] = true
+								end
+								for _, ruleset in ipairs(rulesets) do
+									if ruleset.ruleset == char.ruleset then
+										table.insert(ruleset.characters, char)
+									end
+								end
+
+							end
+							table.sort(rulesets, function(a, b) return a.ruleset < b.ruleset end)
+
+							for _, ruleset in ipairs(rulesets) do
+								sortChars(ruleset.characters)
+								rootDescription:CreateTitle(L.RULESET[ruleset.ruleset])
+								addChars(ruleset.characters)
+							end
 						else
 							local characters = {}
 							for _, char in pairs(app.Data.Characters) do
 								table.insert(characters, char)
 							end
 							sortChars(characters)
-							addChars(characters, true)
+							addChars(characters, app.Retail)
 						end
 					elseif app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Profession then
 						rootDescription:SetGridMode(MenuConstants.VerticalGridDirection)
