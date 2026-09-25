@@ -653,7 +653,13 @@ function app:CreateAddonList()
 		app.AddonListFrame:SetPoint("CENTER")
 
 		app.Flag.SelectedCharacter = app.Info.GUID
-		app.AddonListFrame.CharListDropdown:SetDefaultText("|c" .. app.Data.Characters[app.Flag.SelectedCharacter].classColor .. app.Data.Characters[app.Flag.SelectedCharacter].name .. "-" .. app.Data.Characters[app.Flag.SelectedCharacter].realmNorm)
+		local displayName
+		if app.Retail then
+			displayName = "|c" .. app.Data.Characters[app.Flag.SelectedCharacter].classColor .. app.Data.Characters[app.Flag.SelectedCharacter].name .. "-" .. app.Data.Characters[app.Flag.SelectedCharacter].realmNorm
+		elseif app.Forever then
+			displayName = "|c" .. app.Data.Characters[app.Flag.SelectedCharacter].classColor .. app.Data.Characters[app.Flag.SelectedCharacter].name
+		end
+		app.AddonListFrame.CharListDropdown:SetDefaultText(displayName)
 		app.AddonListFrame.CharListDropdown:SetupMenu(charListGenerator)
 
 		app.AddonListFrame.SearchBar:SetText("")
@@ -682,7 +688,13 @@ function app:CreateAddonList()
 			app.Data.Characters[app.Flag.SelectedCharacter] = nil
 			app.Flag.SelectedCharacter = app.Info.GUID
 			local char = app.Data.Characters[app.Flag.SelectedCharacter]
-			app.AddonListFrame.CharListDropdown:OverrideText("|c" .. char.classColor .. char.name .. "-" .. char.realmNorm)
+			local displayName
+			if app.Retail then
+				displayName = "|c" .. char.classColor .. char.name .. "-" .. char.realmNorm
+			elseif app.Forever then
+				displayName = "|c" .. char.classColor .. char.name
+			end
+			app.AddonListFrame.CharListDropdown:OverrideText(displayName)
 			app:UpdateAddonList()
 		end,
 	}
@@ -700,7 +712,13 @@ function app:UpdateAddonList()
 	end
 
 	if app.Data.Characters[app.Flag.SelectedCharacter] then
-		app.AddonListFrame.CharListDropdown:SetDefaultText("|c" .. app.Data.Characters[app.Flag.SelectedCharacter].classColor .. app.Data.Characters[app.Flag.SelectedCharacter].name .. "-" .. app.Data.Characters[app.Flag.SelectedCharacter].realmNorm)
+		local displayName
+		if app.Retail then
+			displayName = "|c" .. app.Data.Characters[app.Flag.SelectedCharacter].classColor .. app.Data.Characters[app.Flag.SelectedCharacter].name .. "-" .. app.Data.Characters[app.Flag.SelectedCharacter].realmNorm
+		elseif app.Forever then
+			displayName = "|c" .. app.Data.Characters[app.Flag.SelectedCharacter].classColor .. app.Data.Characters[app.Flag.SelectedCharacter].name
+		end
+		app.AddonListFrame.CharListDropdown:SetDefaultText(displayName)
 	else
 		app.AddonListFrame.CharListDropdown:SetDefaultText(L.ALL)
 	end
