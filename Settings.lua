@@ -96,11 +96,8 @@ function app:CreateMinimapButton()
 				app:OpenSettings()
 			end
 		end,
-
-		OnTooltipShow = function(tooltip)
-			if not tooltip or not tooltip.AddLine then return end
-			tooltip:AddLine(L.SETTINGS_TOOLTIP)
-		end,
+		OnEnter = SlackersAddonDepot_Enter,
+		OnLeave = SlackersAddonDepot_Leave,
 	})
 
 	app.MinimapIcon = LibStub("LibDBIcon-1.0", true)
@@ -363,7 +360,7 @@ function app:CreateSettings()
 	app.SettingsCategory = category
 
 	text(L.SETTINGS_VERSION .. " |cffFFFFFF" .. app.Version, nil, nil, 14)
-	text(L.SETTINGS_SUPPORT_TEXTLONG)
+	text(L.SETTINGS_SUPPORT_TEXTLONG1 .. "\n" .. L.SETTINGS_SUPPORT_TEXTLONG2)
 	button(L.SETTINGS_SUPPORT_TEXT, L.SETTINGS_SUPPORT_BUTTON, L.SETTINGS_SUPPORT_DESC, function() StaticPopup_Show("SLACKERSADDONDEPOT_URL", nil, nil, "https://buymeacoffee.com/Slackluster") end)
 	button(L.SETTINGS_HELP_TEXT, L.SETTINGS_HELP_BUTTON, L.SETTINGS_HELP_DESC, function() StaticPopup_Show("SLACKERSADDONDEPOT_URL", nil, nil, "https://discord.gg/hGvF59hstx") end)
 
@@ -374,8 +371,8 @@ function app:CreateSettings()
 		local leftText = { "|cffFFFFFF" ..
 			"/sad",
 			"/sad settings",
-			"/sad load " .. app:Colour(L.PROFILE_NAMEORNO),
-			"/sad forceload " .. app:Colour(L.PROFILE_NAMEORNO) }
+			"/sad load " .. app:Colour(L.SLASH_NAME_OR_NUMBER),
+			"/sad forceload " .. app:Colour(L.SLASH_NAME_OR_NUMBER) }
 		local middleText = {
 			L.SLASH_OPEN_LIST,
 			L.SLASH_OPEN_SETTINGS,
@@ -387,26 +384,26 @@ function app:CreateSettings()
 
 	header(L.GENERAL)
 
-	checkbox("minimapIcon", L.SETTINGS_MINIMAP_TITLE, string.format(L.SETTINGS_MINIMAP_DESC, app.NameShort), true, function() app:ToggleMinimapIcon() end)
+	checkbox("minimapIcon", L.SHOW_MINIMAP_ICON, string.format(L.SHOW_MINIMAP_ICON_DESC, app.NameShort), true, function() app:ToggleMinimapIcon() end)
 
-	checkbox("replaceMenuButton", L.SETTINGS_REPLACE_MENU_BUTTON, string.format(L.SETTINGS_REPLACE_MENU_BUTTON_DESC, app.NameLong), true)
+	checkbox("replaceMenuButton", L.REPLACE_ADDONS_MENU_BUTTON, string.format(L.REPLACE_ADDONS_MENU_BUTTON_DESC, app.NameLong), true)
 
 	header(L.ADDON_LIST)
 
-	checkbox("loadOutOfDate", L.SETTINGS_LOAD_OUT_OF_DATE, L.SETTINGS_LOAD_OUT_OF_DATE_DESC, true, function()
+	checkbox("loadOutOfDate", L.LOAD_OUT_OF_DATE, L.LOAD_OUT_OF_DATE_DESC, true, function()
 		C_AddOns.SetAddonVersionCheck(not app.Settings.loadOutOfDate)
 		app:UpdateAddonList()
 	end)
 
-	checkbox("rememberUninstalled", L.SETTINGS_REMEMBER_UNINSTALLED, L.SETTINGS_REMEMBER_UNINSTALLED_DESC, true)
+	checkbox("rememberUninstalled", L.REMEMBER_UNINSTALLED_ADDONS, L.REMEMBER_UNINSTALLED_ADDONS_DESC, true)
 
 	if app.Retail then
-		checkbox("charListRealm", L.SETTINGS_CHARLIST_REALMS, L.SETTINGS_CHARLIST_REALMS_DESC, true)
+		checkbox("charListRealm", L.CHARLIST_REALMS, L.CHARLIST_REALMS_DESC, true)
 	elseif app.Forever then
-		checkbox("charListRealm", L.SETTINGS_CHARLIST_RULESETS, L.SETTINGS_CHARLIST_RULESETS_DESC, true)
+		checkbox("charListRealm", L.CHARLIST_RULESETS, L.CHARLIST_RULESETS_DESC, true)
 	end
 
-	dropdown("charListSort", L.SETTINGS_CHARLIST_SORT, L.SETTINGS_CHARLIST_SORT_DESC, 2, {
+	dropdown("charListSort", L.CHARLIST_SORT, L.CHARLIST_SORT_DESC, 2, {
 		{ value = 1, name = L.ALPHABETICAL, description = nil },
 		{ value = 2, name = L.CLASS, description = nil },
 	})

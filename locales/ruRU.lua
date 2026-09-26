@@ -8,9 +8,17 @@ if GetLocale() ~= "ruRU" then return end
 local appName, app = ...
 local L = app.locales
 
+-- Core
+L.NEW_VERSION_AVAILABLE =                "Доступна более новая версия %s:" -- %s becomes the addon name
+
+L.DEBUG_ENABLED =                        "Режим отладки включен"
+L.DEBUG_DISABLED =                       "Режим отладки выключен"
+L.INVALID_COMMAND =                      "Неверная команда"
+
 -- Settings
 L.SETTINGS_VERSION =                     GAME_VERSION_LABEL .. ":" -- "Version"
-L.SETTINGS_SUPPORT_TEXTLONG =            "Разработка этого аддона требует значительного количества времени и усилий.\nПожалуйста, рассмотрите возможность финансовой поддержки разработчика."
+L.SETTINGS_SUPPORT_TEXTLONG1 =           "Разработка этого аддона требует значительного времени и усилий."
+L.SETTINGS_SUPPORT_TEXTLONG2 =           "Пожалуйста, рассмотрите возможность финансовой поддержки разработчика."
 L.SETTINGS_SUPPORT_TEXT =                "Поддержка"
 L.SETTINGS_SUPPORT_BUTTON =              "Buy Me a Coffee" -- Brand name, if there isn't a localised version, keep it the way it is
 L.SETTINGS_SUPPORT_DESC =                "Спасибо!"
@@ -22,43 +30,31 @@ L.SETTINGS_URL_COPIED =                  "Ссылка скопирована в
 
 L.SETTINGS_KEYSLASH_TITLE =              SETTINGS_KEYBINDINGS_LABEL .. " и слэш-команды" -- "Keybindings"
 _G["BINDING_NAME_SAD_TOGGLELIST"] =      app.NameShort .. ": Открыть/закрыть список аддона"
--- L.PROFILE_NAMEORNO =                     "name or number"
 L.SLASH_OPEN_LIST =                      "Открыть/закрыть список аддона"
 L.SLASH_OPEN_SETTINGS =                  "Открыть настройки"
+-- L.SLASH_NAME_OR_NUMBER =                 "name or number"
 -- L.SLASH_LOAD_PROFILE =                   "Ask to reload and activate the addon profile"
 -- L.SLASH_FORCELOAD_PROFILE =              "Directly reload and activate the addon profile"
 
 L.GENERAL =                              GENERAL -- "General"
-
-L.SETTINGS_MINIMAP_TITLE =               "Показывать иконку у миникарты"
-L.SETTINGS_MINIMAP_DESC =                "Показывать иконку у миникарты. Если вы отключите её, %s всё равно будет доступен в меню аддонов (Addon Compartment)." -- %s becomes the addon name
-L.SETTINGS_REPLACE_MENU_BUTTON =         "Заменить кнопку «Модификации»"
-L.SETTINGS_REPLACE_MENU_BUTTON_DESC =    "Сделать так, чтобы кнопка «Модификации» в главном меню открывала %s."-- %s becomes the addon name
+L.SHOW_MINIMAP_ICON =                    "Показывать иконку у миникарты"
+L.SHOW_MINIMAP_ICON_DESC =               "Показывать иконку у миникарты. Если вы отключите её, %s всё равно будет доступен в меню аддонов (Addon Compartment)." -- %s becomes the addon name
+L.REPLACE_ADDONS_MENU_BUTTON =           "Заменить кнопку «Модификации»"
+L.REPLACE_ADDONS_MENU_BUTTON_DESC =      "Сделать так, чтобы кнопка «Модификации» в главном меню открывала %s."-- %s becomes the addon name
 
 L.ADDON_LIST =                           "Список аддонов"
-
-L.SETTINGS_LOAD_OUT_OF_DATE =            "Загружать устаревшие модификации"
-L.SETTINGS_LOAD_OUT_OF_DATE_DESC =       "Это может привести к ошибкам из-за несовместимых аддонов."
-L.SETTINGS_REMEMBER_UNINSTALLED =        "Запоминать удаленные аддоны"
-L.SETTINGS_REMEMBER_UNINSTALLED_DESC =   "Сохранять удаленные аддоны в профилях и помнить, были ли они включены."
-L.SETTINGS_CHARLIST_REALMS =             "Игровые миры в списке персонажей"
-L.SETTINGS_CHARLIST_REALMS_DESC =        "Группировать персонажей по игровым мирам."
--- L.SETTINGS_CHARLIST_RULESETS =           "Character List Rulesets"
--- L.SETTINGS_CHARLIST_RULESETS_DESC =      "Categorize characters by ruleset."
-L.SETTINGS_CHARLIST_SORT =               "Сортировка списка персонажей"
-L.SETTINGS_CHARLIST_SORT_DESC =          "Выбрать способ сортировки для списка персонажей."
+L.LOAD_OUT_OF_DATE =                     "Загружать устаревшие модификации"
+L.LOAD_OUT_OF_DATE_DESC =                "Это может привести к ошибкам из-за несовместимых аддонов."
+L.REMEMBER_UNINSTALLED_ADDONS =          "Запоминать удаленные аддоны"
+L.REMEMBER_UNINSTALLED_ADDONS_DESC =     "Сохранять удаленные аддоны в профилях и помнить, были ли они включены."
+L.CHARLIST_REALMS =                      "Игровые миры в списке персонажей"
+L.CHARLIST_REALMS_DESC =                 "Группировать персонажей по игровым мирам."
+-- L.CHARLIST_RULESETS =                    "Character List Rulesets"
+-- L.CHARLIST_RULESETS_DESC =               "Categorize characters by ruleset."
+L.CHARLIST_SORT =                        "Сортировка списка персонажей"
+L.CHARLIST_SORT_DESC =                   "Выбрать способ сортировки для списка персонажей."
 L.ALPHABETICAL =                         HOUSING_CHEST_SORT_TYPE_ALPHABETICAL -- "Alphabetical"
 L.CLASS =                                CLASS -- "Class"
-
--- General
-L.NEW_VERSION_AVAILABLE =                "Доступна более новая версия %s:" -- %s becomes the addon name
-L.SETTINGS_TOOLTIP =                     app.NameLong .. "\n|cffFFFFFF" ..
-                                         app.IconLMB .. ": " .. L.SLASH_OPEN_LIST .. "\n" ..
-                                         app.IconRMB .. ": " .. L.SLASH_OPEN_SETTINGS
-
-L.INVALID_COMMAND =                      "Неверная команда."
-L.DEBUG_ENABLED =                        "Режим отладки включен."
-L.DEBUG_DISABLED =                       "Режим отладки выключен."
 
 -- Addon List
 L.INSTALLED =                            "Установлено"
@@ -89,10 +85,12 @@ L.DELETE_CHARACTER =                     "Удалить выбранного п
 L.PROFILES =                             "Профили"
 L.LOGIN_PROFILE =                        "Профиль при входе"
 L.LOGIN_PROFILES =                       "Профили при входе"
-L.LOGIN_PROFILE_DESC =                   "Включает аддоны при входе в игру.\n\nАвтоматически применяется к персонажам, которые соответствуют условиям загрузки. Применяются все подходящие профили."
+L.LOGIN_PROFILE_DESC1 =                  "Включает аддоны при входе в игру."
+L.LOGIN_PROFILE_DESC2 =                  "Автоматически применяется к персонажам, которые соответствуют условиям загрузки. Применяются все подходящие профили."
 L.STANDARD_PROFILE =                     "Стандартный профиль"
 L.STANDARD_PROFILES =                    "Стандартные профили"
-L.STANDARD_PROFILE_DESC =                "Включает аддоны во время игры.\n\nПрименяется вручную к конкретным персонажам. Можно применить только один профиль за раз."
+L.STANDARD_PROFILE_DESC1 =               "Включает аддоны во время игры."
+L.STANDARD_PROFILE_DESC2 =               "Применяется вручную к конкретным персонажам. Можно применить только один профиль за раз."
 
 L.APPLY_PROFILE =                        "Применить профиль к %s" -- %s becomes a character name
 L.ADDONS =                               "Аддоны"

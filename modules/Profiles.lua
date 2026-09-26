@@ -92,7 +92,7 @@ function app:CreateNewProfilePanel()
 
 	app.NewProfilePanel.NewLoginProfileText = app.NewProfilePanel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 	app.NewProfilePanel.NewLoginProfileText:SetPoint("TOP", app.NewProfilePanel.NewLoginProfileButton, "BOTTOM", 0, -10)
-	app.NewProfilePanel.NewLoginProfileText:SetText(L.LOGIN_PROFILE_DESC)
+	app.NewProfilePanel.NewLoginProfileText:SetText(L.LOGIN_PROFILE_DESC1 .. "\n\n" .. L.LOGIN_PROFILE_DESC2)
 	app.NewProfilePanel.NewLoginProfileText:CanWordWrap(true)
 	app.NewProfilePanel.NewLoginProfileText:SetWidth(250)
 
@@ -108,7 +108,7 @@ function app:CreateNewProfilePanel()
 
 	app.NewProfilePanel.NewStandardProfileText = app.NewProfilePanel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 	app.NewProfilePanel.NewStandardProfileText:SetPoint("TOP", app.NewProfilePanel.NewStandardProfileButton, "BOTTOM", 0, -10)
-	app.NewProfilePanel.NewStandardProfileText:SetText(L.STANDARD_PROFILE_DESC)
+	app.NewProfilePanel.NewStandardProfileText:SetText(L.STANDARD_PROFILE_DESC1 .. "\n\n" .. L.STANDARD_PROFILE_DESC2)
 	app.NewProfilePanel.NewStandardProfileText:CanWordWrap(true)
 	app.NewProfilePanel.NewStandardProfileText:SetWidth(250)
 
