@@ -92,7 +92,7 @@ L.STANDARD_PROFILES =                    "Стандартные профили"
 L.STANDARD_PROFILE_DESC1 =               "Включает аддоны во время игры."
 L.STANDARD_PROFILE_DESC2 =               "Применяется вручную к конкретным персонажам. Можно применить только один профиль за раз."
 
--- L.SET_LOAD_CONDITIONS =                  "Set load conditions"
+L.SET_LOAD_CONDITIONS =                  "Настройка условий загрузки"
 L.APPLY_PROFILE =                        "Применить профиль к %s" -- %s becomes a character name
 L.ADDONS =                               "Аддоны"
 L.SAVE_ADDONS =                          "Сохранить %d аддонов" -- %d becomes a number
@@ -131,7 +131,7 @@ L.RULESET = {}
 L.RULESET[1] =                           GDAPI_REALMTYPE_NORMAL -- "Normal"
 L.RULESET[2] =                           GDAPI_REALMTYPE_PVP -- "PvP"
 L.RULESET[3] =                           "Ролевой"
--- L.RULESET[4] =                           "Roleplay PvP"
+L.RULESET[4] =                           "Ролевой PvP"
 L.RULESET[5] =                           GUILD_PLAYSTYLE_HARDCORE -- "Hardcore"
 
 L.LOADCONDITION_WARNING1 =               "ВНИМАНИЕ:" -- Uppercase
