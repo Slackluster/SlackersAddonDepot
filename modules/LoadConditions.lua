@@ -11,9 +11,6 @@ local L = app.locales
 
 app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
 	if addOnName == appName then
-		-- Earlier version cleanup
-		app.Data.LoadConditions = nil
-
 		app:HookLogout()
 		app:CreateNewCharPopup()
 	end
