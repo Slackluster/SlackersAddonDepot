@@ -511,8 +511,11 @@ function app:CreateAddonList()
 			listItem.Checkbox:SetChecked(false)
 		end
 		listItem.Checkbox:SetScript("OnClick", function(self)
-			sendChanges(data.id, self:GetChecked())
-			app.Flag.LastClicked = { id = listItem:GetElementDataIndex(), enabled = self:GetChecked() }
+			local index = listItem:GetElementDataIndex()
+			local checked = self:GetChecked()
+
+			app.Flag.LastClicked = { id = index, enabled = checked }
+			sendChanges(data.id, checked)
 		end)
 
 		listItem:SetScript("OnClick", function(self, button)
@@ -521,7 +524,7 @@ function app:CreateAddonList()
 			if IsShiftKeyDown() and app.Flag.LastClicked then
 				local oldIndex = app.Flag.LastClicked.id
 				local newIndex = listItem:GetElementDataIndex()
-				if newIndex == app.Flag.LastClicked then return end
+				if newIndex == app.Flag.LastClicked.id then return end
 				app.Flag.LastClicked.id = newIndex
 
 				local a = math.min(oldIndex, newIndex)
