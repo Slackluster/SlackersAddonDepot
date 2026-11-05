@@ -235,8 +235,10 @@ function app:CreateAddonList()
 			local label
 			if app.Flag.SelectedCharacter == "All" then
 				label = L.ALL
-			else
+			elseif app.Retail then
 				label = "|c" .. app.Data.Characters[app.Flag.SelectedCharacter].classColor .. app.Data.Characters[app.Flag.SelectedCharacter].name .. "-" .. app.Data.Characters[app.Flag.SelectedCharacter].realmNorm
+			else
+				label = "|c" .. app.Data.Characters[app.Flag.SelectedCharacter].classColor .. app.Data.Characters[app.Flag.SelectedCharacter].name
 			end
 			profile:CreateButton(string.format(L.APPLY_PROFILE, label), function()
 				app.Flag.Changed = {}
