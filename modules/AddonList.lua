@@ -446,15 +446,15 @@ function app:CreateAddonList()
 		local data = node:GetData()
 		local function updateToggleButton()
 			if node:IsCollapsed() then
-				app.Info.CollapsedHeaders[data.title] = true
 				listItem.toggleButton.texture:SetTexture("Interface\\AddOns\\SlackersAddonDepot\\assets\\button-right.png")
 			else
-				app.Info.CollapsedHeaders[data.title] = nil
 				listItem.toggleButton.texture:SetTexture("Interface\\AddOns\\SlackersAddonDepot\\assets\\button-down.png")
 			end
 		end
-		if app.Info.CollapsedHeaders[data.title] then
+		local function toggleHeader()
 			node:ToggleCollapsed()
+			app.Info.CollapsedHeaders[data.title] = node:IsCollapsed() or nil
+			updateToggleButton()
 		end
 
 		if not listItem.toggleButton then
@@ -470,14 +470,8 @@ function app:CreateAddonList()
 		listItem.toggleButton:Show()
 		listItem.toggleButton:ClearAllPoints()
 		listItem.toggleButton:SetPoint("LEFT", listItem, "LEFT", 2, 1)
-		listItem.toggleButton:SetScript("OnClick", function()
-			node:ToggleCollapsed()
-			updateToggleButton()
-		end)
-		listItem:SetScript("OnClick", function()
-			node:ToggleCollapsed()
-			updateToggleButton()
-		end)
+		listItem.toggleButton:SetScript("OnClick", toggleHeader)
+		listItem:SetScript("OnClick", toggleHeader)
 
 		listItem.Text1:SetText("|cffFFFFFF" .. data.title)
 	end
@@ -904,6 +898,9 @@ function app:UpdateAddonList()
 			local next = next
 			if next(header.children) ~= nil then
 				local row1 = DataProvider:Insert({ nodeType = "header", title = header.category })
+				if app.Info.CollapsedHeaders[header.category] then
+					row1:SetCollapsed(true)
+				end
 				for _, addon1 in ipairs(header.children) do
 					local addon = addon1.addon
 					local row2 = row1:Insert({ id = addon.id, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
@@ -970,6 +967,9 @@ function app:UpdateAddonList()
 			local next = next
 			if next(header.children) ~= nil then
 				local row1 = DataProvider:Insert({ nodeType = "header", title = header.category })
+				if app.Info.CollapsedHeaders[header.category] then
+					row1:SetCollapsed(true)
+				end
 				for _, addon1 in ipairs(header.children) do
 					local addon = addon1.addon
 					local row2 = row1:Insert({ id = addon.id, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
@@ -1028,6 +1028,9 @@ function app:UpdateAddonList()
 			local next = next
 			if next(header.children) ~= nil then
 				local row1 = DataProvider:Insert({ nodeType = "header", title = header.category })
+				if app.Info.CollapsedHeaders[header.category] then
+					row1:SetCollapsed(true)
+				end
 				for _, addon1 in ipairs(header.children) do
 					local addon = addon1.addon
 					local row2 = row1:Insert({ id = addon.id, nodeType = "addon", iconTexture = addon.iconTexture, iconAtlas = addon.iconAtlas, name = addon.name, title = addon.title, notes = addon.notes, interface = addon.interface, version = addon.version, author = addon.author, dependencies = addon.dependencies, enabled = addon.enabled })
