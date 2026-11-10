@@ -37,24 +37,24 @@ end)
 -------------
 
 app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
-	if addOnName == appName then
-		if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
-			app.Retail = true
-		elseif WOW_PROJECT_ID == WOW_PROJECT_CAMELOT then
-			app.Forever = true
-		end
+	if addOnName ~= appName then return end
 
-		SlackersAddonDepot_Data = SlackersAddonDepot_Data or {}
-		SlackersAddonDepot_Settings = SlackersAddonDepot_Settings or {}
-
-		app.Data = SlackersAddonDepot_Data
-		app.Settings = SlackersAddonDepot_Settings
-		app.Version = C_AddOns.GetAddOnMetadata(appName, "Version")
-		app.Flag = {}
-
-		C_ChatInfo.RegisterAddonMessagePrefix(app.NamePrefix)
-		app:CreateSlashCommands()
+	if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+		app.Retail = true
+	elseif WOW_PROJECT_ID == WOW_PROJECT_CAMELOT then
+		app.Forever = true
 	end
+
+	SlackersAddonDepot_Data = SlackersAddonDepot_Data or {}
+	SlackersAddonDepot_Settings = SlackersAddonDepot_Settings or {}
+
+	app.Data = SlackersAddonDepot_Data
+	app.Settings = SlackersAddonDepot_Settings
+	app.Version = C_AddOns.GetAddOnMetadata(appName, "Version")
+	app.Flag = {}
+
+	C_ChatInfo.RegisterAddonMessagePrefix(app.NamePrefix)
+	app:CreateSlashCommands()
 end)
 
 -------------------

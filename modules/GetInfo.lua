@@ -9,12 +9,12 @@ local appName, app = ...
 -------------
 
 app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
-	if addOnName == appName then
-		app.Data.AddonHistory = app.Data.AddonHistory or {}
+	if addOnName ~= appName then return end
 
-		app:GetAddonInfo()
-		app:GetCharacterInfo()
-	end
+	app.Data.AddonHistory = app.Data.AddonHistory or {}
+
+	app:GetAddonInfo()
+	app:GetCharacterInfo()
 end)
 
 ----------------

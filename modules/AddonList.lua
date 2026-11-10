@@ -11,13 +11,13 @@ local L = app.locales
 -------------
 
 app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
-	if addOnName == appName then
-		app.Flag.Changed = {}
-		app.Flag.Search = ""
+	if addOnName ~= appName then return end
 
-		app:CreateAddonList()
-		app:HookGameMenu()
-	end
+	app.Flag.Changed = {}
+	app.Flag.Search = ""
+
+	app:CreateAddonList()
+	app:HookGameMenu()
 end)
 
 ----------------

@@ -10,10 +10,10 @@ local L = app.locales
 -------------
 
 app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
-	if addOnName == appName then
-		app:HookLogout()
-		app:CreateNewCharPopup()
-	end
+	if addOnName ~= appName then return end
+
+	app:HookLogout()
+	app:CreateNewCharPopup()
 end)
 
 ---------------------

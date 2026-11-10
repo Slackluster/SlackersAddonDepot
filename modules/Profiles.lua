@@ -11,10 +11,10 @@ local L = app.locales
 -------------
 
 app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
-	if addOnName == appName then
-		app:CreateNewProfilePanel()
-		app:CreateLoadConditionsPanel()
-	end
+	if addOnName ~= appName then return end
+
+	app:CreateNewProfilePanel()
+	app:CreateLoadConditionsPanel()
 end)
 
 -----------------------
@@ -405,120 +405,120 @@ function app:CreateLoadConditionsPanel()
 				app:UpdateLoadConditionsList()
 			end
 			local function tertiaryConditionGenerator(owner, rootDescription)
-				if app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition then
-					if app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Character then
-						local classSort = {}
-						for i, class in ipairs(app.Classes) do
-							classSort[class.classFile] = i
-						end
+				if not app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition then return end
 
-						local function sortChars(tableName)
-							if app.Settings.charListSort == 1 then
-								table.sort(tableName, function(a, b)
-									if a.name == b.name then
-										return (a.realmNorm) < (b.realmNorm)
-									end
-									return a.name < b.name
-								end)
-							elseif app.Settings.charListSort == 2 then
-								table.sort(tableName, function(a, b)
-									local class1 = classSort[a.class] or 999
-									local class2 = classSort[b.class] or 999
-									if class1 ~= class2 then
-										return class1 < class2
-									end
-									if a.name ~= b.name then
-										return a.name < b.name
-									end
+				if app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Character then
+					local classSort = {}
+					for i, class in ipairs(app.Classes) do
+						classSort[class.classFile] = i
+					end
+
+					local function sortChars(tableName)
+						if app.Settings.charListSort == 1 then
+							table.sort(tableName, function(a, b)
+								if a.name == b.name then
 									return (a.realmNorm) < (b.realmNorm)
-								end)
-							end
+								end
+								return a.name < b.name
+							end)
+						elseif app.Settings.charListSort == 2 then
+							table.sort(tableName, function(a, b)
+								local class1 = classSort[a.class] or 999
+								local class2 = classSort[b.class] or 999
+								if class1 ~= class2 then
+									return class1 < class2
+								end
+								if a.name ~= b.name then
+									return a.name < b.name
+								end
+								return (a.realmNorm) < (b.realmNorm)
+							end)
 						end
+					end
 
-						local function addChars(table, realmSuffix)
-							for _, char in ipairs(table) do
-								local label
-								if realmSuffix then
-									label = "|c" .. char.classColor .. char.name .. "-" .. char.realmNorm
-								else
-									label = "|c" .. char.classColor .. char.name
-								end
-								rootDescription:CreateCheckbox(label, isSelected, setSelected, char.guid)
+					local function addChars(table, realmSuffix)
+						for _, char in ipairs(table) do
+							local label
+							if realmSuffix then
+								label = "|c" .. char.classColor .. char.name .. "-" .. char.realmNorm
+							else
+								label = "|c" .. char.classColor .. char.name
 							end
+							rootDescription:CreateCheckbox(label, isSelected, setSelected, char.guid)
 						end
+					end
 
-						rootDescription:SetGridMode(MenuConstants.VerticalGridDirection)
-						if app.Settings.charListRealm and app.Retail then
-							local realms = {}
-							local seen = {}
-							for _, char in pairs(app.Data.Characters) do
-								if not seen[char.realm] then
-									table.insert(realms, { realm = char.realm, characters = {} })
-									seen[char.realm] = true
-								end
-								for _, realm in ipairs(realms) do
-									if realm.realm == char.realm then
-										table.insert(realm.characters, char)
-									end
-								end
+					rootDescription:SetGridMode(MenuConstants.VerticalGridDirection)
+					if app.Settings.charListRealm and app.Retail then
+						local realms = {}
+						local seen = {}
+						for _, char in pairs(app.Data.Characters) do
+							if not seen[char.realm] then
+								table.insert(realms, { realm = char.realm, characters = {} })
+								seen[char.realm] = true
 							end
-							table.sort(realms, function(a, b) return a.realm < b.realm end)
-
 							for _, realm in ipairs(realms) do
-								sortChars(realm.characters)
-								rootDescription:CreateTitle(realm.realm)
-								addChars(realm.characters)
-							end
-						elseif app.Settings.charListRealm and app.Forever then
-							local rulesets = {}
-							local seen = {}
-							for _, char in pairs(app.Data.Characters) do
-								if not seen[char.ruleset] then
-									table.insert(rulesets, { ruleset = char.ruleset, characters = {} })
-									seen[char.ruleset] = true
+								if realm.realm == char.realm then
+									table.insert(realm.characters, char)
 								end
-								for _, ruleset in ipairs(rulesets) do
-									if ruleset.ruleset == char.ruleset then
-										table.insert(ruleset.characters, char)
-									end
-								end
-
 							end
-							table.sort(rulesets, function(a, b) return a.ruleset < b.ruleset end)
+						end
+						table.sort(realms, function(a, b) return a.realm < b.realm end)
 
+						for _, realm in ipairs(realms) do
+							sortChars(realm.characters)
+							rootDescription:CreateTitle(realm.realm)
+							addChars(realm.characters)
+						end
+					elseif app.Settings.charListRealm and app.Forever then
+						local rulesets = {}
+						local seen = {}
+						for _, char in pairs(app.Data.Characters) do
+							if not seen[char.ruleset] then
+								table.insert(rulesets, { ruleset = char.ruleset, characters = {} })
+								seen[char.ruleset] = true
+							end
 							for _, ruleset in ipairs(rulesets) do
-								sortChars(ruleset.characters)
-								rootDescription:CreateTitle(L.RULESET[ruleset.ruleset])
-								addChars(ruleset.characters)
+								if ruleset.ruleset == char.ruleset then
+									table.insert(ruleset.characters, char)
+								end
 							end
-						else
-							local characters = {}
-							for _, char in pairs(app.Data.Characters) do
-								table.insert(characters, char)
-							end
-							sortChars(characters)
-							addChars(characters, app.Retail)
+
 						end
-					elseif app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Profession then
-						rootDescription:SetGridMode(MenuConstants.VerticalGridDirection)
-						for _, profession in ipairs(app.Professions) do
-							local icon = (app.Retail and profession.retailIcon) or (app.Forever and profession.foreverIcon)
-							if icon then
-								rootDescription:CreateCheckbox(CreateSimpleTextureMarkup(icon) .. " " .. C_TradeSkillUI.GetProfessionInfoBySkillLineID(profession.tradeSkillLineID).professionName, isSelected, setSelected, profession.tradeSkillLineID)
-							end
+						table.sort(rulesets, function(a, b) return a.ruleset < b.ruleset end)
+
+						for _, ruleset in ipairs(rulesets) do
+							sortChars(ruleset.characters)
+							rootDescription:CreateTitle(L.RULESET[ruleset.ruleset])
+							addChars(ruleset.characters)
 						end
-					elseif app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Class then
-						for _, class in ipairs(app.Classes) do
-							if app.Retail or (app.Forever and not class.retailOnly) then
-								local className, classFile = GetClassInfo(class.id)
-								local _, _, _, classColor = GetClassColor(classFile)
-								rootDescription:CreateCheckbox("|c" .. classColor .. className, isSelected, setSelected, classFile)
-							end
+					else
+						local characters = {}
+						for _, char in pairs(app.Data.Characters) do
+							table.insert(characters, char)
 						end
-					elseif app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Ruleset then
-						for i = 1, #L.RULESET do
-							rootDescription:CreateCheckbox(L.RULESET[i], isSelected, setSelected, i)
+						sortChars(characters)
+						addChars(characters, app.Retail)
+					end
+				elseif app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Profession then
+					rootDescription:SetGridMode(MenuConstants.VerticalGridDirection)
+					for _, profession in ipairs(app.Professions) do
+						local icon = (app.Retail and profession.retailIcon) or (app.Forever and profession.foreverIcon)
+						if icon then
+							rootDescription:CreateCheckbox(CreateSimpleTextureMarkup(icon) .. " " .. C_TradeSkillUI.GetProfessionInfoBySkillLineID(profession.tradeSkillLineID).professionName, isSelected, setSelected, profession.tradeSkillLineID)
 						end
+					end
+				elseif app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Class then
+					for _, class in ipairs(app.Classes) do
+						if app.Retail or (app.Forever and not class.retailOnly) then
+							local className, classFile = GetClassInfo(class.id)
+							local _, _, _, classColor = GetClassColor(classFile)
+							rootDescription:CreateCheckbox("|c" .. classColor .. className, isSelected, setSelected, classFile)
+						end
+					end
+				elseif app.Data.Profiles[app.Flag.SelectedProfile].loadConditions[data.id].condition == app.Enum.Condition.Ruleset then
+					for i = 1, #L.RULESET do
+						rootDescription:CreateCheckbox(L.RULESET[i], isSelected, setSelected, i)
 					end
 				end
 			end

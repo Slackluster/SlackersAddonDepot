@@ -11,16 +11,16 @@ local L = app.locales
 -------------
 
 app.Event:Register("ADDON_LOADED", function(addOnName, containsBindings)
-	if addOnName == appName then
-		app.Data.Profiles = app.Data.Profiles or {}
-		app.Settings.seen = app.Settings.seen or {}
-		app.Settings.headerStyle = app.Settings.headerStyle or 2
+	if addOnName ~= appName then return end
 
-		app:CreateMinimapButton()
-		app:CreateSettings()
+	app.Data.Profiles = app.Data.Profiles or {}
+	app.Settings.seen = app.Settings.seen or {}
+	app.Settings.headerStyle = app.Settings.headerStyle or 2
 
-		C_AddOns.SetAddonVersionCheck(not app.Settings.loadOutOfDate)
-	end
+	app:CreateMinimapButton()
+	app:CreateSettings()
+
+	C_AddOns.SetAddonVersionCheck(not app.Settings.loadOutOfDate)
 end)
 
 --------------
