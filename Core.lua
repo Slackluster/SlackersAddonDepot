@@ -108,6 +108,9 @@ function app:CreateSlashCommands()
 	SLASH_RELOADUI1 = "/rl"
 	SlashCmdList.RELOADUI = ReloadUI
 
+	SLASH_ADDONS1 = "/addons"
+	SlashCmdList.ADDONS = function() api:ToggleAddonList() end
+
 	SLASH_SlackersAddonDepot1 = "/sad"
 	function SlashCmdList.SlackersAddonDepot(msg, editBox)
 		local command, rest = msg:match("^(%S*)%s*(.-)$")
