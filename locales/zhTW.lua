@@ -9,36 +9,36 @@ local appName, app = ...
 local L = app.locales
 
 -- Core
--- L.NEW_VERSION_AVAILABLE =                "There is a newer version of %s available:" -- %s becomes the addon name
+L.NEW_VERSION_AVAILABLE =                "%s 有新版本可用：" -- %s becomes the addon name
 
--- L.DEBUG_ENABLED =                        "Debug mode enabled"
--- L.DEBUG_DISABLED =                       "Debug mode disabled"
--- L.INVALID_COMMAND =                      "Invalid command"
+L.DEBUG_ENABLED =                        "除錯模式已啟用"
+L.DEBUG_DISABLED =                       "除錯模式已停用"
+L.INVALID_COMMAND =                      "指令無效"
 
 -- Settings
--- L.VERSION =                              GAME_VERSION_LABEL .. ":" -- "Version"
--- L.SUPPORT_TEXTLONG1 =                    "Developing this addon takes a significant amount of time and effort."
--- L.SUPPORT_TEXTLONG2 =                    "Please consider financially supporting the developer."
--- L.SUPPORT =                              "Support"
--- L.BUY_ME_A_COFFEE =                      "Buy Me a Coffee" -- Brand name, if there isn't a localised version, keep it the way it is
--- L.THANK_YOU =                            "Thank you!"
--- L.FEEDBACK_AND_HELP =                    "Feedback & Help"
--- L.DISCORD =                              "Discord" -- Brand name, if there isn't a localised version, keep it the way it is
--- L.JOIN_DISCORD_SERVER =                  "Join the Discord server."
--- L.CTRL_C_COPY =                          "Ctrl+C to copy:"
--- L.LINK_COPIED =                          "Link copied to clipboard"
+L.VERSION =                              GAME_VERSION_LABEL .. "：" -- "Version"
+L.SUPPORT_TEXTLONG1 =                    "開發這個插件需要投入大量的時間與心力。"
+L.SUPPORT_TEXTLONG2 =                    "歡迎考慮以金錢支持開發者。"
+L.SUPPORT =                              "支持"
+L.BUY_ME_A_COFFEE =                      "Buy Me a Coffee" -- Brand name, if there isn't a localised version, keep it the way it is
+L.THANK_YOU =                            "謝謝！"
+L.FEEDBACK_AND_HELP =                    "意見回饋與協助"
+L.DISCORD =                              "Discord" -- Brand name, if there isn't a localised version, keep it the way it is
+L.JOIN_DISCORD_SERVER =                  "加入 Discord 伺服器。"
+L.CTRL_C_COPY =                          "按 Ctrl+C 複製："
+L.LINK_COPIED =                          "連結已複製到剪貼簿"
 
--- L.KEYBINDINGS_AND_SLASH_COMMANDS =       SETTINGS_KEYBINDINGS_LABEL .. " & Slash Commands" -- "Keybindings"
+L.KEYBINDINGS_AND_SLASH_COMMANDS =       SETTINGS_KEYBINDINGS_LABEL .. " & 斜線指令" -- "Keybindings"
 -- _G["BINDING_NAME_SAD_TOGGLELIST"] =      app.NameShort .. ": Toggle Addon List"
 -- L.TOGGLE_ADDON_LIST =                    "Toggle the addon list"
--- L.OPEN_SETTINGS =                        "Open the settings"
+L.OPEN_SETTINGS =                        "開啟設定"
 -- L.NAME_OR_NUMBER =                       "name or number"
 -- L.LOAD_PROFILE =                         "Ask to reload and activate the addon profile"
 -- L.FORCELOAD_PROFILE =                    "Directly reload and activate the addon profile"
 
--- L.GENERAL =                              GENERAL -- "General"
--- L.SHOW_MINIMAP_ICON =                    "Show Minimap Icon"
--- L.SHOW_MINIMAP_ICON_DESC =               "Show the minimap icon. If you disable this, %s is still available from the Addon Compartment." -- %s becomes the addon name
+L.GENERAL =                              GENERAL -- "General"
+L.SHOW_MINIMAP_ICON =                    "顯示小地圖圖示"
+L.SHOW_MINIMAP_ICON_DESC =               "顯示小地圖圖示。即使停用，仍可從插件選單開啟 %s。" -- %s becomes the addon name
 -- L.REPLACE_ADDONS_MENU_BUTTON =           "Replace AddOns Button"
 -- L.REPLACE_ADDONS_MENU_BUTTON_DESC =      "Make the main menu's AddOns button open %s." -- %s becomes the addon name
 
@@ -71,7 +71,7 @@ local L = app.locales
 -- L.REVERT =                               COOLDOWN_VIEWER_SETTINGS_BUTTON_REVERT_CHANGES -- "Revert"
 -- L.OUT_OF_DATE =                          ADDON_INTERFACE_VERSION -- "Out of date"
 -- L.INCOMPATIBLE =                         ADDON_INCOMPATIBLE -- "Incompatible"
--- L.REQUIRES_RELOAD =                      REQUIRES_RELOAD -- "Requires Reload"
+L.REQUIRES_RELOAD =                      REQUIRES_RELOAD -- "Requires Reload"
 -- L.DEPENDENCY_DISABLED =                  ADDON_DEP_DISABLED -- "Dependency disabled"
 -- L.DEPENDENCY_MISSING =                   ADDON_DEP_MISSING -- "Dependency missing"
 -- L.CHANGE_PENDING =                       "Change Pending"
