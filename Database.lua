@@ -86,6 +86,7 @@ app.Enum = {
 		Hardcore = 5,
 	}
 }
+
 app.ValidStates = {
 	[app.Enum.Condition.Character] = {
 		[app.Enum.ConditionState.IsAnyOf] = true,
