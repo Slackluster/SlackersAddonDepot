@@ -35,6 +35,7 @@ L.OPEN_SETTINGS =                        "Open the settings"
 L.NAME_OR_NUMBER =                       "name or number"
 L.LOAD_PROFILE =                         "Ask to reload and activate the addon profile"
 L.FORCELOAD_PROFILE =                    "Directly reload and activate the addon profile"
+L.APPLY_PROFILES =                       "(Re)apply login profiles and reload"
 
 L.GENERAL =                              GENERAL -- "General"
 L.SHOW_MINIMAP_ICON =                    "Show Minimap Icon"

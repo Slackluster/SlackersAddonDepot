@@ -35,6 +35,7 @@ L.OPEN_SETTINGS =                        "Apri le impostazioni"
 L.NAME_OR_NUMBER =                       "nome o numero"
 L.LOAD_PROFILE =                         "Chiedi di ricaricare l'interfaccia e attivare il profilo degli addon"
 L.FORCELOAD_PROFILE =                    "Ricarica e attiva direttamente il profilo degli addon"
+L.APPLY_PROFILES =                       "(Ri)applica i profili di accesso e ricarica"
 
 L.GENERAL =                              GENERAL -- "General"
 L.SHOW_MINIMAP_ICON =                    "Mostra icona minimappa"

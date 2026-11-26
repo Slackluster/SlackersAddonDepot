@@ -129,6 +129,8 @@ function app:CreateSlashCommands()
 			api:LoadProfile(rest, false)
 		elseif command == "forceload" then
 			api:LoadProfile(rest, true)
+		elseif command == "apply" then
+			api:ApplyLoginProfiles()
 		elseif command == "" then
 			api:ToggleAddonList()
 		else

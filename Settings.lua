@@ -385,12 +385,14 @@ function app:CreateSettings()
 			"/sad",
 			"/sad settings",
 			"/sad load " .. app:Colour(L.NAME_OR_NUMBER),
-			"/sad forceload " .. app:Colour(L.NAME_OR_NUMBER) }
+			"/sad forceload " .. app:Colour(L.NAME_OR_NUMBER),
+			"/sad apply"}
 		local middleText = {
 			L.TOGGLE_ADDON_LIST,
 			L.OPEN_SETTINGS,
 			L.LOAD_PROFILE,
-			L.FORCELOAD_PROFILE }
+			L.FORCELOAD_PROFILE,
+			L.APPLY_PROFILES }
 		leftText = table.concat(leftText, "\n\n")
 		middleText = table.concat(middleText, "\n\n")
 		text(leftText, middleText, nil, nil, isExpanded)

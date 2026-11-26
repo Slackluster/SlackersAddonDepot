@@ -35,6 +35,7 @@ L.OPEN_SETTINGS =                        "설정 열기"
 L.NAME_OR_NUMBER =                       "이름 또는 번호"
 L.LOAD_PROFILE =                         "애드온 프로필을 활성화하도록 재시작 확인"
 L.FORCELOAD_PROFILE =                    "즉시 인터페이스를 다시 불러와 애드온 프로필 활성화"
+L.APPLY_PROFILES =                       "로그인 프로필 (재)적용 후 다시 불러오기"
 
 L.GENERAL =                              GENERAL -- "General"
 L.SHOW_MINIMAP_ICON =                    "미니맵 아이콘 표시"

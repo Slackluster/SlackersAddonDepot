@@ -35,6 +35,7 @@ L.OPEN_SETTINGS =                        "打开设置"
 L.NAME_OR_NUMBER =                       "名称或数字"
 L.LOAD_PROFILE =                         "询问是否重新加载并启用插件配置文件"
 L.FORCELOAD_PROFILE =                    "直接重新加载并启用插件配置文件"
+L.APPLY_PROFILES =                       "（重新）应用登录配置文件并重新加载"
 
 L.GENERAL =                              GENERAL -- "General"
 L.SHOW_MINIMAP_ICON =                    "显示小地图图标"

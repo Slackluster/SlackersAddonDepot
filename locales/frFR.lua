@@ -35,6 +35,7 @@ L.OPEN_SETTINGS =                        "Ouvrir les paramètres"
 L.NAME_OR_NUMBER =                       "nom ou nombre"
 L.LOAD_PROFILE =                         "Demander le rechargement et l'activation du profil d'addons"
 L.FORCELOAD_PROFILE =                    "Recharger et activer directement le profil d'addons"
+L.APPLY_PROFILES =                       "(Ré)appliquer les profils de connexion et recharger"
 
 L.GENERAL =                              GENERAL -- "General"
 L.SHOW_MINIMAP_ICON =                    "Afficher le bouton de la mini-carte"

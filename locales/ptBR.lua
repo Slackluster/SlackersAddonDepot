@@ -35,6 +35,7 @@ L.OPEN_SETTINGS =                        "Abrir as configurações"
 L.NAME_OR_NUMBER =                       "nome ou número"
 L.LOAD_PROFILE =                         "Solicitar recarregamento e ativação do perfil de addons"
 L.FORCELOAD_PROFILE =                    "Recarregar e ativar o perfil de addons imediatamente"
+L.APPLY_PROFILES =                       "(Re)aplicar os perfis de login e recarregar"
 
 L.GENERAL =                              GENERAL -- "General"
 L.SHOW_MINIMAP_ICON =                    "Mostrar ícone no minimapa"

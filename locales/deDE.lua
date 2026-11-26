@@ -35,6 +35,7 @@ L.OPEN_SETTINGS =                        "Einstellungen öffnen"
 L.NAME_OR_NUMBER =                       "Name oder Nummer"
 L.LOAD_PROFILE =                         "Zum Neuladen und Aktivieren des Addon-Profils auffordern"
 L.FORCELOAD_PROFILE =                    "Addon-Profil direkt aktivieren und Interface neu laden"
+L.APPLY_PROFILES =                       "Login-Profile (erneut) anwenden und neu laden"
 
 L.GENERAL =                              GENERAL -- "General"
 L.SHOW_MINIMAP_ICON =                    "Minikartensymbol anzeigen"

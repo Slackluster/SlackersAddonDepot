@@ -3,6 +3,7 @@
 -----------------------------------------------
 
 local appName, app = ...
+local api = app.api
 local L = app.locales
 
 -------------
@@ -207,6 +208,13 @@ function app:ApplyLoadConditions(excludeCurrent)
 			applyProfiles(guid)
 		end
 	end
+end
+
+function api:ApplyLoginProfiles()
+	assert(self == api, "Call SlackersAddonDepot:ApplyLoginProfiles(), not SlackersAddonDepot.ApplyLoginProfiles()")
+
+	app:ApplyLoadConditions()
+	ReloadUI()
 end
 
 function app:HookLogout()
