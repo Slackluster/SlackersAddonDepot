@@ -398,6 +398,21 @@ function app:CreateAddonList()
 		end
 	end)
 
+	app.AddonListFrame.ReapplyButton = app:MakeButton(app.AddonListFrame, L.REAPPLY)
+	app.AddonListFrame.ReapplyButton:SetPoint("RIGHT", app.AddonListFrame.ApplyButton, "LEFT", -2, 0)
+	app.AddonListFrame.ReapplyButton:SetScript("OnClick", function()
+		api:ApplyLoginProfiles()
+	end)
+	app.AddonListFrame.ReapplyButton:SetScript("OnEnter", function(self)
+		GameTooltip:ClearLines()
+		GameTooltip:SetOwner(self, "ANCHOR_TOP")
+		GameTooltip:AddLine(L.APPLY_PROFILES)
+		GameTooltip:Show()
+	end)
+	app.AddonListFrame.ReapplyButton:SetScript("OnLeave", function()
+		GameTooltip:Hide()
+	end)
+
 	local function sendChangesAll(checkboxState)
 		for i, addon in ipairs(app.Info.AddonList) do
 			if addon.enabled == 1 or (addon.enabled == 0 and checkboxState == true) or (addon.enabled == 2 and checkboxState == false) then
